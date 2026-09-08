@@ -1,0 +1,468 @@
+/* pages/archive/archive.wxss - 黑曜石与剧场沉浸风 */
+.archive-container {
+  min-height: 100vh;
+  padding: 24rpx 20rpx 60rpx;
+  background: radial-gradient(circle at 50% 15%, #0f1628 0%, #03060c 85%);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 顶部看板 */
+.archive-header {
+  padding: 20rpx;
+  background: #080c16;
+  text-align: center;
+}
+
+.greek-glyph {
+  color: var(--color-gold-primary);
+  font-size: 18rpx;
+  letter-spacing: 4rpx;
+  opacity: 0.7;
+}
+
+.header-title-text {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2rpx;
+  margin: 6rpx 0;
+  text-shadow: 0 0 16rpx rgba(212, 175, 55, 0.4);
+}
+
+.header-sub-text {
+  font-size: 20rpx;
+  color: #8492a6;
+  margin-bottom: 14rpx;
+}
+
+.archive-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14rpx;
+  margin-top: 10rpx;
+}
+
+.summary-cell {
+  background: #0d1220;
+  border-left: 2px solid var(--color-gold-primary);
+  padding: 12rpx 14rpx;
+  text-align: left;
+}
+
+.summary-label {
+  font-size: 20rpx;
+  color: #94a3b8;
+  margin-bottom: 4rpx;
+}
+
+.summary-number-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6rpx;
+  margin-bottom: 6rpx;
+}
+
+.num-highlight {
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.num-total {
+  font-size: 22rpx;
+  color: #64748b;
+}
+
+.num-percent {
+  font-size: 20rpx;
+  color: #94a3b8;
+}
+
+.summary-bar-track {
+  height: 6rpx;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.summary-bar-fill {
+  height: 100%;
+}
+
+.fill-gold {
+  background: linear-gradient(90deg, #b8860b, #d4af37);
+}
+
+.fill-cyan {
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+}
+
+/* 分栏导航 Tab */
+.tab-nav-scroll {
+  white-space: nowrap;
+  background: #080c16;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 8rpx;
+  display: flex;
+}
+
+.tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 20rpx;
+  color: #8492a6;
+  font-size: 22rpx;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.tab-item-active {
+  color: #fff;
+  background: rgba(212, 175, 55, 0.15);
+  border-bottom: 2px solid var(--color-gold-primary);
+}
+
+.tab-icon {
+  font-size: 24rpx;
+}
+
+.tab-title {
+  font-weight: bold;
+}
+
+.tab-badge {
+  font-size: 18rpx;
+  opacity: 0.7;
+}
+
+/* 分类胶囊 */
+.category-filter-scroll {
+  white-space: nowrap;
+  display: flex;
+  gap: 10rpx;
+  margin-bottom: 14rpx;
+}
+
+.cat-pill {
+  display: inline-block;
+  font-size: 20rpx;
+  padding: 6rpx 18rpx;
+  background: #0d1220;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.cat-pill-active {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--color-gold-primary);
+  color: var(--color-gold-light);
+  font-weight: bold;
+}
+
+/* 列表容器 */
+.tab-content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.section-desc-box {
+  background: #080c16;
+  border-left: 2px solid var(--color-gold-primary);
+  padding: 12rpx 16rpx;
+  font-size: 20rpx;
+  color: #94a3b8;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* 成就卡片 */
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.achievement-card {
+  padding: 16rpx 18rpx;
+  display: flex;
+  gap: 16rpx;
+  background: #0b111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ach-unlocked {
+  border-left: 3px solid var(--color-gold-primary);
+}
+
+.ach-locked {
+  border-left: 3px solid #334155;
+  opacity: 0.7;
+}
+
+.ach-icon-box {
+  font-size: 44rpx;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4rpx;
+}
+
+.ach-body-box {
+  flex: 1;
+}
+
+.ach-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+
+.ach-name-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+}
+
+.ach-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.ach-cat-tag {
+  font-size: 18rpx;
+  color: var(--color-gold-light);
+}
+
+.ach-status-badge {
+  font-size: 18rpx;
+  padding: 2rpx 8rpx;
+}
+
+.status-unlocked {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.status-locked {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #64748b;
+}
+
+.ach-desc {
+  font-size: 22rpx;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.ach-quote-box {
+  margin-top: 8rpx;
+  padding: 8rpx 12rpx;
+  background: rgba(0, 0, 0, 0.35);
+  border-left: 2px solid var(--color-gold-primary);
+}
+
+.quote-text {
+  font-size: 20rpx;
+  color: #cbd5e1;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.ach-meta-row {
+  margin-top: 6rpx;
+  font-size: 18rpx;
+  color: #64748b;
+}
+
+/* 图鉴通用卡片 */
+.codex-card {
+  padding: 16rpx 18rpx;
+  background: #0b111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 10rpx;
+}
+
+.codex-unlocked {
+  border-left: 3px solid #38bdf8;
+}
+
+.codex-locked {
+  border-left: 3px solid #334155;
+  opacity: 0.65;
+}
+
+.codex-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.codex-icon-title {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.codex-icon {
+  font-size: 26rpx;
+}
+
+.codex-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #f8fafc;
+}
+
+.codex-lock-tag {
+  font-size: 18rpx;
+  color: #64748b;
+}
+
+.codex-env-badge {
+  font-size: 18rpx;
+  color: var(--color-gold-light);
+}
+
+.major-quote-line {
+  font-size: 20rpx;
+  color: var(--color-gold-primary);
+  font-style: italic;
+  margin: 4rpx 0 8rpx;
+}
+
+.codex-body-preview {
+  font-size: 22rpx;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.text-fog {
+  color: #475569 !important;
+  font-style: italic;
+}
+
+.deity-prayer-box {
+  margin: 8rpx 0;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8rpx 12rpx;
+}
+
+.prayer-label {
+  display: block;
+  font-size: 18rpx;
+  color: var(--color-gold-light);
+  margin-bottom: 2rpx;
+}
+
+.prayer-text {
+  font-size: 20rpx;
+  color: #cbd5e1;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.deity-bless-box {
+  font-size: 20rpx;
+  color: #34d399;
+  margin-top: 4rpx;
+}
+
+.bless-label {
+  color: #94a3b8;
+}
+
+.ending-tag-pill {
+  font-size: 18rpx;
+  color: var(--color-gold-primary);
+  background: rgba(212, 175, 55, 0.12);
+  padding: 2rpx 8rpx;
+}
+
+.ending-desc-box {
+  font-size: 22rpx;
+  color: #cbd5e1;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* 详情弹窗 */
+.detail-modal-content {
+  max-height: 80vh;
+  background: #080c16;
+}
+
+.detail-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.detail-icon {
+  font-size: 32rpx;
+}
+
+.detail-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: var(--color-gold-light);
+}
+
+.detail-modal-body {
+  max-height: 55vh;
+  margin: 14rpx 0;
+}
+
+.detail-quote-box {
+  background: #04070e;
+  border-left: 2px solid var(--color-gold-primary);
+  padding: 12rpx 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.detail-quote-text {
+  font-size: 22rpx;
+  color: var(--color-gold-light);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.detail-text-box {
+  font-size: 24rpx;
+  color: #cbd5e1;
+  line-height: 1.8;
+  text-align: justify;
+  margin-bottom: 12rpx;
+}
+
+.detail-hint-box {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10rpx 14rpx;
+  border-left: 2px solid #ef4444;
+  font-size: 20rpx;
+}
+
+.hint-label {
+  color: #f87171;
+  font-weight: bold;
+}
+
+.hint-body {
+  color: #94a3b8;
+}
+
+.archive-footer-actions {
+  margin-top: 14rpx;
+}
+
+.back-btn {
+  height: 80rpx !important;
+  font-size: 26rpx !important;
+}

@@ -1,0 +1,1226 @@
+/* pages/game/game.wxss - 极简黑曜石与剧场沉浸风 */
+.game-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16rpx 20rpx;
+  background: radial-gradient(circle at 50% 15%, #0f1524 0%, #04060a 90%);
+  box-sizing: border-box;
+  padding-bottom: 120rpx;
+}
+
+/* ================= 1. 顶部清晰标注状态栏（HUD） ================= */
+.hud-panel {
+  padding: 14rpx 16rpx;
+  margin-bottom: 14rpx;
+  background: #080c16;
+}
+
+.hud-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+  padding-bottom: 8rpx;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hud-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.hud-day-badge {
+  color: var(--color-gold-light);
+  font-weight: 600;
+  font-size: 22rpx;
+  letter-spacing: 1rpx;
+}
+
+.hud-accent {
+  color: var(--color-gold-primary);
+  font-size: 18rpx;
+  margin-right: 4rpx;
+}
+
+.hud-class-badge {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 2rpx 8rpx;
+}
+
+.class-icon-inline {
+  font-size: 18rpx;
+}
+
+.class-name-inline {
+  font-size: 18rpx;
+  color: var(--color-gold-light);
+  font-weight: 600;
+}
+
+/* 海陆环境徽章 */
+.hud-env-badge {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 2rpx 12rpx;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+}
+
+.hud-env-badge.env-sea {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+}
+
+.hud-env-badge.land-uninhabited {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+.hud-env-badge.land-human {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #fde047;
+}
+
+.hud-env-badge.land-monster {
+  background: rgba(192, 132, 252, 0.15);
+  border-color: rgba(192, 132, 252, 0.4);
+  color: #e9d5ff;
+}
+
+.env-icon {
+  font-size: 20rpx;
+}
+
+.env-label {
+  font-weight: bold;
+}
+
+/* 5大核心物资网格（带明确中文字段与数值） */
+.hud-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8rpx;
+}
+
+.hud-stat-cell {
+  background: #0d1220;
+  padding: 8rpx 10rpx;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 2px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.hud-stat-cell.secondary-cell {
+  border-top-color: #38bdf8;
+  border-left: 2px solid var(--color-gold-primary);
+}
+
+.stat-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-name {
+  font-size: 19rpx;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.stat-val-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2rpx;
+}
+
+.stat-number {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-unit {
+  font-size: 17rpx;
+  color: #64748b;
+}
+
+.text-danger {
+  color: #f43f5e !important;
+  animation: flashRed 1s infinite;
+}
+
+.stat-delta {
+  font-size: 18rpx;
+  font-weight: bold;
+}
+
+.stat-delta.positive {
+  color: #10b981;
+}
+
+.stat-delta.negative {
+  color: #f43f5e;
+}
+
+.stat-bar-track {
+  height: 3rpx;
+  width: 100%;
+  background: #1e293b;
+  overflow: hidden;
+  margin-top: 2rpx;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.fill-food { background: #d4af37; }
+.fill-sanity { background: #38bdf8; }
+.fill-luck { background: #c084fc; }
+.fill-crew { background: #10b981; }
+.fill-loyalty { background: #f59e0b; }
+
+/* 预警通知条 */
+.alert-banner {
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-left: 3px solid #f43f5e;
+  padding: 8rpx 14rpx;
+  margin-bottom: 14rpx;
+}
+
+.alert-item {
+  color: #fca5a5;
+  font-size: 20rpx;
+  line-height: 1.4;
+}
+
+/* ================= 2. 【场景原画/插画预留视窗】 ================= */
+.scene-visual-frame {
+  width: 100%;
+  height: 240rpx;
+  margin-bottom: 16rpx;
+  position: relative;
+  overflow: hidden;
+  background: #070a12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scene-visual-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scene-visual-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 50%, #131b2e 0%, #060911 80%);
+}
+
+/* 四角古典希腊金色直角线框装饰 */
+.visual-border-corner {
+  position: absolute;
+  width: 16rpx;
+  height: 16rpx;
+  border: 1px solid var(--color-gold-primary);
+}
+
+.visual-border-corner.top-left {
+  top: 10rpx;
+  left: 10rpx;
+  border-right: none;
+  border-bottom: none;
+}
+
+.visual-border-corner.top-right {
+  top: 10rpx;
+  right: 10rpx;
+  border-left: none;
+  border-bottom: none;
+}
+
+.visual-border-corner.bottom-left {
+  bottom: 10rpx;
+  left: 10rpx;
+  border-right: none;
+  border-top: none;
+}
+
+.visual-border-corner.bottom-right {
+  bottom: 10rpx;
+  right: 10rpx;
+  border-left: none;
+  border-top: none;
+}
+
+.visual-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.visual-glyph {
+  font-size: 56rpx;
+  filter: drop-shadow(0 0 12rpx rgba(212, 175, 55, 0.4));
+}
+
+.visual-title-tag {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4rpx 16rpx;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.visual-title-text {
+  font-size: 22rpx;
+  color: var(--color-gold-light);
+  letter-spacing: 2rpx;
+  font-weight: 600;
+}
+
+.visual-hint {
+  font-size: 18rpx;
+  color: #475569;
+  letter-spacing: 1rpx;
+  margin-top: 4rpx;
+}
+
+/* ================= 3. 【屏幕中间以下】叙事舞台（旁白与对话） ================= */
+.theater-stage {
+  padding: 18rpx 20rpx 14rpx;
+  margin-bottom: 16rpx;
+  background: #080c16;
+  position: relative;
+  min-height: 200rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.theater-gold-divider-top {
+  height: 2rpx;
+  width: 100%;
+  background: linear-gradient(90deg, transparent 0%, #d4af37 20%, #d4af37 80%, transparent 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.theater-gold-divider-bottom {
+  height: 2rpx;
+  width: 100%;
+  background: linear-gradient(90deg, transparent 0%, #d4af37 20%, #d4af37 80%, transparent 100%);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+  padding-bottom: 4rpx;
+}
+
+.scene-icon-tag {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.speaker-tag {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.speaker-bracket {
+  color: var(--color-gold-primary);
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.speaker-name {
+  color: var(--color-gold-light);
+  font-size: 22rpx;
+  font-weight: bold;
+  margin: 0 4rpx;
+  letter-spacing: 1rpx;
+}
+
+.story-body {
+  flex: 1;
+  line-height: 1.8;
+}
+
+.story-text {
+  font-size: 27rpx;
+  color: #f1f5f9;
+  letter-spacing: 1.5rpx;
+  text-align: justify;
+}
+
+.typing-cursor {
+  color: var(--color-gold-primary);
+  font-size: 22rpx;
+  animation: blink 0.7s infinite;
+  margin-left: 4rpx;
+}
+
+.tap-hint {
+  text-align: right;
+  margin-top: 8rpx;
+}
+
+.hint-text {
+  font-size: 18rpx;
+  color: #475569;
+  letter-spacing: 1rpx;
+}
+
+/* ================= 4. 【屏幕下部】命运抉择面板 ================= */
+.choices-container {
+  margin-bottom: 20rpx;
+}
+
+.choices-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 14rpx;
+}
+
+.choices-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.4) 100%);
+}
+
+.choices-header .choices-line:last-child {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.4) 0%, transparent 100%);
+}
+
+.choices-header-content {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.gold-mark {
+  color: var(--color-gold-primary);
+  font-size: 18rpx;
+  opacity: 0.9;
+}
+
+.choices-title {
+  color: var(--color-gold-light);
+  font-size: 24rpx;
+  letter-spacing: 8rpx;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.choice-item {
+  padding: 20rpx 24rpx;
+  min-height: 90rpx;
+  transition: all 0.2s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.choice-enabled {
+  background: linear-gradient(90deg, #0e1424 0%, #070b14 100%);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-left: 4px solid var(--color-gold-primary);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.4);
+}
+
+.choice-enabled:active {
+  transform: translateX(4rpx);
+  background: linear-gradient(90deg, #182238 0%, #0e1526 100%);
+  border-color: var(--color-gold-primary);
+  box-shadow: 0 0 20rpx rgba(212, 175, 55, 0.25);
+}
+
+.choice-disabled {
+  background: #060910;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-left: 4px solid #334155;
+  opacity: 0.5;
+}
+
+.choice-main-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.choice-idx-badge {
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 4rpx 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.choice-idx {
+  color: var(--color-gold-light);
+  font-weight: bold;
+  font-size: 24rpx;
+  font-family: monospace;
+}
+
+.choice-content-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.choice-text {
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 1.55;
+  font-weight: 500;
+  letter-spacing: 0.5rpx;
+}
+
+.choice-hint-box {
+  margin-top: 8rpx;
+  padding: 6rpx 14rpx;
+  background: rgba(56, 189, 248, 0.08);
+  border-left: 2px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.hint-icon {
+  color: #38bdf8;
+  font-size: 20rpx;
+}
+
+.hint-text-body {
+  font-size: 22rpx;
+  color: #7dd3fc;
+  line-height: 1.4;
+}
+
+.choice-reason-box {
+  margin-top: 8rpx;
+  padding: 6rpx 14rpx;
+  background: rgba(244, 63, 94, 0.08);
+  border-left: 2px solid #f43f5e;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.lock-icon {
+  font-size: 20rpx;
+}
+
+.reason-text-body {
+  font-size: 22rpx;
+  color: #fca5a5;
+  line-height: 1.4;
+}
+
+/* ================= 5. 底部快捷工具栏 ================= */
+.bottom-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 86rpx;
+  background: #05070e;
+  border-top: 1px solid var(--color-border-gold);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 24rpx;
+}
+
+.tool-btn:active {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tool-btn-active {
+  background: rgba(212, 175, 55, 0.12);
+  border-bottom: 2px solid var(--color-gold-primary);
+}
+
+.tool-btn-active .tool-label {
+  color: var(--color-gold-primary);
+}
+
+.tool-icon {
+  font-size: 26rpx;
+}
+
+.tool-label {
+  font-size: 18rpx;
+  color: #8492a6;
+  letter-spacing: 1rpx;
+}
+
+/* ================= 弹窗与回顾日志 ================= */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 30rpx;
+}
+
+.modal-content {
+  width: 100%;
+  max-height: 82vh;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  background: #080c16;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  padding-bottom: 14rpx;
+}
+
+.modal-title {
+  color: var(--color-gold-primary);
+  font-size: 26rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.modal-close {
+  color: #8492a6;
+  font-size: 32rpx;
+  padding: 0 10rpx;
+}
+
+.history-scroll {
+  max-height: 55vh;
+  margin: 16rpx 0;
+}
+
+.empty-history {
+  color: #475569;
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 24rpx;
+}
+
+.history-item {
+  background: #0d1220;
+  padding: 14rpx 18rpx;
+  margin-bottom: 12rpx;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 2px solid var(--color-gold-primary);
+}
+
+.history-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+
+.history-chapter {
+  font-size: 18rpx;
+  color: var(--color-gold-light);
+}
+
+.history-env-tag {
+  font-size: 16rpx;
+  color: #38bdf8;
+}
+
+.history-speaker {
+  font-size: 20rpx;
+  color: #38bdf8;
+  font-weight: bold;
+  margin-bottom: 4rpx;
+}
+
+.history-text {
+  font-size: 24rpx;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.history-choice {
+  margin-top: 8rpx;
+  padding-top: 6rpx;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 22rpx;
+  color: var(--color-gold-primary);
+}
+
+.choice-tag {
+  font-weight: bold;
+}
+
+.modal-btn {
+  width: 100% !important;
+  height: 72rpx;
+  margin-top: 10rpx;
+  font-size: 26rpx;
+}
+
+/* 存档槽位 */
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin: 16rpx 0;
+}
+
+.slot-card {
+  padding: 16rpx 18rpx;
+  background: #0d1220;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #475569;
+}
+
+.slot-active {
+  border-left-color: var(--color-gold-primary);
+}
+
+.slot-title {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-gold-light);
+  font-weight: bold;
+  font-size: 24rpx;
+}
+
+.slot-action-btn {
+  font-size: 20rpx;
+  color: #38bdf8;
+}
+
+.slot-time {
+  font-size: 18rpx;
+  color: #64748b;
+  margin-top: 2rpx;
+}
+
+.slot-meta {
+  font-size: 20rpx;
+  color: #cbd5e1;
+  margin-top: 2rpx;
+}
+
+.slot-empty-text {
+  font-size: 20rpx;
+  color: #475569;
+  text-align: center;
+  padding: 8rpx 0;
+}
+
+/* 动画 */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes flashRed {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ================= 祈神祭祀按键与弹窗 ================= */
+.tool-btn-sacrifice {
+  color: var(--color-gold-light);
+}
+
+.tool-btn-sacrifice .tool-icon {
+  text-shadow: 0 0 10rpx rgba(212, 175, 55, 0.6);
+}
+
+.sacrifice-modal-card {
+  max-height: 85vh;
+  background: #080c16;
+}
+
+.sacrifice-formula-bar {
+  background: #0d1220;
+  border-left: 2px solid var(--color-gold-primary);
+  padding: 12rpx 14rpx;
+  margin: 10rpx 0;
+}
+
+.formula-row {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  gap: 8rpx;
+}
+
+.formula-label {
+  color: #94a3b8;
+}
+
+.formula-val {
+  font-weight: bold;
+}
+
+.formula-divider {
+  color: #334155;
+  margin: 0 4rpx;
+}
+
+.formula-sub {
+  font-size: 18rpx;
+  color: #64748b;
+  margin-top: 4rpx;
+  line-height: 1.4;
+}
+
+.sacrifice-list-scroll {
+  max-height: 52vh;
+  margin: 10rpx 0;
+}
+
+.sacrifice-god-item {
+  background: #0b111e;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  padding: 14rpx 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.god-item-disabled {
+  opacity: 0.6;
+}
+
+.god-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.god-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.god-icon {
+  font-size: 24rpx;
+}
+
+.god-name {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #f8fafc;
+}
+
+.god-rate-badge {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 2rpx 10rpx;
+  font-size: 20rpx;
+}
+
+.rate-label {
+  color: #94a3b8;
+}
+
+.rate-val {
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+.god-prayer-text {
+  font-size: 20rpx;
+  color: #94a3b8;
+  font-style: italic;
+  margin: 8rpx 0;
+  line-height: 1.4;
+}
+
+.god-reward-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8rpx;
+}
+
+.reward-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rpx;
+}
+
+.cost-tag {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  font-size: 18rpx;
+  padding: 2rpx 6rpx;
+}
+
+.bless-tag {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-size: 18rpx;
+  padding: 2rpx 6rpx;
+}
+
+.god-pray-btn {
+  font-size: 20rpx !important;
+  height: 48rpx !important;
+  line-height: 48rpx !important;
+  padding: 0 20rpx !important;
+  margin: 0 !important;
+}
+
+/* 祭祀掷骰结果浮层 */
+.sacrifice-result-card {
+  background: #0d1424;
+  border: 1px solid var(--color-gold-primary);
+  box-shadow: 0 0 20rpx rgba(212, 175, 55, 0.25) inset;
+  padding: 24rpx;
+  margin: 16rpx 0;
+  text-align: center;
+}
+
+.res-badge {
+  display: inline-block;
+  padding: 6rpx 18rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+}
+
+.res-badge-great_success {
+  background: rgba(212, 175, 55, 0.25);
+  border: 1px solid var(--color-gold-primary);
+  color: #fde047;
+}
+
+.res-badge-success {
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid #38bdf8;
+  color: #7dd3fc;
+}
+
+.res-badge-failure {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #f87171;
+}
+
+.res-dice-row {
+  font-size: 22rpx;
+  color: #94a3b8;
+  margin: 8rpx 0 12rpx;
+}
+
+.dice-val {
+  color: #fff;
+  font-weight: bold;
+  font-size: 26rpx;
+}
+
+.dice-target {
+  color: #64748b;
+  font-size: 20rpx;
+}
+
+.res-body-text {
+  font-size: 22rpx;
+  color: #cbd5e1;
+  line-height: 1.8;
+  text-align: left;
+  white-space: pre-wrap;
+  margin: 12rpx 0;
+  padding: 12rpx;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.res-deltas-row {
+  font-size: 22rpx;
+  color: var(--color-gold-light);
+  font-weight: bold;
+  margin-bottom: 14rpx;
+}
+
+.res-confirm-btn {
+  height: 64rpx !important;
+  font-size: 24rpx !important;
+}
+
+/* ================= 史诗大事件特刊弹窗 ================= */
+.epic-modal-mask {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.epic-modal-card {
+  border: 2px solid var(--color-gold-primary) !important;
+  box-shadow: 0 0 35rpx rgba(212, 175, 55, 0.35);
+  background: #090e1c !important;
+  padding: 30rpx 26rpx;
+  max-height: 82vh;
+}
+
+.epic-badge-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  color: var(--color-gold-primary);
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.epic-title-wrap {
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+
+.epic-title-main {
+  font-size: 36rpx;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 3rpx;
+  text-shadow: 0 0 16rpx rgba(212, 175, 55, 0.5);
+}
+
+.epic-quote-card {
+  background: #050810;
+  border-left: 3px solid var(--color-gold-primary);
+  border-right: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 16rpx 20rpx;
+  margin-bottom: 16rpx;
+  font-style: italic;
+}
+
+.epic-quote-mark {
+  color: var(--color-gold-primary);
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.epic-quote-body {
+  font-size: 22rpx;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.epic-body-scroll {
+  max-height: 38vh;
+  margin-bottom: 16rpx;
+}
+
+.epic-body-text {
+  font-size: 24rpx;
+  color: #94a3b8;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.epic-confirm-btn {
+  height: 80rpx !important;
+  font-size: 28rpx !important;
+  letter-spacing: 2rpx;
+}
+
+/* ================= 航海见闻录发现弹窗 ================= */
+.sight-modal-mask {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.sight-modal-card {
+  background: #080d1a;
+  border: 1px solid #38bdf8 !important;
+  box-shadow: 0 0 25rpx rgba(56, 189, 248, 0.2);
+  padding: 28rpx;
+}
+
+.sight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+  padding-bottom: 10rpx;
+  margin-bottom: 14rpx;
+}
+
+.sight-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.sight-icon {
+  font-size: 28rpx;
+}
+
+.sight-header-title {
+  color: #38bdf8;
+  font-size: 24rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.sight-counter {
+  color: #64748b;
+  font-size: 20rpx;
+}
+
+.sight-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #f8fafc;
+  margin-bottom: 14rpx;
+}
+
+.sight-body-box {
+  background: rgba(0, 0, 0, 0.35);
+  border-left: 2px solid #38bdf8;
+  padding: 16rpx 20rpx;
+  margin-bottom: 18rpx;
+}
+
+.sight-body-text {
+  font-size: 24rpx;
+  color: #cbd5e1;
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* ================= 全局成就解锁即时浮动横幅 ================= */
+.achievement-toast-banner {
+  position: fixed;
+  top: 16rpx;
+  left: 20rpx;
+  right: 20rpx;
+  z-index: 999;
+  background: linear-gradient(135deg, #141c2e 0%, #080d1a 100%);
+  border: 1px solid var(--color-gold-primary);
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.8), 0 0 20rpx rgba(212, 175, 55, 0.4);
+  padding: 14rpx 18rpx;
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.toast-left {
+  font-size: 40rpx;
+  display: flex;
+  align-items: center;
+}
+
+.toast-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  overflow: hidden;
+}
+
+.toast-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+}
+
+.toast-tag {
+  font-size: 18rpx;
+  color: #080c16;
+  background: var(--color-gold-primary);
+  font-weight: bold;
+  padding: 1rpx 6rpx;
+}
+
+.toast-name {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10rpx rgba(212, 175, 55, 0.6);
+}
+
+.toast-desc {
+  font-size: 20rpx;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast-right {
+  font-size: 20rpx;
+  color: var(--color-gold-light);
+  flex-shrink: 0;
+}
+
+@keyframes slideDownToast {
+  0% {
+    transform: translateY(-80rpx);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+

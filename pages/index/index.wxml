@@ -1,0 +1,190 @@
+<!-- pages/index/index.wxml -->
+<view class="index-container">
+  <!-- 背景氛围光晕与深邃暗夜 -->
+  <view class="bg-vignette"></view>
+
+  <!-- 史诗主标题区（剧场式上下金线） -->
+  <view class="title-section animate-fade-in">
+    <view class="greek-divider-top">◆ ══════════════ ◈ ══════════════ ◆</view>
+    <view class="latin-title">ODYSSEY : NOSTOS</view>
+    <view class="main-title">奥德赛：归乡之路</view>
+    <view class="subtitle">—— 特洛伊余烬后的爱琴海绝境航行 ——</view>
+    <view class="greek-divider-bottom">◆ ══════════════ ◈ ══════════════ ◆</view>
+  </view>
+
+  <!-- 战船图腾徽标与戏剧引言 -->
+  <view class="emblem-section animate-fade-in">
+    <view class="quote-box">
+      <view class="quote-header">〔 史诗序言 〕</view>
+      <view class="quote-body">
+        “你不是不可战胜的阿喀琉斯，亦非受诸神宠爱的奥德修斯。你只是一名带领三十名同乡水手的凡人指挥官。战火已熄，但大海的试炼才刚刚开始。”
+      </view>
+    </view>
+  </view>
+
+  <!-- 主菜单交互操作区（直角极简） -->
+  <view class="menu-section animate-fade-in">
+    <button class="btn-gold menu-btn" bindtap="openClassModal">
+      <text class="btn-prefix">▶</text>
+      <text>开启新的远航</text>
+    </button>
+
+    <button class="btn-secondary menu-btn" bindtap="openSaveModal">
+      <text class="btn-prefix">◈</text>
+      <text>载入航海档案</text>
+    </button>
+
+    <button class="btn-secondary menu-btn btn-archive-entry" bindtap="openArchivePage">
+      <text class="btn-prefix">🏆</text>
+      <text>史诗成就与航海图鉴</text>
+      <text class="archive-pill" wx:if="{{archiveSummary}}">({{archiveSummary.unlockedAchs}}/{{archiveSummary.totalAchs}})</text>
+    </button>
+
+    <button class="btn-text" bindtap="openRuleModal">
+      <text>📖 航海法则、海陆循环与物资图鉴</text>
+    </button>
+  </view>
+
+  <!-- 底部版本与信息 -->
+  <view class="footer-info">
+    <text>ODYSSEY MINI PROGRAM DEMO · v1.1.0</text>
+  </view>
+
+  <!-- 弹窗：物资与游戏规则说明 -->
+  <view class="modal-mask" wx:if="{{showRuleModal}}" bindtap="closeRuleModal">
+    <view class="modal-content stone-card" catchtap="preventBubble">
+      <view class="modal-header">
+        <text class="modal-title">◆ 航海法则与海陆循环 ◆</text>
+        <view class="modal-close" bindtap="closeRuleModal">✕</view>
+      </view>
+      <scroll-view scroll-y class="modal-body">
+        <view class="rule-group">
+          <view class="group-title">【海陆交替冒险循环 (Sea ⇄ Land)】</view>
+          <view class="rule-item">
+            <text class="item-badge">🌊 海上事件 (Sea)</text>
+            <text class="item-desc">航海调度、狂风巨浪、塞壬魔音与海妖大漩涡，极度考验全员意志、理智与神恩庇佑。</text>
+          </view>
+          <view class="rule-item">
+            <text class="item-badge">🏝️ 陆上事件 · 无人荒岛 (Uninhabited)</text>
+            <text class="item-desc">搜集山泉、捕鱼采果与探索古老沉船遗迹，用于休整与回满物资。</text>
+          </view>
+          <view class="rule-item">
+            <text class="item-badge">🏛️ 陆上事件 · 人类城邦 (Human Settlement)</text>
+            <text class="item-desc">外邦商港与城镇。可公平交易购买粮食、招募雇佣水手补充人数，或冒险劫掠。</text>
+          </view>
+          <view class="rule-item">
+            <text class="item-badge">👁️ 陆上事件 · 危险神域与怪物之岛 (Monster & Myth)</text>
+            <text class="item-desc">独眼巨人、魔女喀耳刻、太阳神阿波罗神圣牛群。伴随极高风险与神明戒律考验！</text>
+          </view>
+        </view>
+
+        <view class="rule-group">
+          <view class="group-title">【一阶核心物资】直接由决策增减</view>
+          <view class="rule-item">
+            <text class="item-badge">🍖 食物 (Food)</text>
+            <text class="item-desc">航行基础储备。断粮将引发饥荒，持续扣除忠诚并造成减员。</text>
+          </view>
+          <view class="rule-item">
+            <text class="item-badge">🧠 理智 (Sanity)</text>
+            <text class="item-desc">抵御塞壬魔音与深海恐惧的意志。过低会引发恐慌与怀疑。</text>
+          </view>
+          <view class="rule-item">
+            <text class="item-badge">✨ 神恩/幸运 (Luck)</text>
+            <text class="item-desc">波塞冬、阿波罗、雅典娜的态度。高神恩可解锁特殊神迹选项。</text>
+          </view>
+        </view>
+
+        <view class="rule-group">
+          <view class="group-title">【二阶受控物资】受一阶物资恶化联动</view>
+          <view class="rule-item">
+            <text class="item-badge">👥 船员人数 (Crew)</text>
+            <text class="item-desc">初始 30 人。风暴与海怪造成减员，可在人类港口招募。归零触发【幽灵之舟】。</text>
+          </view>
+          <view class="rule-item">
+            <text class="item-badge">🛡️ 船员忠诚 (Loyalty)</text>
+            <text class="item-desc">水手对船长的信任度。断粮与低理智将导致忠诚崩盘，归零触发【兵变】。</text>
+          </view>
+        </view>
+      </scroll-view>
+      <button class="btn-gold modal-btn" bindtap="closeRuleModal">谨遵法则</button>
+    </view>
+  </view>
+
+  <!-- 弹窗：存读档槽位选择 -->
+  <view class="modal-mask" wx:if="{{showSaveModal}}" bindtap="closeSaveModal">
+    <view class="modal-content stone-card" catchtap="preventBubble">
+      <view class="modal-header">
+        <text class="modal-title">◆ 载入航海档案 ◆</text>
+        <view class="modal-close" bindtap="closeSaveModal">✕</view>
+      </view>
+      <view class="slot-list">
+        <block wx:for="{{saveSlots}}" wx:key="slot">
+          <view class="slot-card {{item.isEmpty ? 'slot-empty' : 'slot-active'}}" bindtap="loadSlot" data-slot="{{item.slot}}">
+            <view class="slot-title">
+              <text>槽位 0{{item.slot}}</text>
+              <text class="slot-action-btn" wx:if="{{!item.isEmpty}}">[点击载入]</text>
+            </view>
+            <view class="slot-info" wx:if="{{!item.isEmpty}}">
+              <view class="slot-time">{{item.time}}</view>
+              <view class="slot-meta">第 {{item.day}} 天 · 船员 {{item.crew}} 人 · 食物 {{item.food}}</view>
+            </view>
+            <view class="slot-empty-text" wx:else>— 空 —</view>
+          </view>
+        </block>
+      </view>
+      <button class="btn-secondary modal-btn" bindtap="closeSaveModal">返回</button>
+    </view>
+  </view>
+  <!-- 弹窗：选择领航身份 (职业选择) -->
+  <view class="modal-mask" wx:if="{{showClassModal}}" bindtap="closeClassModal">
+    <view class="modal-content stone-card class-modal-card" catchtap="preventBubble">
+      <view class="modal-header">
+        <text class="modal-title">◆ 遴选领航身份 ◆</text>
+        <view class="modal-close" bindtap="closeClassModal">✕</view>
+      </view>
+      <view class="class-modal-desc">
+        <text>“你是联军中哪一支的首领？你的出身决定了船队的辎重特长与诸神的注视。”</text>
+      </view>
+      <scroll-view scroll-y class="class-list-scroll">
+        <block wx:for="{{classesList}}" wx:key="id">
+          <view 
+            class="class-select-card {{selectedClassId === item.id ? 'class-card-selected' : ''}}"
+            bindtap="selectClass"
+            data-id="{{item.id}}"
+          >
+            <view class="class-card-top">
+              <view class="class-icon-box">{{item.icon}}</view>
+              <view class="class-name-box">
+                <view class="class-name-title">
+                  <text class="class-name">{{item.name}}</text>
+                  <text class="class-badge">〔{{item.title}}〕</text>
+                </view>
+                <view class="class-stat-chips">
+                  <text class="chip">🍖 粮:{{item.initialResources.food}}</text>
+                  <text class="chip">🧠 理:{{item.initialResources.sanity}}</text>
+                  <text class="chip">✨ 神:{{item.initialResources.luck}}</text>
+                  <text class="chip">🛡️ 忠:{{item.initialResources.loyalty}}%</text>
+                  <text class="chip">👥 30人</text>
+                </view>
+              </view>
+              <view class="class-radio-box">
+                <text class="radio-mark" wx:if="{{selectedClassId === item.id}}">◈</text>
+                <text class="radio-empty" wx:else>◇</text>
+              </view>
+            </view>
+            <view class="class-card-desc">{{item.desc}}</view>
+            <view class="class-card-perk">
+              <text class="perk-label">✦ 领航特质：</text>
+              <text class="perk-text">{{item.perkText}}</text>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+      <view class="class-modal-actions">
+        <button class="btn-gold modal-btn" bindtap="confirmStartGame">
+          <text>率领船队，拔锚启航 ▶</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

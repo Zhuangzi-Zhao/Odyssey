@@ -1,0 +1,395 @@
+/* pages/index/index.wxss - 极简黑曜石与剧场沉浸风 */
+.index-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50rpx 36rpx 40rpx;
+  background: radial-gradient(circle at 50% 25%, #0f1626 0%, #03050a 85%);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 顶部标题区 */
+.title-section {
+  text-align: center;
+  margin-top: 30rpx;
+}
+
+.greek-divider-top, .greek-divider-bottom {
+  color: var(--color-gold-primary);
+  font-size: 20rpx;
+  letter-spacing: 4rpx;
+  opacity: 0.7;
+  margin: 10rpx 0;
+}
+
+.latin-title {
+  color: var(--color-gold-light);
+  font-size: 24rpx;
+  letter-spacing: 14rpx;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6rpx;
+}
+
+.main-title {
+  color: #fff;
+  font-size: 52rpx;
+  font-weight: 900;
+  letter-spacing: 6rpx;
+  text-shadow: 0 0 24rpx rgba(212, 175, 55, 0.4);
+  margin: 8rpx 0;
+}
+
+.subtitle {
+  color: var(--color-text-sub);
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+}
+
+/* 戏剧引言 */
+.emblem-section {
+  width: 100%;
+  max-width: 640rpx;
+  margin: 30rpx 0;
+}
+
+.quote-box {
+  background: #080c16;
+  border-top: 1px solid var(--color-border-gold);
+  border-bottom: 1px solid var(--color-border-gold);
+  border-left: 3px solid var(--color-gold-primary);
+  padding: 24rpx 28rpx;
+}
+
+.quote-header {
+  color: var(--color-gold-light);
+  font-size: 22rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+  margin-bottom: 10rpx;
+}
+
+.quote-body {
+  font-size: 24rpx;
+  color: #cbd5e1;
+  line-height: 1.8;
+  text-align: justify;
+  letter-spacing: 1rpx;
+}
+
+/* 菜单按钮区（直角硬朗） */
+.menu-section {
+  width: 100%;
+  max-width: 580rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.menu-btn {
+  width: 100% !important;
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  letter-spacing: 3rpx;
+}
+
+.btn-prefix {
+  margin-right: 14rpx;
+  font-size: 24rpx;
+  color: var(--color-gold-primary);
+}
+
+.archive-pill {
+  font-size: 20rpx;
+  color: var(--color-gold-light);
+  margin-left: 10rpx;
+  background: rgba(212, 175, 55, 0.15);
+  padding: 2rpx 10rpx;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--color-gold-light);
+  font-size: 24rpx;
+  letter-spacing: 2rpx;
+  margin-top: 6rpx;
+}
+
+.footer-info {
+  font-size: 18rpx;
+  color: #334155;
+  letter-spacing: 2rpx;
+  margin-top: 10rpx;
+}
+
+/* 弹窗通用样式 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 30rpx;
+}
+
+.modal-content {
+  width: 100%;
+  max-height: 80vh;
+  padding: 28rpx;
+  display: flex;
+  flex-direction: column;
+  background: #080c16;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  padding-bottom: 14rpx;
+}
+
+.modal-title {
+  color: var(--color-gold-primary);
+  font-size: 26rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.modal-close {
+  color: #8492a6;
+  font-size: 32rpx;
+  padding: 0 10rpx;
+}
+
+.modal-body {
+  margin: 20rpx 0;
+  max-height: 55vh;
+}
+
+.rule-group {
+  margin-bottom: 24rpx;
+}
+
+.group-title {
+  color: var(--color-gold-light);
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+  letter-spacing: 1rpx;
+}
+
+.rule-item {
+  margin-bottom: 12rpx;
+  background: #0d1220;
+  border-left: 2px solid var(--color-gold-primary);
+  padding: 12rpx 16rpx;
+}
+
+.item-badge {
+  display: block;
+  font-weight: bold;
+  color: #38bdf8;
+  font-size: 24rpx;
+  margin-bottom: 4rpx;
+}
+
+.item-desc {
+  font-size: 22rpx;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.modal-btn {
+  width: 100% !important;
+  margin-top: 10rpx;
+  height: 76rpx;
+  font-size: 26rpx;
+}
+
+/* 存档槽位样式 */
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin: 16rpx 0;
+}
+
+.slot-card {
+  padding: 16rpx 18rpx;
+  background: #0d1220;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #475569;
+}
+
+.slot-active {
+  border-left-color: var(--color-gold-primary);
+}
+
+.slot-title {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-gold-light);
+  font-weight: bold;
+  font-size: 24rpx;
+}
+
+.slot-action-btn {
+  font-size: 20rpx;
+  color: #38bdf8;
+}
+
+.slot-time {
+  font-size: 18rpx;
+  color: #64748b;
+  margin-top: 2rpx;
+}
+
+.slot-meta {
+  font-size: 20rpx;
+  color: #cbd5e1;
+  margin-top: 2rpx;
+}
+
+.slot-empty-text {
+  font-size: 20rpx;
+  color: #475569;
+  text-align: center;
+  padding: 8rpx 0;
+}
+
+/* 职业选择弹窗样式 */
+.class-modal-card {
+  max-height: 85vh;
+}
+
+.class-modal-desc {
+  font-size: 22rpx;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 14rpx 0 10rpx;
+  font-style: italic;
+  border-left: 2px solid var(--color-gold-primary);
+  padding-left: 12rpx;
+}
+
+.class-list-scroll {
+  max-height: 55vh;
+  margin: 10rpx 0;
+}
+
+.class-select-card {
+  background: #0b111e;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 16rpx 18rpx;
+  margin-bottom: 14rpx;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.class-card-selected {
+  border-color: var(--color-gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 16rpx rgba(212, 175, 55, 0.2) inset;
+}
+
+.class-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.class-icon-box {
+  font-size: 40rpx;
+  width: 60rpx;
+  text-align: center;
+}
+
+.class-name-box {
+  flex: 1;
+}
+
+.class-name-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10rpx;
+}
+
+.class-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #f8fafc;
+}
+
+.class-badge {
+  font-size: 20rpx;
+  color: var(--color-gold-light);
+}
+
+.class-stat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 6rpx;
+}
+
+.chip {
+  font-size: 18rpx;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rpx 8rpx;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.class-radio-box {
+  font-size: 28rpx;
+  color: var(--color-gold-primary);
+  padding: 0 10rpx;
+}
+
+.radio-empty {
+  color: #475569;
+}
+
+.class-card-desc {
+  font-size: 20rpx;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin-top: 10rpx;
+}
+
+.class-card-perk {
+  margin-top: 8rpx;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8rpx 12rpx;
+  border-left: 2px solid #38bdf8;
+  font-size: 20rpx;
+  line-height: 1.4;
+}
+
+.perk-label {
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+.perk-text {
+  color: #cbd5e1;
+}
+
+.class-modal-actions {
+  margin-top: 12rpx;
+}
+

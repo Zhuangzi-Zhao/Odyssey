@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/game/game",
+    "pages/ending/ending",
+    "pages/archive/archive"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#090d16",
+    "navigationBarTitleText": "奥德赛：归乡之路",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#090d16"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

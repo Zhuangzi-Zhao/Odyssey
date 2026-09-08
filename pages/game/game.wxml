@@ -1,0 +1,457 @@
+<!-- pages/game/game.wxml -->
+<view class="game-container" bindtap="handleScreenTap">
+
+  <!-- 全局成就即时解锁浮动横幅 (点击可直达图鉴库) -->
+  <view class="achievement-toast-banner animate-slide-down" wx:if="{{newAchievementToast}}" catchtap="openArchivePage">
+    <view class="toast-left">
+      <text class="toast-trophy">🏆</text>
+    </view>
+    <view class="toast-center">
+      <view class="toast-title-row">
+        <text class="toast-tag">达成成就</text>
+        <text class="toast-name">【{{newAchievementToast.name}}】</text>
+      </view>
+      <text class="toast-desc">{{newAchievementToast.desc || newAchievementToast.hint}}</text>
+    </view>
+    <view class="toast-right">
+      <text class="toast-arrow">图鉴 ▶</text>
+    </view>
+  </view>
+
+  <!-- 1. 顶部物资与状态 HUD（清晰中文字段标注，适度加大） -->
+  <view class="hud-panel stone-card" catchtap="preventBubble">
+    <view class="hud-meta-row">
+      <view class="hud-meta-left">
+        <view class="hud-day-badge">
+          <text class="hud-accent">◆</text> 航行第 {{state.day}} 天
+        </view>
+        <view class="hud-class-badge" wx:if="{{state.classInfo}}">
+          <text class="class-icon-inline">{{state.classInfo.icon}}</text>
+          <text class="class-name-inline">{{state.classInfo.name}}</text>
+        </view>
+      </view>
+
+      <!-- 海陆环境地标指示徽章 -->
+      <view class="hud-env-badge env-{{currentNode.env}} {{currentNode.landType ? 'land-' + currentNode.landType : ''}}">
+        <text class="env-icon">{{currentNode.icon || '⛵'}}</text>
+        <text class="env-label">{{currentNode.envLabel || (currentNode.env === 'sea' ? '茫茫大海' : '陆地探索')}}</text>
+      </view>
+    </view>
+
+    <!-- 5 大核心物资指标（包含明确中文全称、数值与能量条） -->
+    <view class="hud-metrics-grid">
+      <!-- 1. 食物储备 (一阶) -->
+      <view class="hud-stat-cell {{deltas.food ? (deltas.food > 0 ? 'pulse-green' : 'pulse-red') : ''}}">
+        <view class="stat-name-row">
+          <text class="stat-name">食物储备</text>
+          <text class="stat-delta positive" wx:if="{{showDeltas && deltas.food > 0}}">+{{deltas.food}}</text>
+          <text class="stat-delta negative" wx:if="{{showDeltas && deltas.food < 0}}">{{deltas.food}}</text>
+        </view>
+        <view class="stat-val-row">
+          <text class="stat-number {{state.resources.food < 20 ? 'text-danger' : ''}}">{{state.resources.food}}</text>
+          <text class="stat-unit">/100</text>
+        </view>
+        <view class="stat-bar-track">
+          <view class="stat-bar-fill fill-food" style="width: {{state.resources.food}}%;"></view>
+        </view>
+      </view>
+
+      <!-- 2. 精神理智 (一阶) -->
+      <view class="hud-stat-cell {{deltas.sanity ? (deltas.sanity > 0 ? 'pulse-green' : 'pulse-red') : ''}}">
+        <view class="stat-name-row">
+          <text class="stat-name">精神理智</text>
+          <text class="stat-delta positive" wx:if="{{showDeltas && deltas.sanity > 0}}">+{{deltas.sanity}}</text>
+          <text class="stat-delta negative" wx:if="{{showDeltas && deltas.sanity < 0}}">{{deltas.sanity}}</text>
+        </view>
+        <view class="stat-val-row">
+          <text class="stat-number {{state.resources.sanity < 25 ? 'text-danger' : ''}}">{{state.resources.sanity}}</text>
+          <text class="stat-unit">/100</text>
+        </view>
+        <view class="stat-bar-track">
+          <view class="stat-bar-fill fill-sanity" style="width: {{state.resources.sanity}}%;"></view>
+        </view>
+      </view>
+
+      <!-- 3. 神恩幸运 (一阶) -->
+      <view class="hud-stat-cell {{deltas.luck ? (deltas.luck > 0 ? 'pulse-green' : 'pulse-red') : ''}}">
+        <view class="stat-name-row">
+          <text class="stat-name">神恩眷顾</text>
+          <text class="stat-delta positive" wx:if="{{showDeltas && deltas.luck > 0}}">+{{deltas.luck}}</text>
+          <text class="stat-delta negative" wx:if="{{showDeltas && deltas.luck < 0}}">{{deltas.luck}}</text>
+        </view>
+        <view class="stat-val-row">
+          <text class="stat-number {{state.resources.luck < 20 ? 'text-danger' : ''}}">{{state.resources.luck}}</text>
+          <text class="stat-unit">/100</text>
+        </view>
+        <view class="stat-bar-track">
+          <view class="stat-bar-fill fill-luck" style="width: {{state.resources.luck}}%;"></view>
+        </view>
+      </view>
+
+      <!-- 4. 存活船员 (二阶) -->
+      <view class="hud-stat-cell secondary-cell {{deltas.crew ? (deltas.crew > 0 ? 'pulse-green' : 'pulse-red') : ''}}">
+        <view class="stat-name-row">
+          <text class="stat-name">存活船员</text>
+          <text class="stat-delta positive" wx:if="{{showDeltas && deltas.crew > 0}}">+{{deltas.crew}}</text>
+          <text class="stat-delta negative" wx:if="{{showDeltas && deltas.crew < 0}}">{{deltas.crew}}</text>
+        </view>
+        <view class="stat-val-row">
+          <text class="stat-number {{state.resources.crew <= 5 ? 'text-danger' : ''}}">{{state.resources.crew}}</text>
+          <text class="stat-unit">/30 人</text>
+        </view>
+        <view class="stat-bar-track">
+          <view class="stat-bar-fill fill-crew" style="width: {{(state.resources.crew / 30) * 100}}%;"></view>
+        </view>
+      </view>
+
+      <!-- 5. 水手忠诚 (二阶) -->
+      <view class="hud-stat-cell secondary-cell {{deltas.loyalty ? (deltas.loyalty > 0 ? 'pulse-green' : 'pulse-red') : ''}}">
+        <view class="stat-name-row">
+          <text class="stat-name">船员忠诚</text>
+          <text class="stat-delta positive" wx:if="{{showDeltas && deltas.loyalty > 0}}">+{{deltas.loyalty}}</text>
+          <text class="stat-delta negative" wx:if="{{showDeltas && deltas.loyalty < 0}}">{{deltas.loyalty}}</text>
+        </view>
+        <view class="stat-val-row">
+          <text class="stat-number {{state.resources.loyalty <= 25 ? 'text-danger' : ''}}">{{state.resources.loyalty}}</text>
+          <text class="stat-unit">%</text>
+        </view>
+        <view class="stat-bar-track">
+          <view class="stat-bar-fill fill-loyalty" style="width: {{state.resources.loyalty}}%;"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 二阶预警通知条 (直角警示) -->
+  <view class="alert-banner animate-fade-in" wx:if="{{secondOrderAlerts.length > 0}}">
+    <view wx:for="{{secondOrderAlerts}}" wx:key="*this" class="alert-item">
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 2. 【场景原画/插画预留视窗】（位于状态栏与旁白之间） -->
+  <view class="scene-visual-frame stone-card animate-fade-in" catchtap="preventBubble">
+    <image 
+      class="scene-visual-image" 
+      src="{{currentNode.image}}" 
+      mode="aspectFill" 
+      wx:if="{{currentNode.image}}"
+    />
+    <view class="scene-visual-placeholder" wx:else>
+      <view class="visual-border-corner top-left"></view>
+      <view class="visual-border-corner top-right"></view>
+      <view class="visual-border-corner bottom-left"></view>
+      <view class="visual-border-corner bottom-right"></view>
+      
+      <view class="visual-center-content">
+        <text class="visual-glyph">{{currentNode.icon || '⛵'}}</text>
+        <view class="visual-title-tag">
+          <text class="visual-title-text">{{currentNode.chapter}}</text>
+        </view>
+        <text class="visual-hint">〔 场景原画 / 插画预留展示位 〕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 3. 【屏幕中间以下】剧场式叙事对白舞台（旁白与对话） -->
+  <view class="theater-stage animate-fade-in">
+    <view class="theater-gold-divider-top"></view>
+    
+    <!-- 章节与说话人栏 -->
+    <view class="stage-header">
+      <!-- 说话人角色标签 -->
+      <view class="speaker-tag" wx:if="{{currentNode.speaker}}">
+        <text class="speaker-bracket">〔</text>
+        <text class="speaker-name">{{currentNode.speaker}}</text>
+        <text class="speaker-bracket">〕</text>
+      </view>
+      
+      <view class="scene-icon-tag">
+        <text class="scene-icon">{{currentNode.icon || '⛵'}}</text>
+      </view>
+    </view>
+
+    <!-- 打字机正文展示区 -->
+    <view class="story-body">
+      <text class="story-text">{{displayedText}}</text>
+      <text class="typing-cursor" wx:if="{{!isTypingDone}}">▋</text>
+    </view>
+
+    <view class="tap-hint" wx:if="{{!isTypingDone}}">
+      <text class="hint-text">点击屏幕任意位置快速完成</text>
+    </view>
+
+    <view class="theater-gold-divider-bottom"></view>
+  </view>
+
+  <!-- 4. 【屏幕下部】命运抉择面板（大卡片、高视觉占比） -->
+  <view class="choices-container animate-fade-in" catchtap="preventBubble">
+    <view class="choices-header">
+      <view class="choices-line"></view>
+      <view class="choices-header-content">
+        <text class="gold-mark">◆</text>
+        <text class="choices-title">命 运 抉 择</text>
+        <text class="gold-mark">◆</text>
+      </view>
+      <view class="choices-line"></view>
+    </view>
+
+    <view class="choices-list">
+      <block wx:for="{{processedChoices}}" wx:key="index">
+        <view 
+          class="choice-item {{item.available ? 'choice-enabled' : 'choice-disabled'}}" 
+          bindtap="onSelectChoice" 
+          data-index="{{index}}"
+        >
+          <view class="choice-main-row">
+            <view class="choice-idx-badge">
+              <text class="choice-idx">0{{index + 1}}</text>
+            </view>
+            <view class="choice-content-wrap">
+              <text class="choice-text">{{item.text}}</text>
+              
+              <!-- 选项说明与预期效果提示 -->
+              <view class="choice-hint-box" wx:if="{{item.hint && item.available}}">
+                <text class="hint-icon">✦</text>
+                <text class="hint-text-body">{{item.hint}}</text>
+              </view>
+
+              <!-- 未解锁限制原因提示 -->
+              <view class="choice-reason-box" wx:if="{{!item.available}}">
+                <text class="lock-icon">🔒</text>
+                <text class="reason-text-body">{{item.reason}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 5. 底部功能快捷工具栏（极简直角栏） -->
+  <view class="bottom-toolbar" catchtap="preventBubble">
+    <view class="tool-btn" bindtap="openHistoryModal">
+      <text class="tool-icon">📜</text>
+      <text class="tool-label">日志</text>
+    </view>
+
+    <view class="tool-btn tool-btn-sacrifice" bindtap="openSacrificeModal">
+      <text class="tool-icon">🔥</text>
+      <text class="tool-label">祈神</text>
+    </view>
+
+    <view class="tool-btn" bindtap="openArchivePage">
+      <text class="tool-icon">🏆</text>
+      <text class="tool-label">图鉴</text>
+    </view>
+
+    <view class="tool-btn" bindtap="openSaveModal">
+      <text class="tool-icon">💾</text>
+      <text class="tool-label">存盘</text>
+    </view>
+
+    <view class="tool-btn" bindtap="openLoadModal">
+      <text class="tool-icon">📂</text>
+      <text class="tool-label">读盘</text>
+    </view>
+
+    <view class="tool-btn {{isAutoMode ? 'tool-btn-active' : ''}}" bindtap="toggleAutoMode">
+      <text class="tool-icon">⏩</text>
+      <text class="tool-label">{{isAutoMode ? '自动中' : '自动'}}</text>
+    </view>
+  </view>
+
+  <!-- 弹窗：航海历史记录回顾 (Backlog) -->
+  <view class="modal-mask" wx:if="{{showHistoryModal}}" bindtap="closeHistoryModal">
+    <view class="modal-content stone-card" catchtap="preventBubble">
+      <view class="modal-header">
+        <text class="modal-title">◆ 航海日志 (Backlog) ◆</text>
+        <view class="modal-close" bindtap="closeHistoryModal">✕</view>
+      </view>
+      <scroll-view scroll-y class="history-scroll" scroll-into-view="{{historyEndId}}">
+        <view wx:if="{{state.history.length === 0}}" class="empty-history">
+          <text>暂无历史对话记录</text>
+        </view>
+        <block wx:for="{{state.history}}" wx:key="index">
+          <view class="history-item">
+            <view class="history-item-top">
+              <text class="history-chapter">{{item.chapter}}</text>
+              <text class="history-env-tag" wx:if="{{item.envLabel}}">〔{{item.envLabel}}〕</text>
+            </view>
+            <view class="history-speaker">〔{{item.speaker}}〕</view>
+            <view class="history-text">{{item.text}}</view>
+            <view class="history-choice" wx:if="{{item.chosenText}}">
+              <text class="choice-tag">▶ 抉择：</text>{{item.chosenText}}
+            </view>
+          </view>
+        </block>
+        <view id="history-end"></view>
+      </scroll-view>
+      <button class="btn-secondary modal-btn" bindtap="closeHistoryModal">关闭</button>
+    </view>
+  </view>
+
+  <!-- 弹窗：游戏内存读档 -->
+  <view class="modal-mask" wx:if="{{showSaveModal}}" bindtap="closeSaveModal">
+    <view class="modal-content stone-card" catchtap="preventBubble">
+      <view class="modal-header">
+        <text class="modal-title">{{saveModalMode === 'save' ? '◆ 航海存盘 ◆' : '◆ 航海档案 ◆'}}</text>
+        <view class="modal-close" bindtap="closeSaveModal">✕</view>
+      </view>
+      <view class="slot-list">
+        <block wx:for="{{saveSlots}}" wx:key="slot">
+          <view class="slot-card {{item.isEmpty ? 'slot-empty' : 'slot-active'}}" bindtap="handleSlotClick" data-slot="{{item.slot}}">
+            <view class="slot-title">
+              <text>槽位 0{{item.slot}}</text>
+              <text class="slot-action-btn">{{saveModalMode === 'save' ? (item.isEmpty ? '[写入]' : '[覆盖]') : (item.isEmpty ? '[空]' : '[读取]')}}</text>
+            </view>
+            <view class="slot-info" wx:if="{{!item.isEmpty}}">
+              <view class="slot-time">{{item.time}}</view>
+              <view class="slot-meta">第 {{item.day}} 天 · 船员 {{item.crew}} 人 · 食物 {{item.food}}</view>
+            </view>
+            <view class="slot-empty-text" wx:else>— 空 —</view>
+          </view>
+        </block>
+      </view>
+      <button class="btn-secondary modal-btn" bindtap="closeSaveModal">取消</button>
+    </view>
+  </view>
+
+  <!-- 弹窗：奥林匹斯神明祭祀系统 (Sacrifice Modal) -->
+  <view class="modal-mask" wx:if="{{showSacrificeModal}}" bindtap="closeSacrificeModal">
+    <view class="modal-content stone-card sacrifice-modal-card" catchtap="preventBubble">
+      <view class="modal-header">
+        <text class="modal-title">◆ 奥林匹斯诸神祭坛 ◆</text>
+        <view class="modal-close" bindtap="closeSacrificeModal">✕</view>
+      </view>
+
+      <!-- 祭祀规则与当前神恩概率加权解析 -->
+      <view class="sacrifice-formula-bar">
+        <view class="formula-row">
+          <text class="formula-label">当前食物储备：</text>
+          <text class="formula-val {{state.resources.food < 5 ? 'text-danger' : 'text-gold'}}">{{state.resources.food}} 点</text>
+          <text class="formula-divider">|</text>
+          <text class="formula-label">当前神恩：</text>
+          <text class="formula-val text-cyan">{{state.resources.luck}} 点</text>
+        </view>
+        <view class="formula-sub">
+          <text>基础成功率50% + 神恩补正{{(state.resources.luck - 50) * 0.5 >= 0 ? '+' : ''}}{{(state.resources.luck - 50) * 0.5}}%{{state.classInfo.weights.sacrificeBonus ? ' + 祭司启蒙(+' + state.classInfo.weights.sacrificeBonus + '%)' : ''}}</text>
+        </view>
+      </view>
+
+      <!-- 祭祀结果掷骰判定浮层 (如果刚执行祭祀) -->
+      <view class="sacrifice-result-card animate-fade-in" wx:if="{{sacrificeResult}}">
+        <view class="res-badge res-badge-{{sacrificeResult.outcomeType}}">
+          <text class="res-badge-text">{{sacrificeResult.outcomeType === 'great_success' ? '🌟 蒙允大吉 · 降下神迹' : (sacrificeResult.outcomeType === 'success' ? '🕊️ 凡祭受纳 · 诸神庇佑' : '⚡ 漠然弃受 · 逆风逆浪')}}</text>
+        </view>
+        <view class="res-dice-row">
+          <text class="dice-label">🎲 命运之骰检定：</text>
+          <text class="dice-val">{{sacrificeResult.roll}}</text>
+          <text class="dice-target">（成功线 ≤ {{sacrificeResult.successRate}}%）</text>
+        </view>
+        <view class="res-body-text">{{sacrificeResult.outcomeText}}</view>
+        <view class="res-deltas-row">
+          <text wx:if="{{sacrificeResult.appliedDeltas.food}}">食物 {{sacrificeResult.appliedDeltas.food}} </text>
+          <text wx:if="{{sacrificeResult.appliedDeltas.sanity}}">理智 {{sacrificeResult.appliedDeltas.sanity > 0 ? '+' : ''}}{{sacrificeResult.appliedDeltas.sanity}} </text>
+          <text wx:if="{{sacrificeResult.appliedDeltas.luck}}">神恩 {{sacrificeResult.appliedDeltas.luck > 0 ? '+' : ''}}{{sacrificeResult.appliedDeltas.luck}} </text>
+          <text wx:if="{{sacrificeResult.appliedDeltas.loyalty}}">忠诚 {{sacrificeResult.appliedDeltas.loyalty > 0 ? '+' : ''}}{{sacrificeResult.appliedDeltas.loyalty}}</text>
+        </view>
+        <button class="btn-gold res-confirm-btn" bindtap="confirmSacrificeResult">谨受神谕</button>
+      </view>
+
+      <!-- 10 位神明祭祀列表 -->
+      <scroll-view scroll-y class="sacrifice-list-scroll" wx:if="{{!sacrificeResult}}">
+        <block wx:for="{{sacrificesList}}" wx:key="id">
+          <view class="sacrifice-god-item {{item.canAfford ? '' : 'god-item-disabled'}}">
+            <view class="god-item-header">
+              <view class="god-name-wrap">
+                <text class="god-icon">🏛️</text>
+                <text class="god-name">{{item.title}}</text>
+              </view>
+              <view class="god-rate-badge">
+                <text class="rate-label">概率: </text>
+                <text class="rate-val">{{item.calculatedRate}}%</text>
+              </view>
+            </view>
+
+            <view class="god-prayer-text">“{{item.prayer}}”</view>
+
+            <view class="god-reward-row">
+              <view class="reward-tags">
+                <text class="cost-tag">耗粮: 5</text>
+                <text class="bless-tag" wx:if="{{item.standardReward.luck}}">神恩+{{item.standardReward.luck}}</text>
+                <text class="bless-tag" wx:if="{{item.standardReward.loyalty}}">忠诚+{{item.standardReward.loyalty}}</text>
+                <text class="bless-tag" wx:if="{{item.standardReward.sanity}}">理智+{{item.standardReward.sanity}}</text>
+                <text class="bless-tag" wx:if="{{item.standardReward.food}}">食物+{{item.standardReward.food}}</text>
+              </view>
+
+              <button 
+                class="btn-gold god-pray-btn" 
+                bindtap="executeSacrifice" 
+                data-index="{{item.index}}"
+                disabled="{{!item.canAfford}}"
+              >
+                {{item.canAfford ? '屠牲祭祀' : '粮草不足'}}
+              </button>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+
+      <button class="btn-secondary modal-btn" bindtap="closeSacrificeModal" wx:if="{{!sacrificeResult}}">退出祭坛</button>
+    </view>
+  </view>
+
+  <!-- 弹窗：荷马史诗 · 核心主线大事件特刊 (Epic Major Event Modal) -->
+  <view class="modal-mask epic-modal-mask" wx:if="{{showEpicModal}}">
+    <view class="modal-content stone-card epic-modal-card" catchtap="preventBubble">
+      <view class="epic-badge-header">
+        <text class="epic-badge-icon">⚡</text>
+        <text class="epic-badge-text">荷马史诗 · 核心命运时刻</text>
+        <text class="epic-badge-icon">⚡</text>
+      </view>
+
+      <view class="epic-title-wrap">
+        <text class="epic-title-main">{{epicEventData.title}}</text>
+      </view>
+
+      <view class="epic-quote-card" wx:if="{{epicEventData.quote}}">
+        <text class="epic-quote-mark">“</text>
+        <text class="epic-quote-body">{{epicEventData.quote}}</text>
+        <text class="epic-quote-mark">”</text>
+      </view>
+
+      <scroll-view scroll-y class="epic-body-scroll">
+        <text class="epic-body-text">{{epicEventData.text}}</text>
+      </scroll-view>
+
+      <view class="epic-footer">
+        <button class="btn-gold modal-btn epic-confirm-btn" bindtap="closeEpicModal">
+          <text>⚔️ 直面命运考验，做出抉择</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 弹窗：航海见闻录发现 (Poetic Sights Modal) -->
+  <view class="modal-mask sight-modal-mask" wx:if="{{showSightModal}}" bindtap="closeSightModal">
+    <view class="modal-content stone-card sight-modal-card animate-fade-in" catchtap="preventBubble">
+      <view class="sight-header">
+        <view class="sight-header-left">
+          <text class="sight-icon">📜</text>
+          <text class="sight-header-title">航海见闻录 · 新发现</text>
+        </view>
+        <text class="sight-counter">〔第 {{state.sightsCount}} / 3 卷〕</text>
+      </view>
+
+      <view class="sight-title">{{currentSight.title}}</view>
+
+      <view class="sight-body-box">
+        <text class="sight-body-text">“{{currentSight.text}}”</text>
+      </view>
+
+      <button class="btn-gold modal-btn" bindtap="closeSightModal">铭记于心 ✕</button>
+    </view>
+  </view>
+
+</view>

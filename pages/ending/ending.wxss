@@ -1,0 +1,210 @@
+/* pages/ending/ending.wxss - 极简黑曜石与剧场沉浸风 */
+.ending-container {
+  min-height: 100vh;
+  padding: 36rpx 24rpx;
+  background: radial-gradient(circle at 50% 15%, #0e1424 0%, #03050a 90%);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 24rpx;
+}
+
+/* 顶部结局英雄区 */
+.ending-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 10rpx;
+}
+
+.ending-icon-tag {
+  font-size: 60rpx;
+  margin-bottom: 12rpx;
+}
+
+.ending-tag {
+  font-size: 20rpx;
+  color: var(--color-gold-light);
+  letter-spacing: 4rpx;
+  background: #0d1220;
+  padding: 4rpx 16rpx;
+  border-left: 2px solid var(--color-gold-primary);
+  border-right: 2px solid var(--color-gold-primary);
+  margin-bottom: 10rpx;
+}
+
+.ending-title {
+  color: #fff;
+  font-size: 38rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+  text-shadow: 0 0 16rpx rgba(212, 175, 55, 0.3);
+}
+
+/* 铭文长文叙述 */
+.ending-narrative {
+  padding: 24rpx;
+  text-align: center;
+  background: #080c16;
+}
+
+.narrative-border-top, .narrative-border-bottom {
+  color: var(--color-gold-primary);
+  font-size: 18rpx;
+  opacity: 0.7;
+}
+
+.narrative-content {
+  font-size: 26rpx;
+  color: #e2e8f0;
+  line-height: 1.85;
+  padding: 16rpx 8rpx;
+  text-align: justify;
+  letter-spacing: 1rpx;
+}
+
+/* 数据结算卡片 */
+.stats-panel {
+  padding: 20rpx;
+  background: #080c16;
+}
+
+.stats-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10rpx;
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+.stats-title {
+  color: var(--color-gold-light);
+  font-size: 24rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14rpx;
+}
+
+.stat-item {
+  background: #0d1220;
+  padding: 12rpx 16rpx;
+  border-left: 2px solid var(--color-gold-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: #8492a6;
+}
+
+.stat-val {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #f1f5f9;
+}
+
+.text-gold {
+  color: var(--color-gold-primary);
+}
+
+.text-danger {
+  color: #f43f5e;
+}
+
+/* 按钮区 */
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-top: 6rpx;
+}
+
+.action-btn {
+  width: 100% !important;
+  height: 86rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  letter-spacing: 2rpx;
+}
+
+.btn-icon {
+  margin-right: 10rpx;
+  font-size: 30rpx;
+}
+
+/* 领航身份徽章 */
+.ending-class-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 4rpx 16rpx;
+  margin-top: 12rpx;
+}
+
+.ending-class-icon {
+  font-size: 24rpx;
+}
+
+.ending-class-text {
+  font-size: 22rpx;
+  color: var(--color-gold-light);
+  letter-spacing: 1rpx;
+}
+
+/* 点亮见闻录面板 */
+.sights-panel {
+  padding: 20rpx;
+  background: #080c16;
+}
+
+.sights-header {
+  border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+  padding-bottom: 10rpx;
+  margin-bottom: 14rpx;
+  text-align: center;
+}
+
+.sights-title {
+  color: #38bdf8;
+  font-size: 24rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.sights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.sight-entry {
+  background: #0d1220;
+  border-left: 2px solid #38bdf8;
+  padding: 12rpx 14rpx;
+}
+
+.sight-entry-title {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #f8fafc;
+  margin-bottom: 4rpx;
+}
+
+.sight-entry-text {
+  font-size: 20rpx;
+  color: #94a3b8;
+  line-height: 1.5;
+  font-style: italic;
+}
+

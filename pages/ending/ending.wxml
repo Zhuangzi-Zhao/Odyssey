@@ -1,0 +1,86 @@
+<!-- pages/ending/ending.wxml -->
+<view class="ending-container">
+  
+  <!-- 结局徽章与标题 -->
+  <view class="ending-hero animate-fade-in">
+    <view class="ending-icon-tag">{{ending.icon || '⚓'}}</view>
+    <view class="ending-tag">{{ending.tag}}</view>
+    <view class="ending-title">{{ending.title}}</view>
+    <view class="ending-class-badge" wx:if="{{classInfo}}">
+      <text class="ending-class-icon">{{classInfo.icon}}</text>
+      <text class="ending-class-text">领航身份：{{classInfo.name}} · {{classInfo.title}}</text>
+    </view>
+  </view>
+
+  <!-- 史诗结局长文叙述卡片（上下金线剧场卡） -->
+  <view class="ending-narrative stone-card animate-fade-in">
+    <view class="narrative-border-top">◆ ════ 命运铭文 ════ ◆</view>
+    <view class="narrative-content">
+      <text>{{ending.desc}}</text>
+    </view>
+    <view class="narrative-border-bottom">◆ ═════════════════ ◆</view>
+  </view>
+
+  <!-- 航海数据综合结算面板 -->
+  <view class="stats-panel stone-card animate-fade-in">
+    <view class="stats-header">
+      <text class="stats-title">◆ 远航终局档案结算 ◆</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-label">航行天数</text>
+        <text class="stat-val">第 {{stats.day}} 天</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">归乡幸存弟兄</text>
+        <text class="stat-val {{stats.crew === 0 ? 'text-danger' : 'text-gold'}}">{{stats.crew}} / 30 人</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">剩余食物储备</text>
+        <text class="stat-val">{{stats.food}} 点</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">终局意志理智</text>
+        <text class="stat-val">{{stats.sanity}} 点</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">诸神神恩眷顾</text>
+        <text class="stat-val">{{stats.luck}} 点</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">终局船员忠诚</text>
+        <text class="stat-val">{{stats.loyalty}}%</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 航程点亮见闻录面板 -->
+  <view class="sights-panel stone-card animate-fade-in" wx:if="{{sightsList.length > 0}}">
+    <view class="sights-header">
+      <text class="sights-title">◆ 航程点亮见闻录 ({{sightsList.length}}/3 卷) ◆</text>
+    </view>
+    <view class="sights-list">
+      <view class="sight-entry" wx:for="{{sightsList}}" wx:key="id">
+        <view class="sight-entry-title">📜 {{item.title}}</view>
+        <view class="sight-entry-text">“{{item.text}}”</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮（直角黑曜石按钮） -->
+  <view class="action-section animate-fade-in">
+    <button class="btn-gold action-btn" bindtap="restartGame">
+      <text class="btn-icon">⚔️</text>
+      <text>重整战船，再次启航</text>
+    </button>
+    <button class="btn-secondary action-btn" bindtap="openArchivePage">
+      <text class="btn-icon">🏆</text>
+      <text>查阅史诗成就与航海图鉴</text>
+    </button>
+    <button class="btn-secondary action-btn" bindtap="backToTitle">
+      <text class="btn-icon">🏛️</text>
+      <text>返回主界面</text>
+    </button>
+  </view>
+
+</view>

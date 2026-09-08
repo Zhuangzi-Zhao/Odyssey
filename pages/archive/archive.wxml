@@ -1,0 +1,266 @@
+<!-- pages/archive/archive.wxml -->
+<view class="archive-container">
+
+  <!-- 顶部标题与总体收集进度看板 -->
+  <view class="archive-header stone-card">
+    <view class="header-top-row">
+      <view class="greek-glyph">◆ ═══ ◈ ═══ ◆</view>
+      <view class="header-title-text">奥林匹斯航海档案库</view>
+      <view class="header-sub-text">跨越轮回的史诗成就与海陆图谱</view>
+    </view>
+
+    <!-- 总体进度指标卡片 -->
+    <view class="archive-summary-grid">
+      <view class="summary-cell">
+        <view class="summary-label">🏆 史诗成就达成率</view>
+        <view class="summary-number-row">
+          <text class="num-highlight text-gold">{{archiveData.stats.unlockedAchs}}</text>
+          <text class="num-total">/ {{archiveData.stats.totalAchs}}</text>
+          <text class="num-percent">({{archiveData.stats.achRate}}%)</text>
+        </view>
+        <view class="summary-bar-track">
+          <view class="summary-bar-fill fill-gold" style="width: {{archiveData.stats.achRate}}%;"></view>
+        </view>
+      </view>
+
+      <view class="summary-cell">
+        <view class="summary-label">📜 航海图鉴点亮率</view>
+        <view class="summary-number-row">
+          <text class="num-highlight text-cyan">{{archiveData.stats.unlockedCodex}}</text>
+          <text class="num-total">/ {{archiveData.stats.totalCodex}}</text>
+          <text class="num-percent">({{archiveData.stats.codexRate}}%)</text>
+        </view>
+        <view class="summary-bar-track">
+          <view class="summary-bar-fill fill-cyan" style="width: {{archiveData.stats.codexRate}}%;"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 五联分栏导航 Tab -->
+  <scroll-view scroll-x class="tab-nav-scroll" enable-flex="true">
+    <view class="tab-item {{currentTab === 'achievements' ? 'tab-item-active' : ''}}" bindtap="switchTab" data-tab="achievements">
+      <text class="tab-icon">🏆</text>
+      <text class="tab-title">史诗成就</text>
+      <text class="tab-badge">({{archiveData.stats.unlockedAchs}}/{{archiveData.stats.totalAchs}})</text>
+    </view>
+
+    <view class="tab-item {{currentTab === 'sights' ? 'tab-item-active' : ''}}" bindtap="switchTab" data-tab="sights">
+      <text class="tab-icon">📖</text>
+      <text class="tab-title">航海见闻</text>
+      <text class="tab-badge">({{archiveData.stats.sightsCount}})</text>
+    </view>
+
+    <view class="tab-item {{currentTab === 'majors' ? 'tab-item-active' : ''}}" bindtap="switchTab" data-tab="majors">
+      <text class="tab-icon">⚡</text>
+      <text class="tab-title">史诗大事件</text>
+      <text class="tab-badge">({{archiveData.stats.majorsCount}})</text>
+    </view>
+
+    <view class="tab-item {{currentTab === 'deities' ? 'tab-item-active' : ''}}" bindtap="switchTab" data-tab="deities">
+      <text class="tab-icon">🏛️</text>
+      <text class="tab-title">诸神殿堂</text>
+      <text class="tab-badge">({{archiveData.stats.deitiesCount}})</text>
+    </view>
+
+    <view class="tab-item {{currentTab === 'endings' ? 'tab-item-active' : ''}}" bindtap="switchTab" data-tab="endings">
+      <text class="tab-icon">⚓</text>
+      <text class="tab-title">终局图谱</text>
+      <text class="tab-badge">({{archiveData.stats.endingsCount}})</text>
+    </view>
+  </scroll-view>
+
+  <!-- TAB 1: 史诗成就列表 -->
+  <view class="tab-content-section" wx:if="{{currentTab === 'achievements'}}">
+    <!-- 成就分类过滤器 -->
+    <scroll-view scroll-x class="category-filter-scroll" enable-flex="true">
+      <view class="cat-pill {{achCategory === 'all' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="all">全部</view>
+      <view class="cat-pill {{achCategory === '启程与归来' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="启程与归来">启程与归来</view>
+      <view class="cat-pill {{achCategory === '史诗大事件' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="史诗大事件">史诗大事件</view>
+      <view class="cat-pill {{achCategory === '见闻与历程' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="见闻与历程">见闻与历程</view>
+      <view class="cat-pill {{achCategory === '极限逆境' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="极限逆境">极限逆境</view>
+      <view class="cat-pill {{achCategory === '命运彩蛋' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="命运彩蛋">命运彩蛋</view>
+      <view class="cat-pill {{achCategory === '远航里程' ? 'cat-pill-active' : ''}}" bindtap="switchAchCategory" data-cat="远航里程">远航里程</view>
+    </scroll-view>
+
+    <view class="achievements-list">
+      <block wx:for="{{filteredAchievements}}" wx:key="id">
+        <view 
+          class="achievement-card stone-card {{item.isUnlocked ? 'ach-unlocked' : 'ach-locked'}}"
+          bindtap="openDetail"
+          data-item="{{item}}"
+        >
+          <view class="ach-icon-box">
+            <text class="ach-icon">{{item.isUnlocked ? item.icon : '🔒'}}</text>
+          </view>
+          <view class="ach-body-box">
+            <view class="ach-header-row">
+              <view class="ach-name-wrap">
+                <text class="ach-name">{{item.name}}</text>
+                <text class="ach-cat-tag">〔{{item.category}}〕</text>
+              </view>
+              <view class="ach-status-badge {{item.isUnlocked ? 'status-unlocked' : 'status-locked'}}">
+                {{item.isUnlocked ? '已达成' : '未解锁'}}
+              </view>
+            </view>
+            <view class="ach-desc">{{item.isUnlocked ? item.desc : item.hint}}</view>
+            <view class="ach-quote-box" wx:if="{{item.isUnlocked && item.quote}}">
+              <text class="quote-text">{{item.quote}}</text>
+            </view>
+            <view class="ach-meta-row" wx:if="{{item.isUnlocked && item.unlockTime}}">
+              <text class="unlock-time">铭刻时间：{{item.unlockTime}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- TAB 2: 航海见闻录图鉴 (12卷) -->
+  <view class="tab-content-section" wx:if="{{currentTab === 'sights'}}">
+    <view class="section-desc-box">
+      <text>“在铅灰色的海浪深处，总有些事物不曾写进荷马的史诗，只存在于水手的私语中。”</text>
+    </view>
+    <view class="sights-grid">
+      <block wx:for="{{archiveData.sights}}" wx:key="id">
+        <view 
+          class="codex-card stone-card {{item.isUnlocked ? 'codex-unlocked' : 'codex-locked'}}"
+          bindtap="openDetail"
+          data-item="{{item}}"
+        >
+          <view class="codex-card-header">
+            <view class="codex-icon-title">
+              <text class="codex-icon">{{item.icon}}</text>
+              <text class="codex-title">{{item.title}}</text>
+            </view>
+            <text class="codex-lock-tag">{{item.isUnlocked ? '已阅' : '海雾未散'}}</text>
+          </view>
+          <view class="codex-body-preview">
+            <text class="codex-text {{item.isUnlocked ? '' : 'text-fog'}}">{{item.text}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- TAB 3: 史诗大事件图鉴 (12幕) -->
+  <view class="tab-content-section" wx:if="{{currentTab === 'majors'}}">
+    <view class="section-desc-box">
+      <text>“荷马史诗的十二重命运长廊。无论顺流还是逆浪，英雄终将跨越险阻。”</text>
+    </view>
+    <view class="majors-list">
+      <block wx:for="{{archiveData.majorEvents}}" wx:key="id">
+        <view 
+          class="codex-card stone-card {{item.isUnlocked ? 'codex-unlocked' : 'codex-locked'}}"
+          bindtap="openDetail"
+          data-item="{{item}}"
+        >
+          <view class="codex-card-header">
+            <view class="codex-icon-title">
+              <text class="codex-icon">{{item.icon}}</text>
+              <text class="codex-title">{{item.title}}</text>
+            </view>
+            <text class="codex-env-badge" wx:if="{{item.env}}">〔{{item.env === 'sea' ? '怒海航段' : '险陆探索'}}〕</text>
+          </view>
+          <view class="major-quote-line" wx:if="{{item.quote}}">
+            <text>{{item.quote}}</text>
+          </view>
+          <view class="codex-body-preview">
+            <text class="codex-text {{item.isUnlocked ? '' : 'text-fog'}}">{{item.text}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- TAB 4: 诸神殿堂图鉴 (10位神明) -->
+  <view class="tab-content-section" wx:if="{{currentTab === 'deities'}}">
+    <view class="section-desc-box">
+      <text>“奥林匹斯十二主神垂顾凡世。在祭坛献上公牛与纯酒，聆听神圣徽音。”</text>
+    </view>
+    <view class="deities-list">
+      <block wx:for="{{archiveData.deities}}" wx:key="id">
+        <view class="codex-card stone-card {{item.isUnlocked ? 'codex-unlocked' : 'codex-locked'}}">
+          <view class="codex-card-header">
+            <view class="codex-icon-title">
+              <text class="codex-icon">{{item.icon}}</text>
+              <text class="codex-title">{{item.title}}</text>
+            </view>
+            <text class="codex-lock-tag">{{item.isUnlocked ? '已叩拜' : '未曾祈求'}}</text>
+          </view>
+          <view class="deity-prayer-box">
+            <text class="prayer-label">〔 虔敬祷词 〕</text>
+            <text class="prayer-text {{item.isUnlocked ? '' : 'text-fog'}}">“{{item.prayer}}”</text>
+          </view>
+          <view class="deity-bless-box" wx:if="{{item.isUnlocked}}">
+            <text class="bless-label">✦ 恩典眷顾：</text>
+            <text class="bless-item" wx:if="{{item.blessing.luck}}">神恩+{{item.blessing.luck}} </text>
+            <text class="bless-item" wx:if="{{item.blessing.loyalty}}">忠诚+{{item.blessing.loyalty}} </text>
+            <text class="bless-item" wx:if="{{item.blessing.sanity}}">理智+{{item.blessing.sanity}} </text>
+            <text class="bless-item" wx:if="{{item.blessing.food}}">食物+{{item.blessing.food}} </text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- TAB 5: 终局图谱 (5大结局) -->
+  <view class="tab-content-section" wx:if="{{currentTab === 'endings'}}">
+    <view class="section-desc-box">
+      <text>“命运织机的五种终局。是光荣凯旋、残缺上岸，还是魂归狂澜深渊？”</text>
+    </view>
+    <view class="endings-list">
+      <block wx:for="{{archiveData.endings}}" wx:key="id">
+        <view class="codex-card stone-card {{item.isUnlocked ? 'codex-unlocked' : 'codex-locked'}}">
+          <view class="codex-card-header">
+            <view class="codex-icon-title">
+              <text class="codex-icon">{{item.icon}}</text>
+              <text class="codex-title">{{item.title}}</text>
+            </view>
+            <text class="ending-tag-pill" wx:if="{{item.isUnlocked}}">{{item.tag}}</text>
+            <text class="codex-lock-tag" wx:else>未曾经历</text>
+          </view>
+          <view class="ending-desc-box">
+            <text class="ending-desc-text {{item.isUnlocked ? '' : 'text-fog'}}">{{item.desc}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 底部返回主界面按钮 -->
+  <view class="archive-footer-actions">
+    <button class="btn-gold back-btn" bindtap="goBack">
+      <text>◀ 返回航海大厅</text>
+    </button>
+  </view>
+
+  <!-- 弹窗：图鉴/成就详情典故全文展开 -->
+  <view class="modal-mask" wx:if="{{showDetailModal}}" bindtap="closeDetail">
+    <view class="modal-content stone-card detail-modal-content" catchtap="preventBubble">
+      <view class="modal-header">
+        <view class="detail-header-left">
+          <text class="detail-icon">{{selectedDetailItem.icon || '📜'}}</text>
+          <text class="detail-title">{{selectedDetailItem.name || selectedDetailItem.title}}</text>
+        </view>
+        <view class="modal-close" bindtap="closeDetail">✕</view>
+      </view>
+
+      <scroll-view scroll-y class="detail-modal-body">
+        <view class="detail-quote-box" wx:if="{{selectedDetailItem.quote}}">
+          <text class="detail-quote-text">“{{selectedDetailItem.quote}}”</text>
+        </view>
+        <view class="detail-text-box">
+          <text class="detail-text-body">{{selectedDetailItem.desc || selectedDetailItem.text}}</text>
+        </view>
+        <view class="detail-hint-box" wx:if="{{!selectedDetailItem.isUnlocked && selectedDetailItem.hint}}">
+          <text class="hint-label">🔒 解锁线索：</text>
+          <text class="hint-body">{{selectedDetailItem.hint}}</text>
+        </view>
+      </scroll-view>
+
+      <button class="btn-gold modal-btn" bindtap="closeDetail">阅毕关闭</button>
+    </view>
+  </view>
+
+</view>
