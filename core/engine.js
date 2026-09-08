@@ -28,6 +28,8 @@ class OdysseyEngine {
         loyalty: initRes.loyalty  // 二阶：船员忠诚 (0 - 100)
       },
       currentEnv: 'land',         // 'sea' | 'land'
+      currentIsland: null,        // 当前遭遇/驻留的岛屿信息 { type, typeName, name, icon, desc }
+      landStayTurns: 0,           // 在当前岛屿停留的回合数（0~2）
       stormStreak: 0,             // 风暴/迷航连续触发次数计数器
       majorEventsCount: 0,        // 主线经典大事件计数（至多 3 次）
       sightsCount: 0,             // 见闻录发现计数（至多 3 次）
@@ -87,6 +89,259 @@ class OdysseyEngine {
   }
 
   /**
+   * 生成岛屿基本信息（分为无人岛屿、人类岛屿、怪物/神异岛屿三种）
+   */
+  generateIslandInfo() {
+    const roll = Math.random();
+    let type = 'uninhabited';
+    if (roll < 0.38) {
+      type = 'uninhabited';
+    } else if (roll < 0.76) {
+      type = 'human';
+    } else {
+      type = 'monster';
+    }
+
+    const islandData = {
+      uninhabited: {
+        type: 'uninhabited',
+        typeName: '无人荒岛',
+        icon: '🏝️',
+        titles: ['苍翠未知荒岛', '断崖孤岛', '海图未载之岛', '寂静石楠岛'],
+        descs: [
+          '海风吹散晨雾，一座未在海图上标注的孤岛在前方左舷浮现。岛上古木参天，断崖瀑布自峭壁垂落白练，不见炊烟与人迹，唯有大群海鸟在灌木间盘旋啼鸣。老水手远眺良久：“船长，前面是座无人荒岛。那里或许有甘甜的泉眼与可供捕猎的野兽，但也难料密林深处是否暗藏险坑。”',
+          '战船切开平静的浪花，前方隐现一座狭长孤岛。岛岸布满白沙与灰岩，海鸟在礁石上栖息。瞭望手呼喊：“前方荒岛未见任何城邦与人烟！若靠岸探索，或许能找到淡水、枯木与先民遗迹，补充给养。”'
+        ],
+        landChoiceText: '下令靠岸，登上荒岛探索',
+        landChoiceHint: '驶入避风湾抛锚，搜寻淡水与补给',
+        bypassChoiceText: '不予靠岸，全速绕行',
+        bypassChoiceHint: '避开未知浅礁，留在开阔海面继续航行'
+      },
+      human: {
+        type: 'human',
+        typeName: '有人城邦岛屿',
+        icon: '🏛️',
+        titles: ['繁茂海岬岛屿', '炊烟袅袅的集市岛', '外邦城邦港湾', '石砌城塞之岛'],
+        descs: [
+          '顺风航行至正午，前方海湾出现了一座坐落于绿山之间的城邦岛屿。石砌码头隐约可见，港内系着外邦木船，山坡上白墙红瓦错落，海风送来烘烤大麦面包与干鱼的咸香。瞭望手兴奋呼喊：“有城邦！岸边有人类聚落活动的踪迹，定能休整与贸易，但也需防备外邦战力或冲突。”',
+          '海面波光粼粼，前方岛屿岬角处升起一道道安宁的炊烟。依山而建的渔村清晰可辨，岛民们似乎正在浅滩织网。老水手手扶船舷：“船长，这是座有人居住的岛屿。若靠岸入港，可与当地人以物易物，亦可能卷入争端。”'
+        ],
+        landChoiceText: '靠港停泊，入岛接触贸易',
+        landChoiceHint: '战船进港，与岛民接触探索',
+        bypassChoiceText: '不入港口，沿外海驶过',
+        bypassChoiceHint: '保持高度戒备，克制入城欲望继续远航'
+      },
+      monster: {
+        type: 'monster',
+        typeName: '异象神异之岛',
+        icon: '👁️',
+        titles: ['迷雾怪石之岛', '紫雾祭坛隐秘岛', '低语轰鸣之岛', '古老神祇秘境'],
+        descs: [
+          '天空毫无征兆地沉暗下来，海流将战船推向一座笼罩在灰紫色浓雾中的怪岛。奇形怪状的悬崖犬牙交错，海浪拍击崖洞发出沉闷如巨兽低吼的回响，隐约能瞥见山巅残破的神坛与微弱荧光。全船水手不寒而栗：“船长……这岛透着怪异，或是神明祭坛，或是巨兽巢穴。若踏上去，生死难料。”',
+          '灰黑色的礁石从狂躁的白沫中拔地而起，前方海岛周围弥漫着浓厚的异味。雾霭深处不时传来摄人心魄的怪异声响与祭坛的祈颂声。老水手按紧了腰间的佩剑：“诸神在上……这座岛绝非凡人居所。若登陆探秘，必将直面未知的命运考验。”'
+        ],
+        landChoiceText: '拔剑戒备，强行登岛探秘',
+        landChoiceHint: '直面未知神异与险恶考验',
+        bypassChoiceText: '敬畏远避，全速驶离险地',
+        bypassChoiceHint: '严防妖魔与神怒灾殃，即刻回归主航道'
+      }
+    };
+
+    const info = islandData[type];
+    const title = info.titles[Math.floor(Math.random() * info.titles.length)];
+    const desc = info.descs[Math.floor(Math.random() * info.descs.length)];
+
+    return {
+      type: type,
+      typeName: info.typeName,
+      name: title,
+      icon: info.icon,
+      desc: desc,
+      landChoiceText: info.landChoiceText,
+      landChoiceHint: info.landChoiceHint,
+      bypassChoiceText: info.bypassChoiceText,
+      bypassChoiceHint: info.bypassChoiceHint
+    };
+  }
+
+  /**
+   * 生成远眺海岛·是否登陆决策节点（不消耗回合数）
+   */
+  generateIslandApproachNode() {
+    const island = this.generateIslandInfo();
+    this.state.currentIsland = island;
+
+    return {
+      id: `island_approach_${island.type}_${Date.now()}`,
+      chapter: `海域航行 · 远眺海岛`,
+      title: island.name,
+      env: 'sea',
+      icon: island.icon,
+      speaker: '瞭望手',
+      isLandingDecision: true,
+      pendingIslandType: island.type,
+      text: island.desc,
+      choices: [
+        {
+          text: island.landChoiceText,
+          hint: island.landChoiceHint,
+          action: 'land',
+          deltas: {},
+          condition: null
+        },
+        {
+          text: island.bypassChoiceText,
+          hint: island.bypassChoiceHint,
+          action: 'bypass',
+          deltas: {},
+          condition: null
+        }
+      ]
+    };
+  }
+
+  /**
+   * 生成岛屿驻留或拔锚抉择节点（至多停留2回合，不消耗回合数）
+   */
+  generateIslandStayNode() {
+    const island = this.state.currentIsland || { typeName: '海岛', name: '海岛' };
+
+    return {
+      id: `island_stay_${Date.now()}`,
+      chapter: `岛屿探索 · 驻留抉择`,
+      title: `暮色将至 · 驻留抉择`,
+      env: 'land',
+      icon: '⛺',
+      speaker: '副手',
+      isIslandStayDecision: true,
+      text: `在${island.name || island.typeName}上的第一日探索已随暮色落幕。营火的火星随晚风升入夜空，水手们正在清点一天的收获与战损。副手快步走上前来请示：“船长，按航海戒律，我们在同一座岛上至多可驻留两日。是要在此岛再探寻一日，还是趁着晨曦顺风拔锚起航，重返归乡的大海？”`,
+      choices: [
+        {
+          text: '在此岛多留一日，深入探索',
+          hint: '在岛上度过第二回合（本岛最后驻留日）',
+          action: 'stay',
+          deltas: {},
+          condition: null
+        },
+        {
+          text: '整备物资，拔锚起航回海',
+          hint: '结束陆地探索，战船驶回大海',
+          action: 'depart',
+          deltas: {},
+          condition: null
+        }
+      ]
+    };
+  }
+
+  /**
+   * 根据岛屿类型抽取匹配的陆地事件（普通事件或主线大事件）
+   */
+  pickLandEventForIsland(islandType) {
+    const day = this.state.day;
+    const luck = this.state.resources.luck;
+
+    // 1. 检查经典主线大事件触发 (至多 3 次)
+    let triggerMajor = false;
+    if (this.state.majorEventsCount < 3) {
+      if ((day >= 5 && day <= 7 && this.state.majorEventsCount === 0) ||
+          (day >= 11 && day <= 13 && this.state.majorEventsCount === 1) ||
+          (day >= 16 && day <= 18 && this.state.majorEventsCount === 2)) {
+        triggerMajor = true;
+      }
+    }
+
+    if (triggerMajor) {
+      // 筛选未经历过的陆地大事件，优先匹配当前岛屿类型
+      const unusedMajor = GAME_DATABASE.MAJOR_EVENTS.filter(m => 
+        !this.state.visitedMajorIds.includes(m.id) && m.env === 'land'
+      );
+      if (unusedMajor.length > 0) {
+        let pickedMajor = unusedMajor.find(m => m.landType === islandType);
+        if (!pickedMajor && luck < 40) {
+          pickedMajor = unusedMajor.find(m => m.title.includes('太阳神') || m.title.includes('独眼') || m.title.includes('食人'));
+        }
+        if (!pickedMajor) {
+          pickedMajor = unusedMajor[0];
+        }
+
+        if (pickedMajor) {
+          this.state.visitedMajorIds.push(pickedMajor.id);
+          this.state.majorEventsCount += 1;
+          this.state.currentEnv = 'land';
+          this.state.epicMajorEvent = pickedMajor;
+
+          const mAchs = ArchiveManager.recordMajorEvent(pickedMajor.id);
+          this.state.newAchievements = (this.state.newAchievements || []).concat(mAchs);
+          return JSON.parse(JSON.stringify(pickedMajor));
+        }
+      }
+    }
+
+    // 2. 抽取匹配 islandType 的随机陆地事件
+    let candidates = GAME_DATABASE.RANDOM_EVENTS.filter(e => 
+      e.env === 'land' && e.landType === islandType && !this.state.visitedRandomIds.includes(e.id)
+    );
+
+    if (candidates.length === 0) {
+      candidates = GAME_DATABASE.RANDOM_EVENTS.filter(e => e.env === 'land' && e.landType === islandType);
+    }
+    if (candidates.length === 0) {
+      candidates = GAME_DATABASE.RANDOM_EVENTS.filter(e => e.env === 'land');
+    }
+
+    const picked = candidates[Math.floor(Math.random() * candidates.length)];
+    this.state.visitedRandomIds.push(picked.id);
+    return JSON.parse(JSON.stringify(picked));
+  }
+
+  /**
+   * 抽取海洋事件（普通海洋事件或海上大事件）
+   */
+  pickSeaEvent() {
+    const day = this.state.day;
+
+    // 1. 检查经典主线大事件触发 (海上大事件：塞壬 major_8, 斯库拉 major_9)
+    let triggerMajor = false;
+    if (this.state.majorEventsCount < 3) {
+      if ((day >= 5 && day <= 7 && this.state.majorEventsCount === 0) ||
+          (day >= 11 && day <= 13 && this.state.majorEventsCount === 1) ||
+          (day >= 16 && day <= 18 && this.state.majorEventsCount === 2)) {
+        triggerMajor = true;
+      }
+    }
+
+    if (triggerMajor) {
+      const unusedSeaMajor = GAME_DATABASE.MAJOR_EVENTS.filter(m => 
+        !this.state.visitedMajorIds.includes(m.id) && m.env === 'sea'
+      );
+      if (unusedSeaMajor.length > 0) {
+        const pickedMajor = unusedSeaMajor[Math.floor(Math.random() * unusedSeaMajor.length)];
+        this.state.visitedMajorIds.push(pickedMajor.id);
+        this.state.majorEventsCount += 1;
+        this.state.currentEnv = 'sea';
+        this.state.epicMajorEvent = pickedMajor;
+
+        const mAchs = ArchiveManager.recordMajorEvent(pickedMajor.id);
+        this.state.newAchievements = (this.state.newAchievements || []).concat(mAchs);
+        return JSON.parse(JSON.stringify(pickedMajor));
+      }
+    }
+
+    // 2. 抽取未经历过的随机海洋事件
+    let candidates = GAME_DATABASE.RANDOM_EVENTS.filter(e => 
+      e.env === 'sea' && !this.state.visitedRandomIds.includes(e.id)
+    );
+    if (candidates.length === 0) {
+      candidates = GAME_DATABASE.RANDOM_EVENTS.filter(e => e.env === 'sea');
+    }
+
+    const picked = candidates[Math.floor(Math.random() * candidates.length)];
+    this.state.visitedRandomIds.push(picked.id);
+    return JSON.parse(JSON.stringify(picked));
+  }
+
+  /**
    * 执行玩家选择并进入下一回合
    * @param {number} choiceIndex 
    */
@@ -102,7 +357,228 @@ class OdysseyEngine {
       return { success: false, msg: check.reason };
     }
 
-    // 1. 记录历史文本
+    // 0. 特殊即死/分支终局判定 (如大事件九进入大漩涡)
+    if (choice.triggerEnding) {
+      this.triggerEnding(choice.triggerEnding);
+      return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
+    }
+
+    // 0.1 序章启航特殊处理：从特洛伊誓师起航直接入海，第一天航程在海上展开
+    if (node.id === 'prologue') {
+      this.state.history.push({
+        day: 1,
+        chapter: node.chapter || node.title,
+        envLabel: '特洛伊海滩',
+        speaker: node.speaker || '旁白',
+        text: node.text,
+        chosenText: choice.text
+      });
+
+      const rawDeltas = Object.assign({ food: 0, sanity: 0, luck: 0, crew: 0, loyalty: 0 }, choice.deltas || {});
+      for (let k in rawDeltas) {
+        this.state.resources[k] += rawDeltas[k];
+      }
+      this.state.lastDeltas = rawDeltas;
+
+      this.state.currentEnv = 'sea';
+      this.state.landStayTurns = 0;
+      this.state.currentIsland = null;
+      this.state.day = 1;
+      this.state.currentNode = this.pickSeaEvent();
+      return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+    }
+
+    // 0.2 是否登陆岛屿决策（不计入总回合数，不推进天数与消耗）
+    if (node.isLandingDecision) {
+      this.state.history.push({
+        day: this.state.day,
+        chapter: node.chapter || node.title,
+        envLabel: '海域远眺',
+        speaker: node.speaker || '瞭望手',
+        text: node.text,
+        chosenText: choice.text
+      });
+
+      if (choice.action === 'bypass') {
+        // 不登陆：直接进入海洋剧情
+        this.state.currentEnv = 'sea';
+        this.state.landStayTurns = 0;
+        this.state.currentIsland = null;
+        this.state.currentNode = this.pickSeaEvent();
+        return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+      } else {
+        // 登陆：进入陆地剧情（根据岛屿类型安排事件）
+        this.state.currentEnv = 'land';
+        this.state.landStayTurns = 0;
+        this.state.currentNode = this.pickLandEventForIsland(node.pendingIslandType);
+        return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+      }
+    }
+
+    // 0.3 岛屿驻留或起航抉择（至多停留两回合，不计入总回合数，不推进天数与消耗）
+    if (node.isIslandStayDecision) {
+      this.state.history.push({
+        day: this.state.day,
+        chapter: node.chapter || node.title,
+        envLabel: '岛屿驻留',
+        speaker: node.speaker || '副手',
+        text: node.text,
+        chosenText: choice.text
+      });
+
+      if (choice.action === 'depart') {
+        // 拔锚起航：重返大海
+        this.state.currentEnv = 'sea';
+        this.state.landStayTurns = 0;
+        this.state.currentIsland = null;
+        this.state.currentNode = this.pickSeaEvent();
+        return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+      } else {
+        // 多留一日：在当前岛屿度过第二回合（根据当前岛屿类型再抽取一幕陆上事件）
+        this.state.currentEnv = 'land';
+        const islandType = this.state.currentIsland ? this.state.currentIsland.type : 'human';
+        this.state.currentNode = this.pickLandEventForIsland(islandType);
+        return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+      }
+    }
+
+    // 0.4 剧情正文展现节点（isResolution）的继续推进
+    if (node.isResolution) {
+      this.state.day += 1;
+      if (this.state.day >= this.state.maxDays) {
+        this.calculateFinalEnding();
+        return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
+      }
+      this.advanceToNextEvent(node);
+      return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+    }
+
+    // 0.5 微型事件链第一阶段抉择（触发第二阶段事件与命运概率判定）
+    if (choice.chain) {
+      // 记录第一阶段抉择历史
+      this.state.history.push({
+        day: this.state.day,
+        chapter: node.chapter || node.title,
+        envLabel: node.envLabel || (node.env === 'sea' ? '海上航段' : '陆上探索'),
+        speaker: node.speaker || '旁白',
+        text: node.text,
+        chosenText: choice.text
+      });
+
+      // 概率判定系统（受神恩与职业特长动态加权）
+      const outcomes = choice.chain.outcomes || [];
+      const chainType = choice.chain.type; // 'battle', 'divine', 'luck', 'sea', 'scavenge'
+      const weights = this.state.classInfo.weights || {};
+      const res = this.state.resources;
+      const currentClass = this.state.chosenClass;
+
+      // 神恩对较优判定结果的动态修正（基准 50）
+      const luckMod = (res.luck - 50) * 0.4;
+
+      const dynamicWeights = outcomes.map((o, idx) => {
+        let w = o.baseWeight || 50;
+        if (idx === 0) {
+          w += luckMod;
+          if (chainType === 'battle' && currentClass === 'warrior') {
+            w += 20; // 贵族武领海陆搏杀胜率更高
+          }
+          if (chainType === 'divine' && currentClass === 'priest') {
+            w += 25; // 神谕祭司神迹眷顾率更高
+          }
+          if (chainType === 'sea' && currentClass === 'helmsman') {
+            w += 20; // 老辣舵手风暴打捞生还率更高
+          }
+        }
+        return Math.max(10, w);
+      });
+
+      const totalWeight = dynamicWeights.reduce((a, b) => a + b, 0);
+      let roll = Math.random() * totalWeight;
+      let winningIndex = 0;
+      for (let i = 0; i < dynamicWeights.length; i++) {
+        if (roll < dynamicWeights[i]) {
+          winningIndex = i;
+          break;
+        }
+        roll -= dynamicWeights[i];
+      }
+
+      const outcome = outcomes[winningIndex] || outcomes[0];
+
+      // 应用判定结果的数值变动（含职业加权修正）
+      const rawDeltas = Object.assign({ food: 0, sanity: 0, luck: 0, crew: 0, loyalty: 0 }, outcome.deltas || {});
+      const appliedDeltas = { ...rawDeltas };
+
+      if (appliedDeltas.loyalty < 0 && weights.loyaltyLossRate) {
+        appliedDeltas.loyalty = Math.round(appliedDeltas.loyalty * weights.loyaltyLossRate);
+      }
+      if (appliedDeltas.food > 0 && weights.battleGainRate && (node.title && (node.title.includes('海战') || node.title.includes('作战')))) {
+        appliedDeltas.food = Math.round(appliedDeltas.food * weights.battleGainRate);
+      }
+      if (appliedDeltas.crew < 0 && weights.stormLossRate && node.isStormOrDisoriented) {
+        appliedDeltas.crew = Math.max(-1, Math.round(appliedDeltas.crew * weights.stormLossRate));
+      }
+
+      // 回合自然消耗（每回合食物-3，理智-2）
+      const foodDecay = Math.round(3 * (weights.foodDecayRate || 1.0));
+      const sanityDecay = Math.round(2 * (weights.sanityDecayRate || 1.0));
+      appliedDeltas.food -= foodDecay;
+      appliedDeltas.sanity -= sanityDecay;
+
+      res.food += appliedDeltas.food;
+      res.sanity += appliedDeltas.sanity;
+      res.luck += appliedDeltas.luck;
+      res.crew += appliedDeltas.crew;
+      res.loyalty += appliedDeltas.loyalty;
+
+      res.food = Math.max(0, Math.min(100, res.food));
+      res.sanity = Math.max(0, Math.min(100, res.sanity));
+      res.luck = Math.max(0, Math.min(100, res.luck));
+      res.loyalty = Math.max(0, Math.min(100, res.loyalty));
+
+      this.state.lastDeltas = appliedDeltas;
+
+      // 解锁成就：命运的骰子 (ach_first_dice) 以及回合检测
+      const diceAchs = ArchiveManager.recordDiceRoll ? ArchiveManager.recordDiceRoll() : [];
+      const turnAchs = ArchiveManager.checkTurnUnlocks(this.state, node, choice);
+      this.state.newAchievements = (this.state.newAchievements || []).concat(diceAchs).concat(turnAchs);
+
+      // 检定即时伤亡终局
+      if (res.crew <= 0) {
+        this.triggerEnding('death_sea');
+        return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
+      }
+      if (res.loyalty <= 0) {
+        this.triggerEnding('death_land');
+        return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
+      }
+
+      // 切换到第二阶段事件展示节点 (isResolution 为 true，玩家阅读后点击继续前行以推进回合)
+      this.state.currentNode = {
+        id: `${node.id}_chain_${winningIndex}`,
+        title: `${node.title} · ${outcome.title}`,
+        chapter: node.chapter || node.title,
+        env: node.env,
+        landType: node.landType,
+        icon: node.icon,
+        speaker: '旁白',
+        quote: '',
+        text: `${choice.chain.text}\n\n【命运判定 · ${outcome.title}】\n${outcome.text}`,
+        isResolution: true,
+        choices: [
+          {
+            text: "妥善处置，继续前行",
+            hint: "收拢心神，扬帆驶向下一段航程",
+            deltas: {},
+            condition: null
+          }
+        ]
+      };
+
+      return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+    }
+
+    // 1. 记录常规历史文本
     this.state.history.push({
       day: this.state.day,
       chapter: node.chapter || node.title,
@@ -140,6 +616,51 @@ class OdysseyEngine {
     res.luck += appliedDeltas.luck;
     res.crew += appliedDeltas.crew;
     res.loyalty += appliedDeltas.loyalty;
+
+    // 如果该选项包含大事件正文展现 (resolutionText)，则切换到剧情正文展示节点供玩家沉浸式阅读
+    if (choice.resolutionText) {
+      const mAchs = ArchiveManager.recordMajorEvent(node.id);
+      this.state.newAchievements = (this.state.newAchievements || []).concat(mAchs);
+
+      this.state.lastDeltas = appliedDeltas;
+
+      // 检定即时伤亡
+      if (res.crew <= 0) {
+        this.triggerEnding('death_sea');
+        return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
+      }
+      if (res.loyalty <= 0) {
+        this.triggerEnding('death_land');
+        return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
+      }
+
+      this.state.currentNode = {
+        id: `${node.id}_resolution`,
+        title: node.title,
+        chapter: node.chapter || node.title,
+        env: node.env,
+        landType: node.landType,
+        icon: node.icon,
+        speaker: '旁白',
+        quote: choice.quote || node.quote || '',
+        text: choice.resolutionText,
+        isResolution: true,
+        choices: [
+          {
+            text: "咽下苦果，继续前行",
+            hint: "铭记教训，扬帆驶向下一片海域",
+            deltas: {},
+            condition: null
+          }
+        ]
+      };
+
+      // 检定回合决策与状态成就
+      const turnAchs = ArchiveManager.checkTurnUnlocks(this.state, node, choice);
+      this.state.newAchievements = (this.state.newAchievements || []).concat(turnAchs);
+
+      return { success: true, state: this.state, newAchievements: this.state.newAchievements };
+    }
 
     // 3. 回合自然消耗（每回合食物-3，理智-2，受职业加权）
     const foodDecay = Math.round(3 * (weights.foodDecayRate || 1.0));
@@ -215,24 +736,22 @@ class OdysseyEngine {
       return { success: true, ending: this.state.ending, state: this.state, newAchievements: this.state.newAchievements };
     }
 
-    // 7. 生成下一个事件（海陆交替 + 风暴连击 + 大事件检定 + 见闻）
+    // 7. 生成下一个事件（海陆交替 + 远眺海岛是否登陆决策 + 驻留上限）
     this.advanceToNextEvent(node);
 
     return { success: true, state: this.state, newAchievements: this.state.newAchievements };
   }
 
   /**
-   * 概率生成下一个事件
+   * 概率生成下一个事件（海陆交替流转系统）
    */
   advanceToNextEvent(previousNode) {
     this.state.discoveredSight = null;
     this.state.epicMajorEvent = null;
 
-    const day = this.state.day;
-    const luck = this.state.resources.luck;
     const weights = this.state.classInfo.weights || {};
 
-    // 1. 见闻录触发判定（单局最多 3 次，约 18% 概率在宁静时刻偶遇）
+    // 1. 见闻录触发判定（单局最多 3 次，约 22% 概率在宁静时刻偶遇）
     if (this.state.sightsCount < 3 && Math.random() < 0.22) {
       const unusedSights = GAME_DATABASE.SIGHTS.filter(s => !this.state.unlockedSights.includes(s.id));
       if (unusedSights.length > 0) {
@@ -241,81 +760,45 @@ class OdysseyEngine {
         this.state.sightsCount += 1;
         this.state.discoveredSight = sight;
 
-        // 全局图鉴与成就记录
         const sAchs = ArchiveManager.recordSight(sight.id);
         this.state.newAchievements = (this.state.newAchievements || []).concat(sAchs);
       }
     }
 
-    // 2. 经典主线大事件触发检定（至多 3 次，分布在航程第 5~8、11~14、16~18 天窗口）
-    let triggerMajor = false;
-    if (this.state.majorEventsCount < 3) {
-      if ((day >= 5 && day <= 7 && this.state.majorEventsCount === 0) ||
-          (day >= 11 && day <= 13 && this.state.majorEventsCount === 1) ||
-          (day >= 16 && day <= 18 && this.state.majorEventsCount === 2)) {
-        triggerMajor = true;
-      }
-    }
+    // 2. 陆地回合流转与驻留上限控制：
+    if (this.state.currentEnv === 'land') {
+      this.state.landStayTurns = (this.state.landStayTurns || 0) + 1;
 
-    if (triggerMajor) {
-      // 筛选适合神恩大事件
-      const unusedMajor = GAME_DATABASE.MAJOR_EVENTS.filter(m => !this.state.visitedMajorIds.includes(m.id));
-      if (unusedMajor.length > 0) {
-        let pickedMajor = null;
-        if (luck < 40) {
-          // 恶兆偏向：斯库拉、太阳神牛、食人巨人、独眼巨人
-          pickedMajor = unusedMajor.find(m => m.title.includes('太阳神') || m.title.includes('斯库拉') || m.title.includes('独眼') || m.title.includes('食人'));
-        } else if (luck > 60) {
-          // 祥瑞偏向：斯克里亚、风神、喀耳刻、卡吕普索
-          pickedMajor = unusedMajor.find(m => m.title.includes('斯克里亚') || m.title.includes('风神') || m.title.includes('喀耳刻') || m.title.includes('塞壬'));
-        }
-        if (!pickedMajor) {
-          pickedMajor = unusedMajor[Math.floor(Math.random() * unusedMajor.length)];
-        }
-
-        this.state.visitedMajorIds.push(pickedMajor.id);
-        this.state.majorEventsCount += 1;
-        this.state.currentEnv = pickedMajor.env || 'sea';
-        this.state.currentNode = JSON.parse(JSON.stringify(pickedMajor));
-        this.state.epicMajorEvent = pickedMajor;
-
-        // 全局图鉴与大事件成就记录
-        const mAchs = ArchiveManager.recordMajorEvent(pickedMajor.id);
-        this.state.newAchievements = (this.state.newAchievements || []).concat(mAchs);
+      // 玩家至多在陆地上停留两个回合：
+      // 如果刚度过第 1 回合 (< 2)，让玩家决策是继续驻留还是拔锚起航！
+      if (this.state.landStayTurns < 2) {
+        this.state.currentNode = this.generateIslandStayNode();
+        return;
+      } else {
+        // 已达 2 回合上限，必须拔锚起航返回大海！
+        this.state.currentEnv = 'sea';
+        this.state.landStayTurns = 0;
+        this.state.currentIsland = null;
+        this.state.currentNode = this.pickSeaEvent();
         return;
       }
     }
 
-    // 3. 正常海陆交替流转（带风暴迷航连发机制）
-    let nextEnv = 'sea';
+    // 3. 海洋回合流转（风暴连发判定）
     if (previousNode && previousNode.env === 'sea' && previousNode.isStormOrDisoriented) {
-      // 若上一轮遭遇风暴/迷航，有 60% 概率连续进入下一次海上险境（舵手职业下降为 36%）
       const chainChance = 0.6 * (weights.stormChainChanceRate || 1.0);
       if (this.state.stormStreak < 2 && Math.random() < chainChance) {
-        nextEnv = 'sea';
         this.state.stormStreak += 1;
-      } else {
-        nextEnv = 'land';
-        this.state.stormStreak = 0;
+        this.state.currentEnv = 'sea';
+        this.state.currentNode = this.pickSeaEvent();
+        return;
       }
-    } else {
-      // 严格海陆交替
-      nextEnv = (this.state.currentEnv === 'sea') ? 'land' : 'sea';
-      this.state.stormStreak = 0;
     }
 
-    this.state.currentEnv = nextEnv;
+    this.state.stormStreak = 0;
 
-    // 从 52 个随机事件库中筛选匹配环境且未重复的事件
-    let candidateEvents = GAME_DATABASE.RANDOM_EVENTS.filter(e => e.env === nextEnv && !this.state.visitedRandomIds.includes(e.id));
-    if (candidateEvents.length === 0) {
-      // 全部经历过则重置池
-      candidateEvents = GAME_DATABASE.RANDOM_EVENTS.filter(e => e.env === nextEnv);
-    }
-
-    const pickedEvent = candidateEvents[Math.floor(Math.random() * candidateEvents.length)];
-    this.state.visitedRandomIds.push(pickedEvent.id);
-    this.state.currentNode = JSON.parse(JSON.stringify(pickedEvent));
+    // 海洋回合正常结束，即将进入陆地回合：触发远眺海岛决策是否登陆！
+    this.state.currentNode = this.generateIslandApproachNode();
   }
 
   /**

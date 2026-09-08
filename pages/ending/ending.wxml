@@ -57,7 +57,7 @@
   <!-- 航程点亮见闻录面板 -->
   <view class="sights-panel stone-card animate-fade-in" wx:if="{{sightsList.length > 0}}">
     <view class="sights-header">
-      <text class="sights-title">◆ 航程点亮见闻录 ({{sightsList.length}}/3 卷) ◆</text>
+      <text class="sights-title">◆ 航程点亮见闻录 ◆</text>
     </view>
     <view class="sights-list">
       <view class="sight-entry" wx:for="{{sightsList}}" wx:key="id">

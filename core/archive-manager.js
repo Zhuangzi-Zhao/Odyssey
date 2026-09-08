@@ -172,6 +172,18 @@ const ArchiveManager = {
   },
 
   /**
+   * 记录命运判定掷骰（微型事件链或概率事件）
+   */
+  recordDiceRoll() {
+    const archive = this.getArchive();
+    const newAchs = [];
+    const a = this.unlock('ach_first_dice', archive);
+    if (a) newAchs.push(a);
+    this.saveArchive(archive);
+    return newAchs;
+  },
+
+  /**
    * 记录终局达成
    */
   recordEnding(endingKey, state) {
