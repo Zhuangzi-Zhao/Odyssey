@@ -43,6 +43,7 @@ class OdysseyEngine {
       currentNode: null,          // 当前剧情/事件节点
       discoveredSight: null,      // 当回合新触发的见闻录弹窗
       epicMajorEvent: null,       // 当回合触发的史诗大事件特刊
+      lastPopupDay: -99,          // 上一次弹出弹窗的天数（用于强制弹窗冷却防连续弹出）
       newAchievements: [],        // 当回合新达成的成就横幅队列
       gameEnded: false,
       ending: null
@@ -235,19 +236,74 @@ class OdysseyEngine {
   }
 
   /**
+   * 检查并尝试触发航海见闻录（宁静时刻偶遇，单局上限3次，与大事件绝对互斥，不连续弹出）
+   * @returns {boolean} 是否触发了见闻录
+   */
+  tryTriggerSight() {
+    // 1. 单局上限 3 次
+    if (this.state.sightsCount >= 3) return false;
+
+    // 2. 本回合若已有史诗大事件特刊，严禁同时触发见闻录（严格同回合互斥）
+    if (this.state.epicMajorEvent) return false;
+
+    // 3. 弹窗防连续出现冷却：与上一次弹窗（大事件或见闻录）至少间隔 2 个回合
+    const minInterval = 2;
+    if (this.state.day - (this.state.lastPopupDay || -99) < minInterval) {
+      return false;
+    }
+
+    // 4. 若当前处于主线大事件候选窗口期（第5-7天、11-13天、16-18天），优先为史诗大事件让路，不插队弹窗
+    const day = this.state.day;
+    const isMajorWindow = (this.state.majorEventsCount === 0 && day >= 5 && day <= 7) ||
+                          (this.state.majorEventsCount === 1 && day >= 11 && day <= 13) ||
+                          (this.state.majorEventsCount === 2 && day >= 16 && day <= 18);
+    if (isMajorWindow) {
+      return false;
+    }
+
+    // 5. 宁静时刻偶遇概率（在合规的平静回合有约 35% 概率偶遇）
+    if (Math.random() < 0.35) {
+      const unusedSights = GAME_DATABASE.SIGHTS.filter(s => !this.state.unlockedSights.includes(s.id));
+      if (unusedSights.length > 0) {
+        const sight = unusedSights[Math.floor(Math.random() * unusedSights.length)];
+        this.state.unlockedSights.push(sight.id);
+        this.state.sightsCount += 1;
+        this.state.discoveredSight = sight;
+        this.state.lastPopupDay = this.state.day; // 记录弹窗天数，开启冷却
+
+        const sAchs = ArchiveManager.recordSight(sight.id);
+        this.state.newAchievements = (this.state.newAchievements || []).concat(sAchs);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * 根据岛屿类型抽取匹配的陆地事件（普通事件或主线大事件）
    */
   pickLandEventForIsland(islandType) {
     const day = this.state.day;
     const luck = this.state.resources.luck;
 
-    // 1. 检查经典主线大事件触发 (至多 3 次)
+    // 0. 重置当回合弹窗
+    this.state.epicMajorEvent = null;
+    this.state.discoveredSight = null;
+
+    // 1. 检查经典主线大事件触发 (至多 3 次，且满足弹窗冷却间隔)
     let triggerMajor = false;
-    if (this.state.majorEventsCount < 3) {
+    const canPopup = (this.state.day - (this.state.lastPopupDay || -99)) >= 2;
+
+    if (this.state.majorEventsCount < 3 && canPopup) {
       if ((day >= 5 && day <= 7 && this.state.majorEventsCount === 0) ||
           (day >= 11 && day <= 13 && this.state.majorEventsCount === 1) ||
           (day >= 16 && day <= 18 && this.state.majorEventsCount === 2)) {
-        triggerMajor = true;
+        // 与神恩（幸运值）挂钩判定：窗口期内神恩越高触发越早，窗口末日必保底触发
+        const isWindowEnd = (day === 7 || day === 13 || day === 18);
+        const luckChance = 0.5 + (luck - 50) * 0.005;
+        if (isWindowEnd || Math.random() < luckChance) {
+          triggerMajor = true;
+        }
       }
     }
 
@@ -270,6 +326,8 @@ class OdysseyEngine {
           this.state.majorEventsCount += 1;
           this.state.currentEnv = 'land';
           this.state.epicMajorEvent = pickedMajor;
+          this.state.discoveredSight = null; // 确保同回合绝对互斥
+          this.state.lastPopupDay = this.state.day; // 记录弹窗天数，开启冷却
 
           const mAchs = ArchiveManager.recordMajorEvent(pickedMajor.id);
           this.state.newAchievements = (this.state.newAchievements || []).concat(mAchs);
@@ -292,6 +350,10 @@ class OdysseyEngine {
 
     const picked = candidates[Math.floor(Math.random() * candidates.length)];
     this.state.visitedRandomIds.push(picked.id);
+
+    // 3. 随机陆地探索时尝试偶遇宁静见闻录（与大事件互斥且带弹窗冷却）
+    this.tryTriggerSight();
+
     return JSON.parse(JSON.stringify(picked));
   }
 
@@ -300,14 +362,25 @@ class OdysseyEngine {
    */
   pickSeaEvent() {
     const day = this.state.day;
+    const luck = this.state.resources.luck;
 
-    // 1. 检查经典主线大事件触发 (海上大事件：塞壬 major_8, 斯库拉 major_9)
+    // 0. 重置当回合弹窗
+    this.state.epicMajorEvent = null;
+    this.state.discoveredSight = null;
+
+    // 1. 检查经典主线大事件触发 (海上大事件：塞壬 major_8, 斯库拉 major_9，至多 3 次且满足弹窗冷却)
     let triggerMajor = false;
-    if (this.state.majorEventsCount < 3) {
+    const canPopup = (this.state.day - (this.state.lastPopupDay || -99)) >= 2;
+
+    if (this.state.majorEventsCount < 3 && canPopup) {
       if ((day >= 5 && day <= 7 && this.state.majorEventsCount === 0) ||
           (day >= 11 && day <= 13 && this.state.majorEventsCount === 1) ||
           (day >= 16 && day <= 18 && this.state.majorEventsCount === 2)) {
-        triggerMajor = true;
+        const isWindowEnd = (day === 7 || day === 13 || day === 18);
+        const luckChance = 0.5 + (luck - 50) * 0.005;
+        if (isWindowEnd || Math.random() < luckChance) {
+          triggerMajor = true;
+        }
       }
     }
 
@@ -321,6 +394,8 @@ class OdysseyEngine {
         this.state.majorEventsCount += 1;
         this.state.currentEnv = 'sea';
         this.state.epicMajorEvent = pickedMajor;
+        this.state.discoveredSight = null; // 确保同回合绝对互斥
+        this.state.lastPopupDay = this.state.day; // 记录弹窗天数，开启冷却
 
         const mAchs = ArchiveManager.recordMajorEvent(pickedMajor.id);
         this.state.newAchievements = (this.state.newAchievements || []).concat(mAchs);
@@ -338,6 +413,12 @@ class OdysseyEngine {
 
     const picked = candidates[Math.floor(Math.random() * candidates.length)];
     this.state.visitedRandomIds.push(picked.id);
+
+    // 3. 在风平浪静的海洋航行时尝试偶遇见闻录（暴风雨/迷航不触发见闻）
+    if (!picked.isStormOrDisoriented) {
+      this.tryTriggerSight();
+    }
+
     return JSON.parse(JSON.stringify(picked));
   }
 
@@ -356,6 +437,10 @@ class OdysseyEngine {
     if (!check.available) {
       return { success: false, msg: check.reason };
     }
+
+    // 消费并清除当前节点的单次弹窗标记，防止次级/结果节点（如 resolution 或 chain）重复弹出
+    this.state.epicMajorEvent = null;
+    this.state.discoveredSight = null;
 
     // 0. 特殊即死/分支终局判定 (如大事件九进入大漩涡)
     if (choice.triggerEnding) {
@@ -751,21 +836,7 @@ class OdysseyEngine {
 
     const weights = this.state.classInfo.weights || {};
 
-    // 1. 见闻录触发判定（单局最多 3 次，约 22% 概率在宁静时刻偶遇）
-    if (this.state.sightsCount < 3 && Math.random() < 0.22) {
-      const unusedSights = GAME_DATABASE.SIGHTS.filter(s => !this.state.unlockedSights.includes(s.id));
-      if (unusedSights.length > 0) {
-        const sight = unusedSights[Math.floor(Math.random() * unusedSights.length)];
-        this.state.unlockedSights.push(sight.id);
-        this.state.sightsCount += 1;
-        this.state.discoveredSight = sight;
-
-        const sAchs = ArchiveManager.recordSight(sight.id);
-        this.state.newAchievements = (this.state.newAchievements || []).concat(sAchs);
-      }
-    }
-
-    // 2. 陆地回合流转与驻留上限控制：
+    // 1. 陆地回合流转与驻留上限控制：
     if (this.state.currentEnv === 'land') {
       this.state.landStayTurns = (this.state.landStayTurns || 0) + 1;
 

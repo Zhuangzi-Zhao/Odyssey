@@ -141,16 +141,18 @@ Page({
       secondOrderAlerts: state.secondOrderAlerts || []
     };
 
-    // 检查史诗大事件弹出
+    // 检查弹窗：史诗大事件特刊与航海见闻录严格互斥，保证绝不同时或连续重叠弹窗
     if (state.epicMajorEvent) {
       updatePayload.showEpicModal = true;
       updatePayload.epicEventData = state.epicMajorEvent;
-    }
-
-    // 检查见闻录偶遇弹出
-    if (state.discoveredSight) {
+      updatePayload.showSightModal = false;
+    } else if (state.discoveredSight) {
       updatePayload.showSightModal = true;
       updatePayload.currentSight = state.discoveredSight;
+      updatePayload.showEpicModal = false;
+    } else {
+      updatePayload.showEpicModal = false;
+      updatePayload.showSightModal = false;
     }
 
     this.setData(updatePayload);
