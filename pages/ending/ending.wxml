@@ -12,6 +12,11 @@
     </view>
   </view>
 
+  <!-- 史诗结局原画海报卡片 -->
+  <view class="ending-poster-card stone-card animate-fade-in" wx:if="{{ending.image}}">
+    <image class="ending-poster-image" src="{{ending.image}}" mode="aspectFill" />
+  </view>
+
   <!-- 史诗结局长文叙述卡片（上下金线剧场卡） -->
   <view class="ending-narrative stone-card animate-fade-in">
     <view class="narrative-border-top">◆ ════ 命运铭文 ════ ◆</view>

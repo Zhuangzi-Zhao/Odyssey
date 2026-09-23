@@ -15,9 +15,11 @@ Page({
         const decoded = JSON.parse(decodeURIComponent(options.data));
         const unlockedIds = decoded.unlockedSights || [];
         const fullSights = GAME_DATABASE.SIGHTS.filter(s => unlockedIds.includes(s.id));
+        const endId = decoded.ending && decoded.ending.id;
+        const fullEnding = Object.assign({}, GAME_DATABASE.ENDINGS[endId] || {}, decoded.ending || {});
 
         this.setData({
-          ending: decoded.ending || {},
+          ending: fullEnding,
           classInfo: decoded.classInfo || null,
           sightsList: fullSights,
           stats: {

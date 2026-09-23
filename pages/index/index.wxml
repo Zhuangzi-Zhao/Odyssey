@@ -1,10 +1,14 @@
 <!-- pages/index/index.wxml -->
 <view class="index-container">
-  <!-- 背景氛围光晕与深邃暗夜 -->
-  <view class="bg-vignette"></view>
+  <!-- 背景氛围光晕与深邃暗夜插画 -->
+  <view class="bg-cover-wrapper">
+    <image class="bg-cover-image" src="/img/重要配图/封面图.png" mode="aspectFill" />
+    <view class="bg-vignette"></view>
+  </view>
 
   <!-- 史诗主标题区（剧场式上下金线） -->
   <view class="title-section animate-fade-in">
+    <image class="game-logo" src="/img/重要配图/logo2.png" mode="aspectFit" />
     <view class="greek-divider-top">◆ ══════════════ ◈ ══════════════ ◆</view>
     <view class="latin-title">ODYSSEY : NOSTOS</view>
     <view class="main-title">奥德赛：归乡之路</view>

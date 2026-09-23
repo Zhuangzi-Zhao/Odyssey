@@ -335,6 +335,7 @@ const ArchiveManager = {
         id: s.id,
         title: s.title,
         text: isUnlocked ? s.text : '此篇航海隐秘仍笼罩于重重海雾之中，唯有在风平浪静的特定时刻偶遇方能点亮。',
+        image: s.image,
         isUnlocked,
         icon: isUnlocked ? '📜' : '🔒'
       };
@@ -348,6 +349,7 @@ const ArchiveManager = {
         title: m.title,
         quote: isUnlocked ? m.quote : '“荷马史诗的此段试炼尚未在你的航程中降临……”',
         text: isUnlocked ? m.text : '命运尚未交汇。保持不同神恩或推进天数，诸神将引渡你的战船直面此劫。',
+        image: m.image,
         env: m.env,
         icon: isUnlocked ? m.icon : '🔒',
         isUnlocked
@@ -376,6 +378,7 @@ const ArchiveManager = {
         title: end.title,
         tag: end.tag,
         desc: isUnlocked ? end.desc : '未达成的命运终局铭文。调整航行中的存活人数、忠诚度与决策以解锁此结局。',
+        image: end.image,
         icon: isUnlocked ? end.icon : '🔒',
         isUnlocked
       };

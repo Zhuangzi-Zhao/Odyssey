@@ -12,10 +12,48 @@
   box-sizing: border-box;
 }
 
+/* 背景海面插画与黑金暗角氛围 */
+.bg-cover-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-cover-image {
+  width: 100%;
+  height: 100%;
+  opacity: 0.22;
+  filter: saturate(0.85) brightness(0.65);
+}
+
+.bg-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 30%, rgba(15, 22, 38, 0.45) 0%, rgba(3, 5, 10, 0.95) 85%);
+}
+
 /* 顶部标题区 */
 .title-section {
   text-align: center;
-  margin-top: 30rpx;
+  margin-top: 15rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.game-logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin: 0 auto 12rpx;
+  display: block;
+  filter: drop-shadow(0 0 16rpx rgba(212, 175, 55, 0.45));
 }
 
 .greek-divider-top, .greek-divider-bottom {
@@ -54,11 +92,14 @@
 .emblem-section {
   width: 100%;
   max-width: 640rpx;
-  margin: 30rpx 0;
+  margin: 20rpx 0;
+  position: relative;
+  z-index: 1;
 }
 
 .quote-box {
-  background: #080c16;
+  background: rgba(8, 12, 22, 0.85);
+  backdrop-filter: blur(8px);
   border-top: 1px solid var(--color-border-gold);
   border-bottom: 1px solid var(--color-border-gold);
   border-left: 3px solid var(--color-gold-primary);
@@ -88,6 +129,8 @@
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+  position: relative;
+  z-index: 1;
 }
 
 .menu-btn {

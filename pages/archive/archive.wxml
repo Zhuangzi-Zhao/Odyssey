@@ -128,6 +128,10 @@
           bindtap="openDetail"
           data-item="{{item}}"
         >
+          <!-- 解锁缩略画 -->
+          <view class="codex-thumbnail-wrap" wx:if="{{item.isUnlocked && item.image}}">
+            <image class="codex-thumbnail" src="{{item.image}}" mode="aspectFill" />
+          </view>
           <view class="codex-card-header">
             <view class="codex-icon-title">
               <text class="codex-icon">{{item.icon}}</text>
@@ -155,6 +159,10 @@
           bindtap="openDetail"
           data-item="{{item}}"
         >
+          <!-- 解锁缩略画 -->
+          <view class="codex-thumbnail-wrap" wx:if="{{item.isUnlocked && item.image}}">
+            <image class="codex-thumbnail" src="{{item.image}}" mode="aspectFill" />
+          </view>
           <view class="codex-card-header">
             <view class="codex-icon-title">
               <text class="codex-icon">{{item.icon}}</text>
@@ -211,7 +219,15 @@
     </view>
     <view class="endings-list">
       <block wx:for="{{archiveData.endings}}" wx:key="id">
-        <view class="codex-card stone-card {{item.isUnlocked ? 'codex-unlocked' : 'codex-locked'}}">
+        <view 
+          class="codex-card stone-card {{item.isUnlocked ? 'codex-unlocked' : 'codex-locked'}}"
+          bindtap="openDetail"
+          data-item="{{item}}"
+        >
+          <!-- 解锁缩略画 -->
+          <view class="codex-thumbnail-wrap" wx:if="{{item.isUnlocked && item.image}}">
+            <image class="codex-thumbnail" src="{{item.image}}" mode="aspectFill" />
+          </view>
           <view class="codex-card-header">
             <view class="codex-icon-title">
               <text class="codex-icon">{{item.icon}}</text>
@@ -247,6 +263,10 @@
       </view>
 
       <scroll-view scroll-y class="detail-modal-body">
+        <!-- 解锁大图展示 -->
+        <view class="detail-image-wrap" wx:if="{{selectedDetailItem.isUnlocked && selectedDetailItem.image}}">
+          <image class="detail-modal-image" src="{{selectedDetailItem.image}}" mode="aspectFill" />
+        </view>
         <view class="detail-quote-box" wx:if="{{selectedDetailItem.quote}}">
           <text class="detail-quote-text">“{{selectedDetailItem.quote}}”</text>
         </view>

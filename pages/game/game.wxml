@@ -411,6 +411,11 @@
         <text class="epic-badge-icon">⚡</text>
       </view>
 
+      <!-- 史诗原画海报橫幅 -->
+      <view class="epic-banner-wrap" wx:if="{{epicEventData.image}}">
+        <image class="epic-modal-banner" src="{{epicEventData.image}}" mode="aspectFill" />
+      </view>
+
       <view class="epic-title-wrap">
         <text class="epic-title-main">{{epicEventData.title}}</text>
       </view>
@@ -442,6 +447,11 @@
           <text class="sight-header-title">航海见闻录 · 新发现</text>
         </view>
         <text class="sight-counter">〔第 {{state.sightsCount}} / 3 卷〕</text>
+      </view>
+
+      <!-- 见闻原画插图 -->
+      <view class="sight-banner-wrap" wx:if="{{currentSight.image}}">
+        <image class="sight-modal-banner" src="{{currentSight.image}}" mode="aspectFill" />
       </view>
 
       <view class="sight-title">{{currentSight.title}}</view>
