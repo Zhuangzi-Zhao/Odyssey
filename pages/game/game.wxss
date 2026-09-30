@@ -211,6 +211,93 @@
   line-height: 1.4;
 }
 
+/* ================= 戏剧四幕与主线目标 HUD Banner ================= */
+.act-objective-banner {
+  padding: 10rpx 16rpx;
+  margin-bottom: 14rpx;
+  background: linear-gradient(135deg, rgba(16, 24, 40, 0.95) 0%, rgba(9, 13, 22, 0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.4);
+}
+
+.act-meta-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+
+.act-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 2rpx 10rpx;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.act-pill-badge {
+  font-size: 18rpx;
+  font-weight: 700;
+  color: var(--color-gold-primary);
+  background: rgba(212, 175, 55, 0.2);
+  padding: 0 6rpx;
+  border-radius: 2rpx;
+}
+
+.act-pill-title {
+  font-size: 20rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5rpx;
+}
+
+.act-pill-theme {
+  font-size: 18rpx;
+  color: #cbd5e1;
+}
+
+.act-pill-0 { border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1); }
+.act-pill-0 .act-pill-badge { color: #38bdf8; background: rgba(56, 189, 248, 0.2); }
+
+.act-pill-1 { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); }
+.act-pill-1 .act-pill-badge { color: #f87171; background: rgba(239, 68, 68, 0.2); }
+
+.act-pill-2 { border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.1); }
+.act-pill-2 .act-pill-badge { color: #c084fc; background: rgba(168, 85, 247, 0.2); }
+
+.act-pill-3 { border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.1); }
+.act-pill-3 .act-pill-badge { color: #fbbf24; background: rgba(245, 158, 11, 0.2); }
+
+.act-pill-4 { border-color: rgba(34, 197, 94, 0.4); background: rgba(34, 197, 94, 0.1); }
+.act-pill-4 .act-pill-badge { color: #4ade80; background: rgba(34, 197, 94, 0.2); }
+
+.objective-row {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  line-height: 1.4;
+}
+
+.objective-icon {
+  font-size: 20rpx;
+  flex-shrink: 0;
+}
+
+.objective-label {
+  font-size: 20rpx;
+  color: var(--color-gold-light);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.objective-text {
+  font-size: 20rpx;
+  color: #e2e8f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ================= 2. 【场景原画/插画预留视窗】 ================= */
 .scene-visual-frame {
   width: 100%;
@@ -1040,6 +1127,24 @@
 .epic-modal-banner {
   width: 100%;
   height: 100%;
+}
+
+.epic-unlocked-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid var(--color-gold-primary);
+  padding: 8rpx 16rpx;
+  margin-bottom: 16rpx;
+  border-radius: 4rpx;
+}
+
+.unlocked-text {
+  font-size: 22rpx;
+  color: var(--color-gold-light);
+  font-weight: bold;
+  letter-spacing: 2rpx;
 }
 
 .epic-title-wrap {

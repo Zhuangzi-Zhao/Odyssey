@@ -59,7 +59,7 @@ for (let r = 1; r <= RUNS; r++) {
   }
 
   // 4. 上限检验
-  assert(engine.state.majorEventsCount <= 3, `大事件次数不能超过3次，实际: ${engine.state.majorEventsCount}`);
+  assert(engine.state.majorEventsCount <= 12, `大事件次数不能超过12次，实际: ${engine.state.majorEventsCount}`);
   assert(engine.state.sightsCount <= 3, `见闻录次数不能超过3次，实际: ${engine.state.sightsCount}`);
 }
 

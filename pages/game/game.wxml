@@ -129,6 +129,22 @@
     </view>
   </view>
 
+  <!-- 戏剧四幕与当前主线目标 Banner -->
+  <view class="act-objective-banner stone-card animate-fade-in" wx:if="{{state.actTitle}}" catchtap="preventBubble">
+    <view class="act-meta-row">
+      <view class="act-pill act-pill-{{state.currentAct}}">
+        <text class="act-pill-badge">第 {{state.currentAct === 0 ? '序' : state.currentAct}} 幕</text>
+        <text class="act-pill-title">{{state.actTitle}}</text>
+        <text class="act-pill-theme" wx:if="{{state.actTheme}}">· {{state.actTheme}}</text>
+      </view>
+    </view>
+    <view class="objective-row">
+      <text class="objective-icon">🎯</text>
+      <text class="objective-label">航程主旨：</text>
+      <text class="objective-text">{{state.currentObjective || currentNode.objective}}</text>
+    </view>
+  </view>
+
   <!-- 2. 【场景原画/插画预留视窗】（位于状态栏与旁白之间） -->
   <view class="scene-visual-frame stone-card animate-fade-in" catchtap="preventBubble">
     <image 
@@ -148,7 +164,8 @@
         <view class="visual-title-tag">
           <text class="visual-title-text">{{currentNode.chapter}}</text>
         </view>
-        <text class="visual-hint">〔 场景原画 / 插画预留展示位 〕</text>
+        <text class="visual-hint" wx:if="{{currentNode.isMajorChallenge}}">〔 险局当前 · 待突破考验解锁史诗插画 〕</text>
+        <text class="visual-hint" wx:else>〔 场景原画 / 插画预留展示位 〕</text>
       </view>
     </view>
   </view>
@@ -209,12 +226,6 @@
             </view>
             <view class="choice-content-wrap">
               <text class="choice-text">{{item.text}}</text>
-              
-              <!-- 选项说明与预期效果提示 -->
-              <view class="choice-hint-box" wx:if="{{item.hint && item.available}}">
-                <text class="hint-icon">✦</text>
-                <text class="hint-text-body">{{item.hint}}</text>
-              </view>
 
               <!-- 未解锁限制原因提示 -->
               <view class="choice-reason-box" wx:if="{{!item.available}}">
@@ -406,14 +417,18 @@
   <view class="modal-mask epic-modal-mask" wx:if="{{showEpicModal}}">
     <view class="modal-content stone-card epic-modal-card" catchtap="preventBubble">
       <view class="epic-badge-header">
-        <text class="epic-badge-icon">⚡</text>
-        <text class="epic-badge-text">荷马史诗 · 核心命运时刻</text>
-        <text class="epic-badge-icon">⚡</text>
+        <text class="epic-badge-icon">🏆</text>
+        <text class="epic-badge-text">史诗图鉴收集 · 成功突破考验</text>
+        <text class="epic-badge-icon">🏆</text>
       </view>
 
       <!-- 史诗原画海报橫幅 -->
       <view class="epic-banner-wrap" wx:if="{{epicEventData.image}}">
         <image class="epic-modal-banner" src="{{epicEventData.image}}" mode="aspectFill" />
+      </view>
+
+      <view class="epic-unlocked-tag">
+        <text class="unlocked-text">✨ 史诗原画已收录至【成就图鉴】</text>
       </view>
 
       <view class="epic-title-wrap">
@@ -432,7 +447,7 @@
 
       <view class="epic-footer">
         <button class="btn-gold modal-btn epic-confirm-btn" bindtap="closeEpicModal">
-          <text>⚔️ 直面命运考验，做出抉择</text>
+          <text>🏆 珍藏图鉴 · 继续航行</text>
         </button>
       </view>
     </view>

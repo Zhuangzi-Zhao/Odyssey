@@ -571,6 +571,18 @@ def parse_random_events():
                 'condition': None
             })
 
+        act_1_ids = {1, 2, 6, 7, 10, 13, 19, 21, 27, 30, 34, 40, 44, 47, 51, 52}
+        act_2_ids = {3, 5, 8, 12, 17, 20, 24, 26, 28, 32, 36, 38, 41, 42, 45, 48, 49}
+        act_3_ids = {4, 9, 11, 14, 15, 16, 18, 22, 23, 25, 29, 31, 33, 35, 37, 39, 43, 46, 50}
+
+        act_filter = [1, 2, 3]
+        if idx in act_1_ids:
+            act_filter = [1]
+        elif idx in act_2_ids:
+            act_filter = [2]
+        elif idx in act_3_ids:
+            act_filter = [3]
+
         parsed_events.append({
             'id': f'random_{idx}',
             'num': str(idx),
@@ -579,6 +591,7 @@ def parse_random_events():
             'env': env,
             'landType': land_type,
             'isStormOrDisoriented': is_storm,
+            'actFilter': act_filter,
             'icon': icon,
             'text': narrative_text,
             'choices': choices
@@ -740,6 +753,15 @@ def build_all():
             "icon": "🌀",
             "image": "/img/重要配图/海洋死亡.png",
             "desc": "你选择了左侧。海浪拍打礁石的声音越来越响，像千万根手指同时敲击船底。你的桨手们拼尽全力稳住方向，但水流在变快，船开始不听使唤，正在被一种你从未见过的力量拖着向一侧滑去。你低头看的时候，海水已经不再是海水了——它形成了一个巨大的、缓慢旋转的圆，像一头沉睡的野兽终于翻了个身，张开了一个深不见底的、泛着泡沫的喉咙。你终于想起来了那是什么。你听说过它的名字。你站在船头，听见自己的船员在身后大声呼喊着什么，但你听不清了——涡流的声音太深、太沉、像是整个海都在说话。你最后看见的是桅杆倾斜、天空旋转成一道裂缝。然后海水合上了。"
+        },
+        "hidden_safe_haven": {
+            "id": "hidden_safe_haven",
+            "achievement": "神佑归航",
+            "title": "【隐藏结局 · 神佑归航】",
+            "tag": "传奇神迹 ★★★★★",
+            "icon": "🕊️",
+            "image": "/img/重要配图/凯旋结局2.png",
+            "desc": "在卡法柔斯海角滔天黑浪与雷暴的缝隙中，雅典娜降下了破晓微光。未染贪婪的船队、心怀虔敬的统帅与同舟共济的桨手，奇迹般地斩碎了复仇风暴。战船未曾迷航，未曾惊扰深海巨妖，沿着平稳航道一路顺风顺水径直归抵母港！钟声齐鸣，全城跪迎，你如同未曾受劫的老将涅斯托尔，免受十年漂泊撕心之苦，将所有兄弟全须全尾带回了故土家园！“诸神的狂怒掠过海面，却为真正清醒而敬畏的心灵让出了生路。”"
         }
     }
 
@@ -1078,6 +1100,15 @@ def build_all():
             "quote": "“归途易得，归己最难。”"
         },
         {
+            "id": "ach_caphireus_miracle",
+            "category": "启程与归来",
+            "name": "神佑归航",
+            "icon": "🕊️",
+            "hint": "在序幕卡法柔斯大风暴中达成高门槛神迹，避开十年漂泊一路平安归乡。",
+            "desc": "雅典娜的微光破开复仇假火与灭顶风暴，你的战船未失一人，顺风归抵故乡港湾。",
+            "quote": "“诸神的狂怒掠过海面，却为真正清醒而敬畏的心灵让出了生路。”"
+        },
+        {
             "id": "ach_end_survivor",
             "category": "启程与归来",
             "name": "上岸",
@@ -1240,6 +1271,33 @@ def build_all():
             "hint": "经历史诗大事件：斯克里亚 · 援手。",
             "desc": "在异乡王宫中道尽十年流亡辛酸，仁慈的菲埃克斯人为你铺平了最后的归途。",
             "quote": "“你从远方来到我们的城市和国土，不用再忍受任何苦难，我们会送你回去。” —— 卷七"
+        },
+        {
+            "id": "ach_steersman",
+            "category": "史诗大事件",
+            "name": "执舵者",
+            "icon": "⚓",
+            "hint": "在序幕中直面波塞冬风暴，立下凡人之誓扬帆启航。",
+            "desc": "当卡法柔斯海角的风暴撕裂天空，你握紧了手中的舵柄。凡人的航程，自此始于风暴，归于波涛。",
+            "quote": "“海可以收去一切，唯独收不走握舵的手。”"
+        },
+        {
+            "id": "ach_peacemaker",
+            "category": "史诗大事件",
+            "name": "止战者",
+            "icon": "🕊️",
+            "hint": "在第一幕米拉托斯雅典娜神庙前，献出佩剑与银杯，放下杀戮执念。",
+            "desc": "你将特洛伊染血的剑与带走的财富留在祭坛之上。智慧并非来自锋芒，而是来自知晓何时归鞘。",
+            "quote": "“放下剑的那一刻，真正的航程才刚刚开始。”"
+        },
+        {
+            "id": "ach_crossing_realms",
+            "category": "史诗大事件",
+            "name": "渡界者",
+            "icon": "🌌",
+            "hint": "在第二幕提那鲁斯幽冥迷宫中识破六重幻境，成功突破生者与亡魂之界。",
+            "desc": "不饮遗忘之水，不恋碎刃之影，不回头看亡魂的呼唤。你将影子留给深渊，将生者带回人间。",
+            "quote": "“向死而行，踏浪出冥。”"
         },
 
         # 3. 见闻与历程 (8)
@@ -1431,11 +1489,19 @@ def build_all():
         }
     ]
 
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from generate_acts_data import get_acts_and_knots
+    major_dict = {m['id']: m for m in major_events}
+    story_acts, knots = get_acts_and_knots(major_dict)
+
     db_obj = {
         "CLASSES": classes,
         "PROLOGUE": prologue,
         "ENDINGS": endings,
         "MAJOR_EVENTS": major_events,
+        "STORY_ACTS": story_acts,
+        "KNOTS": knots,
         "SACRIFICES": sacrifices,
         "RANDOM_EVENTS": random_events,
         "SIGHTS": sights,
@@ -1443,8 +1509,11 @@ def build_all():
     }
 
     js_code = "// story/game_database.js\n// 完整奥德赛游戏数据库（职业、大事件、祭祀、52随机事件、见闻录、结局与成就）\n\n"
-    js_code += "const GAME_DATABASE = " + json.dumps(db_obj, ensure_ascii=False, indent=2) + ";\n\n"
-    js_code += "module.exports = GAME_DATABASE;\n"
+    js_code += "(function(root) {\n"
+    js_code += "  const GAME_DATABASE = " + json.dumps(db_obj, ensure_ascii=False, indent=2) + ";\n\n"
+    js_code += "  if (typeof module !== 'undefined' && module.exports) {\n    module.exports = GAME_DATABASE;\n  }\n"
+    js_code += "  if (typeof root !== 'undefined') {\n    root.GAME_DATABASE = GAME_DATABASE;\n  }\n"
+    js_code += "})(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));\n"
 
     with open('story/game_database.js', 'w', encoding='utf-8') as f:
         f.write(js_code)

@@ -1,11 +1,53 @@
 // core/save-manager.js
+(function(root) {
 /**
- * 存档与读档管理器（基于微信本地存储 Storage）
+ * 存档与读档管理器（跨平台支持：微信小程序 Storage 与 Web LocalStorage）
  * 提供 3 个手动存档槽位与 1 个自动存档槽位
  */
 
 const STORAGE_KEY_PREFIX = 'ODYSSEY_SAVE_SLOT_';
 const AUTO_SAVE_KEY = 'ODYSSEY_AUTO_SAVE';
+
+const storage = {
+  get(key) {
+    try {
+      if (typeof wx !== 'undefined' && wx.getStorageSync) {
+        return wx.getStorageSync(key);
+      }
+      if (typeof localStorage !== 'undefined') {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+      }
+    } catch (e) {
+      console.warn('[SaveManager] storage.get 异常', e);
+    }
+    return null;
+  },
+  set(key, val) {
+    try {
+      if (typeof wx !== 'undefined' && wx.setStorageSync) {
+        return wx.setStorageSync(key, val);
+      }
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(key, JSON.stringify(val));
+      }
+    } catch (e) {
+      console.warn('[SaveManager] storage.set 异常', e);
+    }
+  },
+  remove(key) {
+    try {
+      if (typeof wx !== 'undefined' && wx.removeStorageSync) {
+        return wx.removeStorageSync(key);
+      }
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(key);
+      }
+    } catch (e) {
+      console.warn('[SaveManager] storage.remove 异常', e);
+    }
+  }
+};
 
 const SaveManager = {
   /**
@@ -23,7 +65,7 @@ const SaveManager = {
         classInfo: gameState.classInfo,
         state: gameState
       };
-      wx.setStorageSync(`${STORAGE_KEY_PREFIX}${slot}`, saveData);
+      storage.set(`${STORAGE_KEY_PREFIX}${slot}`, saveData);
       return { success: true, msg: `存档成功（槽位 ${slot}）` };
     } catch (e) {
       console.error('[SaveManager] 保存失败', e);
@@ -36,7 +78,7 @@ const SaveManager = {
    */
   loadGame(slot) {
     try {
-      const saveData = wx.getStorageSync(`${STORAGE_KEY_PREFIX}${slot}`);
+      const saveData = storage.get(`${STORAGE_KEY_PREFIX}${slot}`);
       if (!saveData || !saveData.state) {
         return { success: false, msg: `槽位 ${slot} 没有存档记录` };
       }
@@ -54,7 +96,7 @@ const SaveManager = {
     const slots = [];
     for (let i = 1; i <= 3; i++) {
       try {
-        const data = wx.getStorageSync(`${STORAGE_KEY_PREFIX}${i}`);
+        const data = storage.get(`${STORAGE_KEY_PREFIX}${i}`);
         if (data && data.state) {
           const className = (data.classInfo && data.classInfo.name) ||
                             (data.state.classInfo && data.state.classInfo.name) || '领航者';
@@ -82,7 +124,7 @@ const SaveManager = {
    */
   autoSave(gameState) {
     try {
-      wx.setStorageSync(AUTO_SAVE_KEY, {
+      storage.set(AUTO_SAVE_KEY, {
         timestamp: Date.now(),
         state: gameState
       });
@@ -96,7 +138,7 @@ const SaveManager = {
    */
   loadAutoSave() {
     try {
-      const data = wx.getStorageSync(AUTO_SAVE_KEY);
+      const data = storage.get(AUTO_SAVE_KEY);
       if (data && data.state) {
         return { success: true, data: data.state };
       }
@@ -111,7 +153,7 @@ const SaveManager = {
    */
   deleteSlot(slot) {
     try {
-      wx.removeStorageSync(`${STORAGE_KEY_PREFIX}${slot}`);
+      storage.remove(`${STORAGE_KEY_PREFIX}${slot}`);
       return { success: true };
     } catch (e) {
       return { success: false };
@@ -119,4 +161,11 @@ const SaveManager = {
   }
 };
 
-module.exports = SaveManager;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = SaveManager;
+}
+if (typeof root !== 'undefined') {
+  root.SaveManager = SaveManager;
+}
+})(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
+

@@ -1,10 +1,13 @@
 // core/archive-manager.js
+(function(root) {
 /**
  * 全局成就与航海图鉴管理器
  * 跨游戏局数持久化存储 (ODYSSEY_GLOBAL_ARCHIVE)
  */
 
-const GAME_DATABASE = require('../story/game_database.js');
+const GAME_DATABASE = (typeof require !== 'undefined') 
+  ? require('../story/game_database.js') 
+  : (typeof root !== 'undefined' ? root.GAME_DATABASE : null);
 
 const ARCHIVE_STORAGE_KEY = 'ODYSSEY_GLOBAL_ARCHIVE';
 
@@ -20,6 +23,9 @@ const ArchiveManager = {
     try {
       if (typeof wx !== 'undefined' && wx.getStorageSync) {
         data = wx.getStorageSync(ARCHIVE_STORAGE_KEY);
+      } else if (typeof localStorage !== 'undefined') {
+        const raw = localStorage.getItem(ARCHIVE_STORAGE_KEY);
+        data = raw ? JSON.parse(raw) : null;
       } else {
         data = _memArchive;
       }
@@ -69,6 +75,8 @@ const ArchiveManager = {
       _memArchive = archive;
       if (typeof wx !== 'undefined' && wx.setStorageSync) {
         wx.setStorageSync(ARCHIVE_STORAGE_KEY, archive);
+      } else if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(ARCHIVE_STORAGE_KEY, JSON.stringify(archive));
       }
     } catch (e) {
       console.error('[ArchiveManager] 保存全局档案失败', e);
@@ -86,6 +94,21 @@ const ArchiveManager = {
       archive.unlockedAchievements[achId] = Date.now();
       const achDef = GAME_DATABASE.ACHIEVEMENTS.find(a => a.id === achId);
       return achDef || { id: achId, name: achId, icon: '🏆', desc: '' };
+    }
+    return null;
+  },
+
+  /**
+   * 直接解锁指定成就并保存
+   * @param {string} achId
+   * @returns {object|null}
+   */
+  unlockDirect(achId) {
+    const archive = this.getArchive();
+    const ach = this.unlock(achId, archive);
+    if (ach) {
+      this.saveArchive(archive);
+      return ach;
     }
     return null;
   },
@@ -197,6 +220,11 @@ const ArchiveManager = {
     const a1 = this.unlock(achKey, archive);
     if (a1) newAchs.push(a1);
 
+    if (endingKey === 'hidden_safe_haven') {
+      const aMiracle = this.unlock('ach_caphireus_miracle', archive);
+      if (aMiracle) newAchs.push(aMiracle);
+    }
+
     // 琴杖之律（完成一次任意大事件并触发任意一个结局）
     if (state && state.majorEventsCount && state.majorEventsCount > 0) {
       const a2 = this.unlock('ach_egg_poet', archive);
@@ -304,6 +332,12 @@ const ArchiveManager = {
         const a = this.unlock('ach_egg_siren_crew', archive);
         if (a) newAchs.push(a);
       }
+    }
+
+    // 5. 选项显式成就解锁 (unlockAchievement)
+    if (choice && choice.unlockAchievement) {
+      const a = this.unlock(choice.unlockAchievement, archive);
+      if (a) newAchs.push(a);
     }
 
     this.saveArchive(archive);
@@ -418,4 +452,11 @@ const ArchiveManager = {
   }
 };
 
-module.exports = ArchiveManager;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ArchiveManager;
+}
+if (typeof root !== 'undefined') {
+  root.ArchiveManager = ArchiveManager;
+}
+})(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
+

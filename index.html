@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="奥德赛：归乡之路 (Odyssey: Nostos) · 网页先行体验版 —— 特洛伊余烬后的爱琴海绝境航行交互叙事游戏">
+  <title>奥德赛：归乡之路 (Odyssey: Nostos) · 网页先行体验版</title>
+  <link rel="stylesheet" href="web/style.css">
+</head>
+<body>
+
+  <!-- 总体视口容器 -->
+  <div id="app-viewport">
+
+    <!-- 全局成就即时解锁浮动横幅 -->
+    <div id="achievement-toast" class="achievement-toast-banner" style="display: none;" onclick="window.App.showScreen('archive')">
+      <div class="toast-left">
+        <span id="toast-trophy-icon">🏆</span>
+      </div>
+      <div class="toast-center">
+        <div class="toast-title-row">
+          <span class="toast-tag">达成成就</span>
+          <span id="toast-ach-name" class="toast-name">【执舵者】</span>
+        </div>
+        <div id="toast-ach-desc" class="toast-desc">在序幕中直面波塞冬风暴，立下凡人之誓扬帆启航。</div>
+      </div>
+      <div class="toast-right">
+        <span>图鉴 ▶</span>
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         SCREEN 1: 封面主菜单屏幕 (#screen-title)
+         ============================================================== -->
+    <div id="screen-title" class="screen-view title-container">
+      <div class="bg-cover-wrapper">
+        <img class="bg-cover-image" src="img/重要配图/封面图.png" alt="Odyssey Cover" onerror="this.style.display='none'">
+        <div class="bg-vignette"></div>
+      </div>
+
+      <div class="title-section">
+        <img class="game-logo" src="img/重要配图/logo2.png" alt="Odyssey Logo" onerror="this.style.display='none'">
+        <div class="greek-divider-top">◆ ══════════════ ◈ ══════════════ ◆</div>
+        <div class="latin-title">ODYSSEY : NOSTOS</div>
+        <div class="main-title">奥德赛：归乡之路</div>
+        <div class="subtitle">—— 特洛伊余烬后的爱琴海绝境航行 ——</div>
+        <div class="greek-divider-bottom">◆ ══════════════ ◈ ══════════════ ◆</div>
+      </div>
+
+      <div class="emblem-section">
+        <div class="quote-box">
+          <div class="quote-header">〔 史诗序言 〕</div>
+          <div class="quote-body">
+            “你不是不可战胜的阿喀琉斯，亦非受诸神宠爱的奥德修斯。你只是一名带领三十名同乡水手的凡人指挥官。战火已熄，但大海的试炼才刚刚开始。”
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-section">
+        <button class="btn btn-gold menu-btn" onclick="window.App.openClassModal()">
+          <span class="btn-prefix">▶</span>
+          <span>开启新的远航</span>
+        </button>
+
+        <button class="btn btn-secondary menu-btn" onclick="window.App.openSaveModal('load')">
+          <span class="btn-prefix">◈</span>
+          <span>载入航海档案</span>
+        </button>
+
+        <button class="btn btn-secondary menu-btn" onclick="window.App.showScreen('archive')">
+          <span class="btn-prefix">🏆</span>
+          <span>史诗成就与航海图鉴</span>
+          <span id="title-archive-summary" class="archive-pill">(0/38)</span>
+        </button>
+
+        <button class="btn-text" onclick="window.App.openModal('modal-rule')">
+          <span>📖 航海法则、海陆循环与物资图鉴</span>
+        </button>
+      </div>
+
+      <div class="footer-info">
+        <span>ODYSSEY WEB PREVIEW · v1.2.0 · 网页先行体验版</span>
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         SCREEN 2: 核心航海屏幕 (#screen-game)
+         ============================================================== -->
+    <div id="screen-game" class="screen-view game-container" style="display: none;">
+
+      <!-- 1. 顶部物资与状态 HUD -->
+      <div class="hud-panel stone-card">
+        <div class="hud-meta-row">
+          <div class="hud-meta-left">
+            <div id="hud-day" class="hud-day-badge">
+              <span class="hud-accent">◆</span> 航行第 1 天
+            </div>
+            <div class="hud-class-badge">
+              <span id="hud-class-icon" class="class-icon-inline">⚔️</span>
+              <span id="hud-class-name" class="class-name-inline">贵族武领</span>
+            </div>
+          </div>
+
+          <div id="hud-env-badge" class="hud-env-badge env-sea">
+            <span id="hud-env-icon" class="env-icon">⛵</span>
+            <span id="hud-env-label" class="env-label">茫茫大海</span>
+          </div>
+        </div>
+
+        <!-- 5 项核心物资指标 -->
+        <div class="hud-metrics-grid">
+          <!-- 1. 食物储备 -->
+          <div class="hud-stat-cell">
+            <div class="stat-name-row">
+              <span>食物储备</span>
+              <span id="stat-delta-food" class="stat-delta" style="display: none;">+0</span>
+            </div>
+            <div class="stat-val-row">
+              <span id="stat-val-food" class="stat-number">70</span>
+              <span class="stat-unit">/100</span>
+            </div>
+            <div class="stat-bar-track">
+              <div id="stat-fill-food" class="stat-bar-fill fill-food" style="width: 70%;"></div>
+            </div>
+          </div>
+
+          <!-- 2. 精神理智 -->
+          <div class="hud-stat-cell">
+            <div class="stat-name-row">
+              <span>精神理智</span>
+              <span id="stat-delta-sanity" class="stat-delta" style="display: none;">+0</span>
+            </div>
+            <div class="stat-val-row">
+              <span id="stat-val-sanity" class="stat-number">70</span>
+              <span class="stat-unit">/100</span>
+            </div>
+            <div class="stat-bar-track">
+              <div id="stat-fill-sanity" class="stat-bar-fill fill-sanity" style="width: 70%;"></div>
+            </div>
+          </div>
+
+          <!-- 3. 神恩幸运 -->
+          <div class="hud-stat-cell">
+            <div class="stat-name-row">
+              <span>神恩眷顾</span>
+              <span id="stat-delta-luck" class="stat-delta" style="display: none;">+0</span>
+            </div>
+            <div class="stat-val-row">
+              <span id="stat-val-luck" class="stat-number">45</span>
+              <span class="stat-unit">/100</span>
+            </div>
+            <div class="stat-bar-track">
+              <div id="stat-fill-luck" class="stat-bar-fill fill-luck" style="width: 45%;"></div>
+            </div>
+          </div>
+
+          <!-- 4. 存活船员 -->
+          <div class="hud-stat-cell">
+            <div class="stat-name-row">
+              <span>存活船员</span>
+              <span id="stat-delta-crew" class="stat-delta" style="display: none;">+0</span>
+            </div>
+            <div class="stat-val-row">
+              <span id="stat-val-crew" class="stat-number">30</span>
+              <span class="stat-unit">/30 人</span>
+            </div>
+            <div class="stat-bar-track">
+              <div id="stat-fill-crew" class="stat-bar-fill fill-crew" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <!-- 5. 船员忠诚 -->
+          <div class="hud-stat-cell">
+            <div class="stat-name-row">
+              <span>船员忠诚</span>
+              <span id="stat-delta-loyalty" class="stat-delta" style="display: none;">+0</span>
+            </div>
+            <div class="stat-val-row">
+              <span id="stat-val-loyalty" class="stat-number">70</span>
+              <span class="stat-unit">/100</span>
+            </div>
+            <div class="stat-bar-track">
+              <div id="stat-fill-loyalty" class="stat-bar-fill fill-loyalty" style="width: 70%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 危机警报通知栏 -->
+      <div id="alerts-container" class="alerts-container"></div>
+
+      <!-- 幕次与目标 Banner -->
+      <div class="act-objective-banner stone-card">
+        <div class="act-meta-row">
+          <div id="act-pill-container" class="act-pill act-pill-0">
+            <span id="act-pill-badge">第 序 幕</span>
+            <span id="act-pill-title">序幕 · 启航之殇</span>
+            <span id="act-pill-theme">· 特洛伊撤离与卡法柔斯浩劫</span>
+          </div>
+        </div>
+        <div class="objective-row">
+          <span class="objective-icon">🎯</span>
+          <span class="objective-label">航程主旨：</span>
+          <span id="act-objective-text" class="objective-text">整备战船，航向卡法柔斯海角以返回希腊本土</span>
+        </div>
+      </div>
+
+      <!-- 2. 场景原画视窗 -->
+      <div class="scene-visual-frame stone-card">
+        <img id="scene-visual-img" class="scene-visual-image" src="" alt="Scene" style="display: none;">
+        <div id="scene-visual-ph" class="scene-visual-placeholder">
+          <div class="visual-border-corner top-left"></div>
+          <div class="visual-border-corner top-right"></div>
+          <div class="visual-border-corner bottom-left"></div>
+          <div class="visual-border-corner bottom-right"></div>
+          <div class="visual-center-content">
+            <span id="visual-glyph-text" class="visual-glyph">⛵</span>
+            <div class="visual-title-tag">
+              <span id="visual-title-text">特洛伊残烬 · 启航</span>
+            </div>
+            <div id="visual-hint-text" class="visual-hint">〔 场景原画 / 插画展示位 〕</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 剧场对白舞台（打字机正文） -->
+      <div class="theater-stage" onclick="window.App.finishTypewriter()">
+        <div class="theater-gold-divider-top"></div>
+        <div class="stage-header">
+          <div id="stage-speaker-tag" class="speaker-tag">
+            <span>〔</span>
+            <span id="stage-speaker-name">旁白</span>
+            <span>〕</span>
+          </div>
+          <div id="stage-scene-icon" class="scene-icon">⛵</div>
+        </div>
+
+        <div class="story-body">
+          <span id="stage-story-text" class="story-text"></span>
+          <span id="typing-cursor" class="typing-cursor">▋</span>
+        </div>
+
+        <div id="stage-tap-hint" class="tap-hint">点击屏幕快速显示全文</div>
+        <div class="theater-gold-divider-bottom"></div>
+      </div>
+
+      <!-- 4. 命运抉择选项卡片 -->
+      <div class="choices-container">
+        <div class="choices-header">
+          <div class="choices-line"></div>
+          <div class="choices-header-content">
+            <span class="gold-mark">◆</span>
+            <span>命 运 抉 择</span>
+            <span class="gold-mark">◆</span>
+          </div>
+          <div class="choices-line"></div>
+        </div>
+
+        <div id="choices-list" class="choices-list">
+          <!-- 动态渲染选项 -->
+        </div>
+      </div>
+
+      <!-- 5. 底部快捷工具栏 -->
+      <div class="bottom-toolbar">
+        <button class="tool-btn" onclick="window.App.openHistoryModal()">
+          <span class="tool-icon">📜</span>
+          <span class="tool-label">日志</span>
+        </button>
+        <button class="tool-btn" onclick="window.App.openSacrificeModal()">
+          <span class="tool-icon">🔥</span>
+          <span class="tool-label">祈神</span>
+        </button>
+        <button class="tool-btn" onclick="window.App.showScreen('archive')">
+          <span class="tool-icon">🏆</span>
+          <span class="tool-label">图鉴</span>
+        </button>
+        <button class="tool-btn" onclick="window.App.openSaveModal('save')">
+          <span class="tool-icon">💾</span>
+          <span class="tool-label">存盘</span>
+        </button>
+        <button class="tool-btn" onclick="window.App.openSaveModal('load')">
+          <span class="tool-icon">📂</span>
+          <span class="tool-label">读盘</span>
+        </button>
+        <button id="btn-tool-auto" class="tool-btn" onclick="window.App.toggleAutoMode()">
+          <span class="tool-icon">⏩</span>
+          <span id="tool-auto-text" class="tool-label">自动</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         SCREEN 3: 史诗档案图鉴屏幕 (#screen-archive)
+         ============================================================== -->
+    <div id="screen-archive" class="screen-view archive-container" style="display: none;">
+      <div class="archive-top-bar">
+        <button class="btn btn-secondary btn-back" onclick="window.App.showScreen(window.App.engine.state.currentNode ? 'game' : 'title')">
+          <span>◀ 返回</span>
+        </button>
+        <div class="latin-title">CODEX & ARCHIVES</div>
+        <div style="width: 60px;"></div>
+      </div>
+
+      <div class="archive-header stone-card">
+        <div class="greek-glyph">◆ ═══ ◈ ═══ ◆</div>
+        <div class="header-title-text">奥林匹斯航海档案库</div>
+        <div class="header-sub-text">跨越轮回的史诗成就与海陆图谱</div>
+
+        <div class="archive-summary-grid">
+          <div class="summary-cell">
+            <div class="summary-label">🏆 史诗成就达成率</div>
+            <div class="summary-number-row">
+              <span id="arc-ach-ratio" class="num-highlight text-gold">0 / 38</span>
+              <span id="arc-ach-rate" class="num-percent">(0%)</span>
+            </div>
+            <div class="summary-bar-track">
+              <div id="arc-ach-bar" class="summary-bar-fill fill-gold" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="summary-cell">
+            <div class="summary-label">📜 航海图鉴点亮率</div>
+            <div class="summary-number-row">
+              <span id="arc-codex-ratio" class="num-highlight text-cyan">0 / 43</span>
+              <span id="arc-codex-rate" class="num-percent">(0%)</span>
+            </div>
+            <div class="summary-bar-track">
+              <div id="arc-codex-bar" class="summary-bar-fill fill-cyan" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 导航 Tabs -->
+      <div class="tab-nav-bar">
+        <div id="tab-btn-achievements" class="tab-item tab-item-active" onclick="window.App.switchArchiveTab('achievements')">
+          <span>🏆</span>
+          <span>史诗成就</span>
+          <span id="tab-badge-ach" class="tab-badge">(0/38)</span>
+        </div>
+        <div id="tab-btn-sights" class="tab-item" onclick="window.App.switchArchiveTab('sights')">
+          <span>📖</span>
+          <span>航海见闻</span>
+          <span id="tab-badge-sights" class="tab-badge">(0/12)</span>
+        </div>
+        <div id="tab-btn-majors" class="tab-item" onclick="window.App.switchArchiveTab('majors')">
+          <span>⚡</span>
+          <span>史诗大事件</span>
+          <span id="tab-badge-majors" class="tab-badge">(0/12)</span>
+        </div>
+        <div id="tab-btn-deities" class="tab-item" onclick="window.App.switchArchiveTab('deities')">
+          <span>🏛️</span>
+          <span>诸神殿堂</span>
+          <span id="tab-badge-deities" class="tab-badge">(0/12)</span>
+        </div>
+        <div id="tab-btn-endings" class="tab-item" onclick="window.App.switchArchiveTab('endings')">
+          <span>⚓</span>
+          <span>终局图谱</span>
+          <span id="tab-badge-endings" class="tab-badge">(0/7)</span>
+        </div>
+      </div>
+
+      <!-- Tab 正文内容区 -->
+      <div id="archive-tab-content"></div>
+    </div>
+
+    <!-- ==============================================================
+         MODALS 模态弹窗系统
+         ============================================================== -->
+
+    <!-- 1. 职业选择弹窗 -->
+    <div id="modal-class-select" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-class-select')">
+      <div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+        <div class="modal-header">
+          <span class="modal-title">◆ 遴选领航身份与专属天赋 ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-class-select')">✕</span>
+        </div>
+        <div class="modal-body" style="overflow-y: auto; flex: 1;">
+          <div id="class-select-list" class="class-grid"></div>
+        </div>
+        <div class="modal-footer" style="padding: 12px 16px; background: #070a12; border-top: 1px solid var(--border-subtle); flex-shrink: 0;">
+          <button id="btn-confirm-class" class="btn btn-gold" style="width: 100%; padding: 12px;" onclick="window.App.startNewGame()">
+            <span id="btn-confirm-class-text">⚓ 以【贵族武领】启航 · 踏入爱琴海</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 航海法则规则弹窗 -->
+    <div id="modal-rule" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-rule')">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">◆ 航海法则与海陆循环 ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-rule')">✕</span>
+        </div>
+        <div class="modal-body">
+          <div class="quote-box" style="margin-bottom: 14px;">
+            <div class="quote-header">【海陆交替循环】</div>
+            <div class="quote-body">
+              战船在开阔海域与沿岸海岛间流转。在无人荒岛搜集山泉补给，在人类城邦以物易物或招募佣兵，在神异之岛经受神罚考验。
+            </div>
+          </div>
+          <div class="quote-box" style="margin-bottom: 14px;">
+            <div class="quote-header">【一阶物资体系】</div>
+            <div class="quote-body">
+              <strong>食物 (Food)</strong>：每回合自然消耗3点，断粮将引发减员与哗变。<br>
+              <strong>理智 (Sanity)</strong>：抵御魔音与深渊恐惧，理智崩溃即深海沉沦。<br>
+              <strong>神恩 (Luck)</strong>：诸神态度的晴雨表，高神恩可逢凶化吉。
+            </div>
+          </div>
+          <div class="quote-box">
+            <div class="quote-header">【二阶危机联动】</div>
+            <div class="quote-body">
+              <strong>船员 (Crew)</strong>：全船基石，降至0人即舟沉人亡。<br>
+              <strong>忠诚 (Loyalty)</strong>：忠诚崩溃将触发流血兵变！
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 航海历史日志弹窗 (Backlog) -->
+    <div id="modal-history" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-history')">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">◆ 航海日志 (Backlog) ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-history')">✕</span>
+        </div>
+        <div class="modal-body">
+          <div id="history-timeline-list" class="history-timeline"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 神明祭祀弹窗 -->
+    <div id="modal-sacrifice" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-sacrifice')">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">◆ 奥林匹斯神明祭祀 ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-sacrifice')">✕</span>
+        </div>
+        <div class="modal-body">
+          <div style="font-size: 11px; color: var(--gold-light); margin-bottom: 10px; font-style: italic;">
+            注：祭祀成功率由诸神契合度、当前神恩眷顾（高于50点产生显著加成）与祭司职业天赋共同决定。
+          </div>
+          <div id="sacrifice-grid-list" class="sacrifice-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 存档 / 读档弹窗 -->
+    <div id="modal-save" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-save')">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span id="save-modal-title" class="modal-title">◆ 航海档案管理 ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-save')">✕</span>
+        </div>
+        <div class="modal-body">
+          <div id="save-slots-list" class="save-slots-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 史诗大事件原画收集特刊弹窗 -->
+    <div id="modal-epic-collector" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-epic-collector')">
+      <div class="modal-content epic-collector-modal">
+        <div class="modal-header">
+          <span class="modal-title">◆ 史诗大事件 · 原画收录 ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-epic-collector')">✕</span>
+        </div>
+        <div class="modal-body">
+          <img id="epic-full-img" class="epic-artwork-full" src="" alt="Epic Artwork">
+          <div class="epic-collector-badge">〔 考验突破 · 原画解锁入库 〕</div>
+          <div id="epic-title-text" class="epic-title">伊斯马罗斯</div>
+          <div id="epic-quote-text" class="epic-quote">“我主张赶快逃走，可是这些愚蠢的人不肯听从。”</div>
+          <div id="epic-desc-text" class="epic-desc">成功突破考验。</div>
+          <div style="margin-top: 16px;">
+            <button class="btn btn-gold" style="width: 100%; padding: 10px;" onclick="window.App.closeModal('modal-epic-collector')">
+              <span>收录入库 · 扬帆前行</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 航海见闻录发现弹窗 -->
+    <div id="modal-sight" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-sight')">
+      <div class="modal-content epic-collector-modal">
+        <div class="modal-header">
+          <span class="modal-title">◆ 航海见闻录 · 隐秘点亮 ◆</span>
+          <span class="modal-close" onclick="window.App.closeModal('modal-sight')">✕</span>
+        </div>
+        <div class="modal-body">
+          <img id="sight-full-img" class="epic-artwork-full" src="" alt="Sight Artwork">
+          <div class="epic-collector-badge">〔 尘世之眼 · 见闻点亮 〕</div>
+          <div id="sight-title-text" class="epic-title">见闻录</div>
+          <div id="sight-desc-text" class="epic-desc">航海日志录入。</div>
+          <div style="margin-top: 16px;">
+            <button class="btn btn-gold" style="width: 100%; padding: 10px;" onclick="window.App.closeModal('modal-sight')">
+              <span>铭刻见闻 · 记录日志</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. 终局结算弹窗 -->
+    <div id="modal-ending" class="modal-mask" style="display: none;">
+      <div class="modal-content ending-modal">
+        <div class="modal-header">
+          <span class="modal-title">◆ 归乡航程 · 史诗终局 ◆</span>
+        </div>
+        <div class="modal-body">
+          <img id="ending-cover-img" class="ending-art-cover" src="" alt="Ending Art">
+          <div class="ending-badge">〔 诺斯托斯 · 凡人史诗 〕</div>
+          <div id="ending-title-text" class="ending-title">【凯旋 · 众多船员】</div>
+          <div id="ending-desc-text" class="ending-desc">战船驶入故土海滩，钟声齐鸣。</div>
+          <div id="ending-quote-text" class="ending-quote">“我们跨过了冥河，站在了自己的土地上！”</div>
+
+          <div class="ending-stats-summary">
+            <div class="ending-stat-item">
+              <span class="ending-stat-label">存活船员</span>
+              <span id="end-stat-crew" class="ending-stat-val">28 人</span>
+            </div>
+            <div class="ending-stat-item">
+              <span class="ending-stat-label">全船忠诚</span>
+              <span id="end-stat-loyalty" class="ending-stat-val">95</span>
+            </div>
+            <div class="ending-stat-item">
+              <span class="ending-stat-label">航行历程</span>
+              <span id="end-stat-days" class="ending-stat-val">第 27 天</span>
+            </div>
+          </div>
+
+          <button class="btn btn-gold" style="width: 100%; padding: 12px;" onclick="window.App.closeModal('modal-ending'); window.App.showScreen('title');">
+            <span>重启新的远航轮回</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 脚本加载链：数据库 -> 档案管理器 -> 存档管理器 -> 核心引擎 -> 网页应用控制器 -->
+  <script src="story/game_database.js"></script>
+  <script src="core/archive-manager.js"></script>
+  <script src="core/save-manager.js"></script>
+  <script src="core/engine.js"></script>
+  <script src="web/app.js"></script>
+</body>
+</html>
