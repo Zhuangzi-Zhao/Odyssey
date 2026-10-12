@@ -413,69 +413,23 @@
     </view>
   </view>
 
-  <!-- 弹窗：荷马史诗 · 核心主线大事件特刊 (Epic Major Event Modal) -->
-  <view class="modal-mask epic-modal-mask" wx:if="{{showEpicModal}}">
-    <view class="modal-content stone-card epic-modal-card" catchtap="preventBubble">
-      <view class="epic-badge-header">
-        <text class="epic-badge-icon">🏆</text>
-        <text class="epic-badge-text">史诗图鉴收集 · 成功突破考验</text>
-        <text class="epic-badge-icon">🏆</text>
-      </view>
-
-      <!-- 史诗原画海报橫幅 -->
-      <view class="epic-banner-wrap" wx:if="{{epicEventData.image}}">
-        <image class="epic-modal-banner" src="{{epicEventData.image}}" mode="aspectFill" />
-      </view>
-
-      <view class="epic-unlocked-tag">
-        <text class="unlocked-text">✨ 史诗原画已收录至【成就图鉴】</text>
-      </view>
-
-      <view class="epic-title-wrap">
-        <text class="epic-title-main">{{epicEventData.title}}</text>
-      </view>
-
-      <view class="epic-quote-card" wx:if="{{epicEventData.quote}}">
-        <text class="epic-quote-mark">“</text>
-        <text class="epic-quote-body">{{epicEventData.quote}}</text>
-        <text class="epic-quote-mark">”</text>
-      </view>
-
-      <scroll-view scroll-y class="epic-body-scroll">
-        <text class="epic-body-text">{{epicEventData.text}}</text>
-      </scroll-view>
-
-      <view class="epic-footer">
-        <button class="btn-gold modal-btn epic-confirm-btn" bindtap="closeEpicModal">
-          <text>🏆 珍藏图鉴 · 继续航行</text>
-        </button>
+  <!-- 弹窗：荷马史诗 · 核心主线大事件特刊 (Epic Major Event Modal - 纯原画展示) -->
+  <view class="modal-mask epic-modal-mask" wx:if="{{showEpicModal}}" bindtap="closeEpicModal">
+    <view class="modal-content pure-artwork-modal-card animate-fade-in" catchtap="preventBubble">
+      <view class="pure-close-btn" bindtap="closeEpicModal">✕</view>
+      <view class="pure-banner-wrap" wx:if="{{epicEventData.image}}" bindtap="closeEpicModal">
+        <image class="pure-modal-banner" src="{{epicEventData.image}}" mode="aspectFit" />
       </view>
     </view>
   </view>
 
-  <!-- 弹窗：航海见闻录发现 (Poetic Sights Modal) -->
+  <!-- 弹窗：航海见闻录发现 (Poetic Sights Modal - 纯原画展示) -->
   <view class="modal-mask sight-modal-mask" wx:if="{{showSightModal}}" bindtap="closeSightModal">
-    <view class="modal-content stone-card sight-modal-card animate-fade-in" catchtap="preventBubble">
-      <view class="sight-header">
-        <view class="sight-header-left">
-          <text class="sight-icon">📜</text>
-          <text class="sight-header-title">航海见闻录 · 新发现</text>
-        </view>
-        <text class="sight-counter">〔第 {{state.sightsCount}} / 3 卷〕</text>
+    <view class="modal-content pure-artwork-modal-card animate-fade-in" catchtap="preventBubble">
+      <view class="pure-close-btn" bindtap="closeSightModal">✕</view>
+      <view class="pure-banner-wrap" wx:if="{{currentSight.image}}" bindtap="closeSightModal">
+        <image class="pure-modal-banner" src="{{currentSight.image}}" mode="aspectFit" />
       </view>
-
-      <!-- 见闻原画插图 -->
-      <view class="sight-banner-wrap" wx:if="{{currentSight.image}}">
-        <image class="sight-modal-banner" src="{{currentSight.image}}" mode="aspectFill" />
-      </view>
-
-      <view class="sight-title">{{currentSight.title}}</view>
-
-      <view class="sight-body-box">
-        <text class="sight-body-text">“{{currentSight.text}}”</text>
-      </view>
-
-      <button class="btn-gold modal-btn" bindtap="closeSightModal">铭记于心 ✕</button>
     </view>
   </view>
 

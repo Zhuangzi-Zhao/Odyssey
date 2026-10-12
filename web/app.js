@@ -678,18 +678,25 @@
 
     openEpicCollectorModal(epic) {
       playSound('triumph');
-      document.getElementById('epic-full-img').src = resolveImg(epic.image);
-      document.getElementById('epic-title-text').textContent = epic.title;
-      document.getElementById('epic-quote-text').textContent = epic.quote || '';
-      document.getElementById('epic-desc-text').textContent = epic.aftermath || epic.text || '';
+      const img = document.getElementById('epic-full-img');
+      if (img) img.src = resolveImg(epic.image);
+      const titleEl = document.getElementById('epic-title-text');
+      if (titleEl) titleEl.textContent = epic.title || '';
+      const quoteEl = document.getElementById('epic-quote-text');
+      if (quoteEl) quoteEl.textContent = epic.quote || '';
+      const descEl = document.getElementById('epic-desc-text');
+      if (descEl) descEl.textContent = epic.aftermath || epic.text || '';
       this.openModal('modal-epic-collector');
     },
 
     openSightModal(sight) {
       playSound('triumph');
-      document.getElementById('sight-full-img').src = resolveImg(sight.image);
-      document.getElementById('sight-title-text').textContent = sight.title;
-      document.getElementById('sight-desc-text').textContent = sight.text || '';
+      const img = document.getElementById('sight-full-img');
+      if (img) img.src = resolveImg(sight.image);
+      const titleEl = document.getElementById('sight-title-text');
+      if (titleEl) titleEl.textContent = sight.title || '';
+      const descEl = document.getElementById('sight-desc-text');
+      if (descEl) descEl.textContent = sight.text || '';
       this.openModal('modal-sight');
     },
 

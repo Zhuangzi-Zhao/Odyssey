@@ -102,6 +102,11 @@ class OdysseyEngine {
     if (cond.minCrew !== undefined && res.crew < cond.minCrew) {
       return { available: false, reason: `需船员 ≥ ${cond.minCrew}（当前 ${res.crew}）` };
     }
+    if (cond.requiredClass && this.state.classId !== cond.requiredClass) {
+      const clsDef = GAME_DATABASE && GAME_DATABASE.CLASSES && GAME_DATABASE.CLASSES[cond.requiredClass];
+      const clsName = clsDef ? clsDef.name : cond.requiredClass;
+      return { available: false, reason: `需【${clsName}】专属` };
+    }
     if (cond.requireMemory) {
       const mem = this.state.storyMemory || {};
       if (!mem[cond.requireMemory]) {

@@ -463,46 +463,19 @@
       </div>
     </div>
 
-    <!-- 6. 史诗大事件原画收集特刊弹窗 -->
-    <div id="modal-epic-collector" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-epic-collector')">
-      <div class="modal-content epic-collector-modal">
-        <div class="modal-header">
-          <span class="modal-title">◆ 史诗大事件 · 原画收录 ◆</span>
-          <span class="modal-close" onclick="window.App.closeModal('modal-epic-collector')">✕</span>
-        </div>
-        <div class="modal-body">
-          <img id="epic-full-img" class="epic-artwork-full" src="" alt="Epic Artwork">
-          <div class="epic-collector-badge">〔 考验突破 · 原画解锁入库 〕</div>
-          <div id="epic-title-text" class="epic-title">伊斯马罗斯</div>
-          <div id="epic-quote-text" class="epic-quote">“我主张赶快逃走，可是这些愚蠢的人不肯听从。”</div>
-          <div id="epic-desc-text" class="epic-desc">成功突破考验。</div>
-          <div style="margin-top: 16px;">
-            <button class="btn btn-gold" style="width: 100%; padding: 10px;" onclick="window.App.closeModal('modal-epic-collector')">
-              <span>收录入库 · 扬帆前行</span>
-            </button>
-          </div>
-        </div>
+    <!-- 6. 史诗大事件原画收集特刊弹窗 (纯原画展示) -->
+    <div id="modal-epic-collector" class="modal-mask" style="display: none;" onclick="window.App.closeModal('modal-epic-collector')">
+      <div class="modal-content pure-artwork-modal" onclick="event.stopPropagation()">
+        <span class="pure-artwork-close" onclick="window.App.closeModal('modal-epic-collector')">✕</span>
+        <img id="epic-full-img" class="pure-artwork-img" src="" alt="Epic Artwork" onclick="window.App.closeModal('modal-epic-collector')">
       </div>
     </div>
 
-    <!-- 7. 航海见闻录发现弹窗 -->
-    <div id="modal-sight" class="modal-mask" style="display: none;" onclick="if(event.target===this) window.App.closeModal('modal-sight')">
-      <div class="modal-content epic-collector-modal">
-        <div class="modal-header">
-          <span class="modal-title">◆ 航海见闻录 · 隐秘点亮 ◆</span>
-          <span class="modal-close" onclick="window.App.closeModal('modal-sight')">✕</span>
-        </div>
-        <div class="modal-body">
-          <img id="sight-full-img" class="epic-artwork-full" src="" alt="Sight Artwork">
-          <div class="epic-collector-badge">〔 尘世之眼 · 见闻点亮 〕</div>
-          <div id="sight-title-text" class="epic-title">见闻录</div>
-          <div id="sight-desc-text" class="epic-desc">航海日志录入。</div>
-          <div style="margin-top: 16px;">
-            <button class="btn btn-gold" style="width: 100%; padding: 10px;" onclick="window.App.closeModal('modal-sight')">
-              <span>铭刻见闻 · 记录日志</span>
-            </button>
-          </div>
-        </div>
+    <!-- 7. 航海见闻录发现弹窗 (纯原画展示) -->
+    <div id="modal-sight" class="modal-mask" style="display: none;" onclick="window.App.closeModal('modal-sight')">
+      <div class="modal-content pure-artwork-modal" onclick="event.stopPropagation()">
+        <span class="pure-artwork-close" onclick="window.App.closeModal('modal-sight')">✕</span>
+        <img id="sight-full-img" class="pure-artwork-img" src="" alt="Sight Artwork" onclick="window.App.closeModal('modal-sight')">
       </div>
     </div>
 

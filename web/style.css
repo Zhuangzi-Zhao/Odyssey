@@ -1401,6 +1401,55 @@ button, .btn {
   text-align: center;
 }
 
+.pure-artwork-modal {
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pure-artwork-close {
+  position: absolute;
+  top: -42px;
+  right: 0;
+  font-size: 22px;
+  color: var(--gold-primary);
+  cursor: pointer;
+  background: rgba(10, 16, 30, 0.85);
+  border: 1px solid var(--border-gold);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.pure-artwork-close:hover {
+  color: #fff;
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+.pure-artwork-img {
+  max-width: 85vw;
+  max-height: 75vh;
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+}
+
 .epic-artwork-full {
   width: 100%;
   max-height: 240px;

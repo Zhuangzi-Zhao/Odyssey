@@ -70,13 +70,18 @@ engWarrior.state.resources.sanity = 75;
 check = engWarrior.isChoiceAvailable(miracleChoice);
 assert.strictEqual(check.available, true, '数值满足极高门槛后神迹选项必须可用');
 
-// 触发神迹隐藏结局
+// 突破卡法柔斯海角风暴 -> 顺利进入彩蛋线
 res = engWarrior.makeChoice(0);
-assert(res.success, '触发隐藏结局成功');
+assert(res.success, '突破卡法柔斯风暴成功');
+assert.strictEqual(engWarrior.state.currentNode.id, 'knot_easter_egg_caphireus_pass', '顺利通过卡法柔斯海角后必须进入彩蛋线');
+
+// 在彩蛋线选择直接返乡
+res = engWarrior.makeChoice(0);
+assert(res.success, '彩蛋线直接返乡成功');
 assert.strictEqual(engWarrior.state.gameEnded, true, '游戏应当结束');
 assert.strictEqual(engWarrior.state.ending.title, '【隐藏结局 · 神佑归航】', '结局必须为神佑归航');
 assert(engWarrior.state.newAchievements.find(a => a.id === 'ach_caphireus_miracle'), '必须解锁神佑归航成就');
-console.log('   ✓ 卡法柔斯神迹隐藏结局与成就解锁验证通过！');
+console.log('   ✓ 卡法柔斯神迹彩蛋线直通返乡与成就解锁验证通过！');
 
 // 5. 验证四幕完整贯通流程（从序幕誓言到故土归途）
 console.log('\n5. 验证常规航线（四幕连贯流转至终章）...');
@@ -112,7 +117,8 @@ function stepToNextKnot(eng) {
 engine.makeChoice(0); // 特洛伊启航 -> 卡法柔斯风暴
 assert.strictEqual(engine.state.currentNode.id, 'knot_prologue_warrior_storm');
 
-engine.makeChoice(1); // 割断缆绳，弃船保命 -> 浅滩反思
+const regularIdx = engine.state.currentNode.choices.findIndex(c => c.nextKnot === 'knot_prologue_beach_reflection');
+engine.makeChoice(regularIdx >= 0 ? regularIdx : 2); // 搏杀巨浪，冲上海滩 -> 浅滩反思
 assert.strictEqual(engine.state.currentNode.id, 'knot_prologue_beach_reflection');
 
 // 立誓启航：扬帆，启航！(解锁执舵者成就，切入第一幕)
@@ -161,8 +167,8 @@ assert.strictEqual(engine.state.currentNode.id, 'knot_act2_gate1_drinking', '必
 console.log('   ✓ 抵达第二幕提那鲁斯神之域：', engine.state.currentNode.title);
 
 // 六重门连贯流转：
-// 第一重门：饮水之门 -> 只灌一桶留给后来者 -> 第二重门：忘名之门
-engine.makeChoice(1);
+// 第一重门：饮水之门 -> 【武领克制】严守军纪 -> 第二重门：忘名之门
+engine.makeChoice(0);
 assert.strictEqual(engine.state.currentNode.id, 'knot_act2_gate2_forget_name');
 
 // 第二重门 -> 写下同袍名字 -> 第三重门：折刃之门

@@ -195,6 +195,15 @@
       "icon": "🕊️",
       "image": "/img/重要配图/凯旋结局2.png",
       "desc": "在卡法柔斯海角滔天黑浪与雷暴的缝隙中，雅典娜降下了破晓微光。未染贪婪的船队、心怀虔敬的统帅与同舟共济的桨手，奇迹般地斩碎了复仇风暴。战船未曾迷航，未曾惊扰深海巨妖，沿着平稳航道一路顺风顺水径直归抵母港！钟声齐鸣，全城跪迎，你如同未曾受劫的老将涅斯托尔，免受十年漂泊撕心之苦，将所有兄弟全须全尾带回了故土家园！“诸神的狂怒掠过海面，却为真正清醒而敬畏的心灵让出了生路。”"
+    },
+    "caphireus_easter_egg_home": {
+      "id": "caphireus_easter_egg_home",
+      "achievement": "神佑归航",
+      "title": "【隐藏结局 · 神佑归航】",
+      "tag": "凡人神迹 ★★★★★",
+      "icon": "🕊️",
+      "image": "/img/重要配图/凯旋结局2.png",
+      "desc": "在卡法柔斯海角滔天黑浪与雷暴的缝隙中，你的卓越决断斩碎了复仇风暴！战船未曾迷航，亦未曾沦陷于深海巨妖与魔女之岛，沿着顺风航道径直归抵母港！钟声齐鸣，全城跪迎，你免受十年漂泊之苦，将出发时的三十名同胞全须全尾带回了故土家园！“诸神的狂怒掠过海面，却为真正清醒而敬畏的心灵让出了生路。”"
     }
   },
   "MAJOR_EVENTS": [
@@ -735,9 +744,18 @@
             "minLoyalty": 80,
             "minSanity": 70
           },
-          "triggerEnding": "hidden_safe_haven",
-          "unlockAchievement": "ach_caphireus_miracle",
-          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，未损一船一卒，乘着顺风笔直驶向故乡港湾！"
+          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，顺利突破卡法柔斯海角！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
+        },
+        {
+          "text": "【武领军阵】组织甲士结成长矛盾阵加固龙骨，逆波前冲！",
+          "hint": "",
+          "condition": {
+            "requiredClass": "warrior",
+            "minLoyalty": 60
+          },
+          "resolutionText": "“阿卡亚的勇士，随我顶住！”你拔出精铜巨剑刺入甲板稳固身形，号令全员排开盾阵！全船受你豪气感召，同心协力以战阵之势死死扼制狂澜！战船借着排浪飞跃暗礁，奇迹般突破了卡法柔斯海角！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
         },
         {
           "text": "在甲板主持大局，命令船员全力划桨",
@@ -807,9 +825,18 @@
             "minLoyalty": 80,
             "minSanity": 70
           },
-          "triggerEnding": "hidden_safe_haven",
-          "unlockAchievement": "ach_caphireus_miracle",
-          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，未损一船一卒，乘着顺风笔直驶向故乡港湾！"
+          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，顺利突破卡法柔斯海角！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
+        },
+        {
+          "text": "【大祭司祷祝】高举神杖沟通风暴之灵，以血奉献祈得神风护佑！",
+          "hint": "",
+          "condition": {
+            "requiredClass": "priest",
+            "minSanity": 60
+          },
+          "resolutionText": "你划破手掌将热血洒向怒涛，高举神杖高声咏唱古老的宁海颂歌！金色的神圣微光撕开暗云，波塞冬的三叉戟在神光前微微一滞。海风瞬间转向，战船借神风奇迹般穿透狂澜，顺利突破卡法柔斯！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
         },
         {
           "text": "跪在甲板上，向波塞冬高声祈祷，恳求祂的怜悯",
@@ -913,9 +940,18 @@
             "minLoyalty": 80,
             "minSanity": 70
           },
-          "triggerEnding": "hidden_safe_haven",
-          "unlockAchievement": "ach_caphireus_miracle",
-          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，未损一船一卒，乘着顺风笔直驶向故乡港湾！"
+          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，顺利突破卡法柔斯海角！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
+        },
+        {
+          "text": "【老舵手绝技】迎头逆切九重巨浪，借暴风反作用力强行抢风调头！",
+          "hint": "",
+          "condition": {
+            "requiredClass": "helmsman",
+            "minSanity": 55
+          },
+          "resolutionText": "你凭借二十年老舵手对海流脾性的直觉，双手死死卡住舵柄，迎着千钧浪头反向斜切！战船宛如飞鱼般轻巧掠过致命暗礁，借着回旋风暴的反冲力猛冲出海角险境，驶入开阔平静海域！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
         },
         {
           "text": "咬牙稳住舵柄，尝试靠自己的经验带船冲出风暴",
@@ -1020,9 +1056,18 @@
             "minLoyalty": 80,
             "minSanity": 70
           },
-          "triggerEnding": "hidden_safe_haven",
-          "unlockAchievement": "ach_caphireus_miracle",
-          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，未损一船一卒，乘着顺风笔直驶向故乡港湾！"
+          "resolutionText": "神圣的微光自云层缝隙破空而降！波塞冬的三叉戟在神光前微微一滞。全船上下同仇敌忾，战船在灭顶浩劫中奇迹般穿透狂澜，顺利突破卡法柔斯海角！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
+        },
+        {
+          "text": "【富贾断腕】抛弃所有特洛伊金银压舱，以轻舟极速掠浪滑翔！",
+          "hint": "",
+          "condition": {
+            "requiredClass": "merchant",
+            "minFood": 55
+          },
+          "resolutionText": "“钱财乃身外之物，活命才是根本！”你果断命人将满舱最沉重的青铜器与金币抛入深海。战船吃水瞬间大减，身轻如燕，借着涌浪腾跃越过卡法柔斯咆哮的浅滩，安然冲出风暴！",
+          "nextKnot": "knot_easter_egg_caphireus_pass"
         },
         {
           "text": "拼死抢救粮袋和淡水——活人比死物值钱",
@@ -1105,6 +1150,73 @@
           "unlockAchievement": "ach_steersman",
           "resolutionText": "你召集剩余船员动手清理残骸、修补破陋的船板，换上粗壮的新桅，将战船重新推入大海。你握紧舵柄，迎着鱼肚白的海平线远航。长路自此始！",
           "nextAct": 1
+        }
+      ]
+    },
+    "knot_easter_egg_caphireus_pass": {
+      "id": "knot_easter_egg_caphireus_pass",
+      "act": 0,
+      "stage": 3,
+      "title": "卡法柔斯奇迹 · 顺风彩蛋线",
+      "chapter": "隐藏彩蛋 · 神佑捷径",
+      "icon": "🕊️",
+      "image": "/img/重要配图/开端1.png",
+      "env": "sea",
+      "speaker": "老水手",
+      "objective": "顺利通过卡法柔斯海角，选择即刻归乡或巡游庆功",
+      "text": "不可思议的奇迹！在你的英明决断下，战船奇迹般冲破了卡法柔斯海角的灭顶狂澜！\n当最后一阵雷暴被甩在船尾，海面突然平静如镜，金色的晨曦穿透云层，洒在每一位安然无恙的同胞脸上。波塞冬的三叉戟悄然归隐深海，爱琴海向你们敞开了最为温和的怀抱。\n老水手颤抖着手抚摸着完好无损的木榫，喜极而泣：“船长……我们绕过了所有厄运！海流正推着我们直奔阿萨卡！顺风只要两天……只要两天我们就能回到家乡！”\n三十名同乡兄弟欢呼雷动，你们避开了十年的孤岛漂泊，创造了希腊联军绝无仅有的神迹！",
+      "choices": [
+        {
+          "text": "【直接返乡 · 凯旋抵港】满帆直航，驶入阿萨卡故土海滩",
+          "hint": "",
+          "triggerEnding": "caphireus_easter_egg_home",
+          "unlockAchievement": "ach_caphireus_miracle",
+          "resolutionText": "你下令全帆张开，战船劈开宁静如镜的碧波向西直航。顺风顺水，第三日清晨，阿萨卡的橄榄林在破晓金辉中映入眼帘！你做到了凡人未曾设想的神迹——完满归乡！"
+        },
+        {
+          "text": "【彩蛋整备 · 巡游庆功】在金光潋滟的避风湾痛饮庆功，享受诸神垂青",
+          "hint": "",
+          "deltas": {
+            "food": 30,
+            "sanity": 30,
+            "luck": 30,
+            "loyalty": 30
+          },
+          "resolutionText": "全船在平静的避风湾抛锚，开怀痛饮特洛伊的美酒！神恩与忠诚达到前所未有的顶峰。整备完毕后，战船在欢呼声中扬帆驶向故乡！",
+          "nextKnot": "knot_easter_egg_triumphant_landing"
+        },
+        {
+          "text": "【传奇雄心 · 转向未知远洋】“我们已见证神迹，但英雄的灵魂渴望更远的世界”",
+          "hint": "",
+          "deltas": {
+            "sanity": 10,
+            "luck": 10
+          },
+          "resolutionText": "你望向遥远外海奇异的迷雾，心潮澎湃。既然上天赐予全船完好无损的战力，你决定率领这支无敌之师，继续探索爱琴海深处隐秘的未知神域！",
+          "nextAct": 1
+        }
+      ]
+    },
+    "knot_easter_egg_triumphant_landing": {
+      "id": "knot_easter_egg_triumphant_landing",
+      "act": 0,
+      "stage": 4,
+      "title": "故土阿萨卡 · 黄金凯旋",
+      "chapter": "隐藏彩蛋 · 凡人神迹",
+      "icon": "🏛️",
+      "image": "/img/重要配图/凯旋结局2.png",
+      "env": "land",
+      "landType": "human",
+      "speaker": "旁白",
+      "objective": "步下跳板，登上故土阿萨卡海滩",
+      "text": "晨钟齐鸣！战船缓缓驶入阿萨卡石砌码头。\n全城百姓惊愕而后狂喜地涌上海滩——出发时的三十名同胞一个不落全部站在甲板上，满载特洛伊的荣耀与给养，完好无损地踏上了故土！\n你的妻子带着孩子穿过欢呼的人群向你奔来。这是整个希腊史诗中最不可思议的一页：凡人未受十年磨难，凭借至高智慧与决断，赢得了最圆满的归乡！",
+      "choices": [
+        {
+          "text": "【步下跳板，拥抱故土与家人】走下战船，步入温暖家门",
+          "hint": "",
+          "triggerEnding": "caphireus_easter_egg_home",
+          "unlockAchievement": "ach_caphireus_miracle",
+          "resolutionText": "你紧紧拥抱着妻子与孩子，耳畔回荡着同胞们的欢歌。爱与故土，就在脚下。"
         }
       ]
     },
@@ -1266,6 +1378,64 @@
       "text": "前方的沙洲上横亘着一艘折成两截的巨船，十数名幸存者麻木地站着。一名汉子水没过膝走来：“我们从特洛伊另一艘船游过来的，三天没水了。带我们走可能撑不到下个岛，不带我们也不怪你，只是得让你知道。”两群人在烈日下互相对视。",
       "choices": [
         {
+          "text": "【武领重诺】“希腊勇士不弃同袍！”接他们登船并整编入阵，同生共死",
+          "hint": "",
+          "condition": {
+            "requiredClass": "warrior"
+          },
+          "deltas": {
+            "crew": 5,
+            "food": -10,
+            "loyalty": 15
+          },
+          "resolutionText": "你拔剑划沙立誓，号令战船抛缆接应！三十名弟兄齐心合力，将虚弱的同袍悉数背上甲板。士气如虹，军威大震！",
+          "nextKnot": "knot_act1_q3_put_down_sword"
+        },
+        {
+          "text": "【祭司祝水】以圣水为受难者解渴祈福，神明必看顾施予庇佑之舟",
+          "hint": "",
+          "condition": {
+            "requiredClass": "priest"
+          },
+          "deltas": {
+            "crew": 4,
+            "luck": 15,
+            "sanity": 10,
+            "food": -10
+          },
+          "resolutionText": "你手持圣杯走下浅滩，为每一个干渴的灵魂分饮净水。神光隐隐，善行受纳，全船人精神大振！",
+          "nextKnot": "knot_act1_q3_put_down_sword"
+        },
+        {
+          "text": "【老舵收编】“都是海里讨饭的苦兄弟！”清理下层舱位，安置他们同舟共济",
+          "hint": "",
+          "condition": {
+            "requiredClass": "helmsman"
+          },
+          "deltas": {
+            "crew": 4,
+            "loyalty": 10,
+            "sanity": 5,
+            "food": -10
+          },
+          "resolutionText": "你亲自跳入齐腰深的海水，将落难弟兄逐一托上舢板，老水手们的默契相助让两拨人迅速融为一体！",
+          "nextKnot": "knot_act1_q3_put_down_sword"
+        },
+        {
+          "text": "【商契共生】定下互助契约：分出救急口粮换取他们全力摇桨加速航行",
+          "hint": "",
+          "condition": {
+            "requiredClass": "merchant"
+          },
+          "deltas": {
+            "crew": 4,
+            "loyalty": 10,
+            "food": -5
+          },
+          "resolutionText": "你公平明晰地分派了干粮与水壶，落难水手们感激涕零，甘愿立誓成为最卖力的桨手以报救命之恩！",
+          "nextKnot": "knot_act1_q3_put_down_sword"
+        },
+        {
           "text": "带他们走！放下小艇，把淡水和口粮分成更多份",
           "hint": "",
           "deltas": {
@@ -1391,6 +1561,58 @@
       "objective": "在浓雾水幕与甘泉前经受贪婪考验",
       "text": "战船驶入浓雾，灰色的雾墙将海天缝在一起。水幕化作两根水柱凭空升起，水幕后陈列着盛满清水的陶罐。全船干渴如焚。",
       "choices": [
+        {
+          "text": "【武领克制】以刚毅军纪严令全军戒绝暴饮，仅以随身皮囊匀取数口润喉",
+          "hint": "",
+          "condition": {
+            "requiredClass": "warrior"
+          },
+          "deltas": {
+            "sanity": 10,
+            "loyalty": 10
+          },
+          "resolutionText": "你横刀立于水幕前，严明的战时纪律震慑住躁动。全船将士克制贪欲，水幕在敬佩的叹息声中悄然隐退。",
+          "nextKnot": "knot_act2_gate2_forget_name"
+        },
+        {
+          "text": "【祭司净泉】默念净水神咒，向赫尔墨斯供奉第一捧清泉后适量取用",
+          "hint": "",
+          "condition": {
+            "requiredClass": "priest"
+          },
+          "deltas": {
+            "luck": 15,
+            "sanity": 10
+          },
+          "resolutionText": "你以银匙向虚空献祭甘泉，神使的迷雾骤然化作金光散开，水幕恭顺退避！",
+          "nextKnot": "knot_act2_gate2_forget_name"
+        },
+        {
+          "text": "【老舵警觉】深知海雾幽泉诡谲，取一小桶清水并严令全员绝不暴饮沉沦",
+          "hint": "",
+          "condition": {
+            "requiredClass": "helmsman"
+          },
+          "deltas": {
+            "sanity": 10,
+            "loyalty": 5
+          },
+          "resolutionText": "老舵手的谨慎经验救了全船！甘甜之泉未化作催命的涡流，水幕平缓落下引出明路。",
+          "nextKnot": "knot_act2_gate2_forget_name"
+        },
+        {
+          "text": "【商贾定额】按人头严格精确分水，绝不多盛一滴触动迷宫杀机",
+          "hint": "",
+          "condition": {
+            "requiredClass": "merchant"
+          },
+          "deltas": {
+            "food": 10,
+            "sanity": 10
+          },
+          "resolutionText": "你取出量器毫厘不爽地分配泉水，冷静的算筹破除了贪婪幻阵，水柱消散于无形。",
+          "nextKnot": "knot_act2_gate2_forget_name"
+        },
         {
           "text": "走进水幕，灌满所有水桶",
           "hint": "",
@@ -1628,6 +1850,70 @@
       "objective": "在海滩立碑刻下誓言",
       "text": "战船在阿尔戈斯平缓的沙滩靠岸。中央立着一块被风磨光的滚烫石碑，刻着：“刻下你的誓言。”碑前放着一把刻刀。你拿起它。",
       "choices": [
+        {
+          "text": "【武领誓约】刻下“同生共死”：必携全船同胞血战到底，全须全尾回家",
+          "hint": "",
+          "condition": {
+            "requiredClass": "warrior"
+          },
+          "deltas": {
+            "loyalty": 15,
+            "sanity": 5
+          },
+          "setMemory": {
+            "oath": "warrior_oath"
+          },
+          "resolutionText": "石碑碎屑飞溅，你刻下了武者的铁血之誓！全船兄弟振臂高呼，誓死追随！",
+          "nextKnot": "knot_act3_q1_whose"
+        },
+        {
+          "text": "【祭司誓约】刻下“虔敬如初”：以清净仁心顺应天命，不负神明眷顾",
+          "hint": "",
+          "condition": {
+            "requiredClass": "priest"
+          },
+          "deltas": {
+            "luck": 15,
+            "sanity": 10
+          },
+          "setMemory": {
+            "oath": "priest_oath"
+          },
+          "resolutionText": "刻刀如行云流水，古老祭司的圣字散发着淡淡的金辉，诸神的注视仿佛化作护佑的暖风。",
+          "nextKnot": "knot_act3_q1_whose"
+        },
+        {
+          "text": "【老舵誓约】刻下“矢志不偏”：哪怕沧海桑田，手中木舵永不偏航",
+          "hint": "",
+          "condition": {
+            "requiredClass": "helmsman"
+          },
+          "deltas": {
+            "loyalty": 10,
+            "sanity": 10
+          },
+          "setMemory": {
+            "oath": "helmsman_oath"
+          },
+          "resolutionText": "你以握舵二十年的茧手用力刻下永不偏移的罗盘之印，老水手们目光如铁，信心倍增！",
+          "nextKnot": "knot_act3_q1_whose"
+        },
+        {
+          "text": "【富贾誓约】刻下“千金散尽”：散尽特洛伊财帛，只求带弟兄们重见故土炊烟",
+          "hint": "",
+          "condition": {
+            "requiredClass": "merchant"
+          },
+          "deltas": {
+            "loyalty": 20,
+            "food": 5
+          },
+          "setMemory": {
+            "oath": "merchant_oath"
+          },
+          "resolutionText": "石碑上刻下商贾舍金取义的重誓，船员们相视而笑，贪恋财货的戾气一扫而空！",
+          "nextKnot": "knot_act3_q1_whose"
+        },
         {
           "text": "刻下“归”字：你只想回家，忘掉一切",
           "hint": "",
@@ -2224,6 +2510,77 @@
               }
             ]
           }
+        },
+        {
+          "text": "【武领亲征】组织重甲亲卫抢占上风，跳帮斩首敌方酋领！",
+          "hint": "",
+          "deltas": {
+            "crew": -1,
+            "food": 20,
+            "loyalty": 15
+          },
+          "condition": {
+            "requiredClass": "warrior"
+          },
+          "chain": {
+            "text": "你手提青铜阔剑率先荡索跳上敌船甲板，战吼声震天动地！敌方酋领尚未举起弯刀便被你一剑斩断护心镜。敌船阵脚大乱溃不成军，你们缴获了大量干酪与咸鱼！",
+            "type": "battle",
+            "outcomes": [
+              {
+                "title": "斩将大捷",
+                "text": "甲士们受你勇武激励，以极小代价全歼来犯之敌，战利品满舱！",
+                "deltas": {
+                  "food": 25,
+                  "loyalty": 20
+                },
+                "baseWeight": 70
+              },
+              {
+                "title": "激战力克",
+                "text": "跳帮血战惨烈，虽然成功斩首敌酋，但亦有一名兄弟挂彩。",
+                "deltas": {
+                  "crew": -1,
+                  "food": 15,
+                  "loyalty": 10
+                },
+                "baseWeight": 30
+              }
+            ]
+          }
+        },
+        {
+          "text": "【商贾周旋】以特洛伊丝绸铜器为诱，订立和平通商盟约",
+          "hint": "",
+          "deltas": {
+            "food": 10,
+            "sanity": 10
+          },
+          "condition": {
+            "requiredClass": "merchant"
+          },
+          "chain": {
+            "text": "你从容步出甲板，令人抬出几匹特洛伊缴获的紫罗兰丝绸与精美铜器。海盗首领目光大亮，在财富与契约面前收起了弯刀，双方以物易物，相安无事。",
+            "type": "luck",
+            "outcomes": [
+              {
+                "title": "互利共赢",
+                "text": "海盗首领赠予你们新鲜淡水与肉干，并指明了避礁近道！",
+                "deltas": {
+                  "food": 15,
+                  "sanity": 15
+                },
+                "baseWeight": 60
+              },
+              {
+                "title": "顺利通关",
+                "text": "对方收下财物后让开航道，船队平安驶离险境。",
+                "deltas": {
+                  "sanity": 5
+                },
+                "baseWeight": 40
+              }
+            ]
+          }
         }
       ]
     },
@@ -2588,6 +2945,41 @@
                   "sanity": -10
                 },
                 "baseWeight": 50
+              }
+            ]
+          }
+        },
+        {
+          "text": "【祭司驱瘟】点燃神殿圣香净舱，持阿波罗金杖祷祝驱疫",
+          "hint": "",
+          "deltas": {
+            "sanity": 15,
+            "luck": 15
+          },
+          "condition": {
+            "requiredClass": "priest"
+          },
+          "chain": {
+            "text": "你披上洁白祭袍，在下层舱室点燃乳香与没药，高唱远射神阿波罗的祛疫圣歌。金色的烟气穿透阴暗潮湿的船舱，高热呻吟的水手呼吸逐渐平稳，红斑奇迹般退去！",
+            "type": "divine",
+            "outcomes": [
+              {
+                "title": "神光普照",
+                "text": "阿波罗垂怜虔敬祭司，疫气彻底消散，病患全部康复，船员感激涕零！",
+                "deltas": {
+                  "sanity": 20,
+                  "loyalty": 20
+                },
+                "baseWeight": 70
+              },
+              {
+                "title": "疫势暂遏",
+                "text": "神圣香火遏制住了疫病蔓延，虽未当即痊愈但无人因此丧命。",
+                "deltas": {
+                  "sanity": 10,
+                  "loyalty": 10
+                },
+                "baseWeight": 30
               }
             ]
           }
@@ -3089,6 +3481,42 @@
                   "crew": -1
                 },
                 "baseWeight": 50
+              }
+            ]
+          }
+        },
+        {
+          "text": "【老舵控帆】凭借老辣风帆技法借风抢位，从涡流边缘稳妥捞回物资",
+          "hint": "",
+          "deltas": {
+            "food": 10,
+            "sanity": 10,
+            "loyalty": 10
+          },
+          "condition": {
+            "requiredClass": "helmsman"
+          },
+          "chain": {
+            "text": "“掌稳横桁，听我号令松左舵！”你亲自接管舵轮，如同一只老海雕般精准预判浪头走势。战船斜切涌浪稳稳横在物资漂流下方，水手们用挠钩轻松将落水粮桶悉数吊回甲板！",
+            "type": "sea",
+            "outcomes": [
+              {
+                "title": "毫发无伤",
+                "text": "老舵手的惊人操舵技艺令全船惊叹，补给全数挽回且无一人落水！",
+                "deltas": {
+                  "food": 10,
+                  "loyalty": 15
+                },
+                "baseWeight": 80
+              },
+              {
+                "title": "小有收获",
+                "text": "捞回了大半粮袋，虽有部分浸润海水，但成功稳住了局面。",
+                "deltas": {
+                  "food": 5,
+                  "loyalty": 5
+                },
+                "baseWeight": 20
               }
             ]
           }

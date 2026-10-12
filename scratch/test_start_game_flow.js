@@ -77,7 +77,8 @@ global.document = {
       textContent: '',
       innerHTML: '',
       children: [],
-      appendChild(child) { this.children.push(child); }
+      appendChild(child) { this.children.push(child); },
+      setAttribute(k, v) { this[k] = v; }
     };
   }
 };

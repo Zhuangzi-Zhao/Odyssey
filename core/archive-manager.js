@@ -220,7 +220,7 @@ const ArchiveManager = {
     const a1 = this.unlock(achKey, archive);
     if (a1) newAchs.push(a1);
 
-    if (endingKey === 'hidden_safe_haven') {
+    if (endingKey === 'hidden_safe_haven' || endingKey === 'caphireus_easter_egg_home') {
       const aMiracle = this.unlock('ach_caphireus_miracle', archive);
       if (aMiracle) newAchs.push(aMiracle);
     }
