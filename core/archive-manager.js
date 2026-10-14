@@ -252,6 +252,28 @@ const ArchiveManager = {
   },
 
   /**
+   * 检查是否已打出过任意成功返乡结局
+   * 成功返乡结局包含：survivor (上岸), return (回家), triumphant (凯旋), hidden_safe_haven / caphireus_easter_egg_home (神佑归航)
+   */
+  hasAchievedHomeReturn() {
+    const archive = this.getArchive();
+    const homeEndings = ['survivor', 'return', 'triumphant', 'hidden_safe_haven', 'caphireus_easter_egg_home'];
+    return (archive.unlockedEndings || []).some(k => homeEndings.includes(k));
+  },
+
+  /**
+   * 检查指定开局职业是否已解锁
+   * 规则：在玩家第一次打出成功返乡结局之前，锁定贵族武领
+   * @param {string} classId
+   */
+  isClassUnlocked(classId) {
+    if (classId === 'warrior') {
+      return this.hasAchievedHomeReturn();
+    }
+    return true;
+  },
+
+  /**
    * 回合决策与状态成就检定
    */
   checkTurnUnlocks(state, node, choice) {

@@ -349,6 +349,33 @@
   box-shadow: 0 0 16rpx rgba(212, 175, 55, 0.2) inset;
 }
 
+.class-card-locked {
+  opacity: 0.65;
+  filter: grayscale(0.6);
+  border-left: 4rpx solid #ef4444 !important;
+  background: #080c14 !important;
+}
+
+.class-lock-badge {
+  font-size: 18rpx;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 2rpx 10rpx;
+  border-radius: 12rpx;
+  margin-left: 8rpx;
+}
+
+.class-lock-hint-banner {
+  margin-top: 8rpx;
+  background: rgba(153, 27, 27, 0.2);
+  border-left: 2px solid #ef4444;
+  padding: 8rpx 12rpx;
+  font-size: 19rpx;
+  color: #fca5a5;
+  line-height: 1.4;
+}
+
 .class-card-top {
   display: flex;
   align-items: center;

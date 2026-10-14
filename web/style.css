@@ -1224,6 +1224,40 @@ button, .btn {
   box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
 }
 
+.class-card.locked {
+  opacity: 0.65;
+  filter: grayscale(0.55);
+  cursor: not-allowed;
+  border-left-color: #ef4444;
+  background: #090b12;
+}
+
+.class-card.locked:hover {
+  background: #0d101a;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.class-lock-badge {
+  font-size: 11px;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.class-lock-hint-banner {
+  margin-top: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: #fca5a5;
+  background: rgba(153, 27, 27, 0.2);
+  border-left: 2px solid #ef4444;
+}
+
 .class-header {
   display: flex;
   align-items: center;

@@ -152,16 +152,17 @@
       <scroll-view scroll-y class="class-list-scroll">
         <block wx:for="{{classesList}}" wx:key="id">
           <view 
-            class="class-select-card {{selectedClassId === item.id ? 'class-card-selected' : ''}}"
+            class="class-select-card {{selectedClassId === item.id && item.isUnlocked ? 'class-card-selected' : ''}} {{!item.isUnlocked ? 'class-card-locked' : ''}}"
             bindtap="selectClass"
             data-id="{{item.id}}"
           >
             <view class="class-card-top">
-              <view class="class-icon-box">{{item.icon}}</view>
+              <view class="class-icon-box">{{item.isUnlocked ? item.icon : '🔒'}}</view>
               <view class="class-name-box">
                 <view class="class-name-title">
                   <text class="class-name">{{item.name}}</text>
-                  <text class="class-badge">〔{{item.title}}〕</text>
+                  <text class="class-badge" wx:if="{{item.isUnlocked}}">〔{{item.title}}〕</text>
+                  <text class="class-lock-badge" wx:else>🔒 需首次成功返乡解锁</text>
                 </view>
                 <view class="class-stat-chips">
                   <text class="chip">🍖 粮:{{item.initialResources.food}}</text>
@@ -172,7 +173,8 @@
                 </view>
               </view>
               <view class="class-radio-box">
-                <text class="radio-mark" wx:if="{{selectedClassId === item.id}}">◈</text>
+                <text class="radio-mark" wx:if="{{item.isUnlocked && selectedClassId === item.id}}">◈</text>
+                <text class="radio-lock" wx:elif="{{!item.isUnlocked}}">🔒</text>
                 <text class="radio-empty" wx:else>◇</text>
               </view>
             </view>
@@ -180,6 +182,9 @@
             <view class="class-card-perk">
               <text class="perk-label">✦ 领航特质：</text>
               <text class="perk-text">{{item.perkText}}</text>
+            </view>
+            <view class="class-lock-hint-banner" wx:if="{{!item.isUnlocked}}">
+              <text>🔒 封印中：需先以其他身份经历考验，达成任意一次成功返乡结局方可出阵。</text>
             </view>
           </view>
         </block>

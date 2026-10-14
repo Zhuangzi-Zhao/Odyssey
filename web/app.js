@@ -177,7 +177,13 @@
         }
       };
 
+      const isWarriorUnlocked = window.ArchiveManager ? window.ArchiveManager.isClassUnlocked('warrior') : true;
+      if (this.selectedClassId === 'warrior' && !isWarriorUnlocked) {
+        this.selectedClassId = 'priest';
+      }
+
       list.forEach(c => {
+        const isUnlocked = window.ArchiveManager ? window.ArchiveManager.isClassUnlocked(c.id) : true;
         let perkText = '';
         if (c.id === 'warrior') perkText = '士气刚毅：忠诚流失-25% · 战斗食物收益+25%';
         else if (c.id === 'priest') perkText = '神眷通灵：祭祀成功率+15%且成效卓越 · 理智衰减-20%';
@@ -185,11 +191,16 @@
         else if (c.id === 'merchant') perkText = '精打细算：食物消耗-10% · 港口贸易收益+35%';
 
         const card = document.createElement('div');
-        const isSel = c.id === this.selectedClassId;
-        card.className = `class-card ${isSel ? 'selected' : ''}`;
+        const isSel = c.id === this.selectedClassId && isUnlocked;
+        card.className = `class-card ${isSel ? 'selected' : ''} ${!isUnlocked ? 'locked' : ''}`;
         card.setAttribute('data-id', c.id);
 
         card.onclick = () => {
+          if (!isUnlocked) {
+            playSound('click');
+            alert('【贵族武领】尚未解锁：需在爱琴海中完成任意一次成功返乡结局！');
+            return;
+          }
           this.selectedClassId = c.id;
           document.querySelectorAll('.class-card').forEach(cc => cc.classList.remove('selected'));
           card.classList.add('selected');
@@ -199,17 +210,26 @@
 
         // 双击卡片直接以该身份快速启航
         card.ondblclick = () => {
+          if (!isUnlocked) {
+            playSound('click');
+            alert('【贵族武领】尚未解锁：需在爱琴海中完成任意一次成功返乡结局！');
+            return;
+          }
           this.selectedClassId = c.id;
           this.startNewGame();
         };
 
+        const badgeHtml = isUnlocked
+          ? `<span class="class-diff-badge">${c.difficulty || '难度适中'}</span>`
+          : `<span class="class-lock-badge">🔒 需首次成功返乡解锁</span>`;
+
         card.innerHTML = `
           <div class="class-header">
             <div class="class-name-tag">
-              <span>${c.icon}</span>
+              <span>${isUnlocked ? c.icon : '🔒'}</span>
               <span>${c.name}</span>
             </div>
-            <span class="class-diff-badge">${c.difficulty || '难度适中'}</span>
+            ${badgeHtml}
           </div>
           <div class="class-desc-text">${c.desc}</div>
           <div class="class-res-preview">
@@ -220,12 +240,16 @@
             <span>忠 ${c.initialResources.loyalty}</span>
           </div>
           <div class="class-perk-text">✦ ${perkText}</div>
+          ${!isUnlocked ? '<div class="class-lock-hint-banner">🔒 封印中：需先以其他身份经历考验，达成任意一次成功返乡结局方可出阵。</div>' : ''}
         `;
         container.appendChild(card);
       });
 
-      const selObj = list.find(c => c.id === this.selectedClassId) || list[0];
-      if (selObj) updateBtnText(selObj.name);
+      const selObj = list.find(c => c.id === this.selectedClassId) || list.find(c => window.ArchiveManager ? window.ArchiveManager.isClassUnlocked(c.id) : true) || list[0];
+      if (selObj) {
+        this.selectedClassId = selObj.id;
+        updateBtnText(selObj.name);
+      }
 
       this.openModal('modal-class-select');
     },
@@ -234,6 +258,10 @@
       try {
         if (!this.engine && window.OdysseyEngine) {
           this.engine = new window.OdysseyEngine();
+        }
+        if (window.ArchiveManager && !window.ArchiveManager.isClassUnlocked(this.selectedClassId)) {
+          alert('该身份尚未解锁，已为您切回【神谕祭司】！');
+          this.selectedClassId = 'priest';
         }
         this.closeModal('modal-class-select');
         this.engine.reset(this.selectedClassId);
