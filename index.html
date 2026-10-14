@@ -194,7 +194,7 @@
       <div class="act-objective-banner stone-card">
         <div class="act-meta-row">
           <div id="act-pill-container" class="act-pill act-pill-0">
-            <span id="act-pill-badge">第 序 幕</span>
+            <span id="act-pill-badge">序幕</span>
             <span id="act-pill-title">序幕 · 启航之殇</span>
             <span id="act-pill-theme">· 特洛伊撤离与卡法柔斯浩劫</span>
           </div>
@@ -463,19 +463,31 @@
       </div>
     </div>
 
-    <!-- 6. 史诗大事件原画收集特刊弹窗 (纯原画展示) -->
+    <!-- 6. 史诗大事件原画收集特刊弹窗 (提示通过大事件与原画) -->
     <div id="modal-epic-collector" class="modal-mask" style="display: none;" onclick="window.App.closeModal('modal-epic-collector')">
       <div class="modal-content pure-artwork-modal" onclick="event.stopPropagation()">
         <span class="pure-artwork-close" onclick="window.App.closeModal('modal-epic-collector')">✕</span>
+        <div class="artwork-event-tag">
+          <span class="artwork-event-icon">🏆</span>
+          <span class="artwork-event-label">成功通过大事件</span>
+          <span id="epic-title-text" class="artwork-event-name">【大事件】</span>
+        </div>
         <img id="epic-full-img" class="pure-artwork-img" src="" alt="Epic Artwork" onclick="window.App.closeModal('modal-epic-collector')">
+        <div class="artwork-tap-tip">点击图片或任意处继续航行</div>
       </div>
     </div>
 
-    <!-- 7. 航海见闻录发现弹窗 (纯原画展示) -->
+    <!-- 7. 航海见闻录发现弹窗 (提示收录见闻与原画) -->
     <div id="modal-sight" class="modal-mask" style="display: none;" onclick="window.App.closeModal('modal-sight')">
       <div class="modal-content pure-artwork-modal" onclick="event.stopPropagation()">
         <span class="pure-artwork-close" onclick="window.App.closeModal('modal-sight')">✕</span>
+        <div class="artwork-event-tag">
+          <span class="artwork-event-icon">📜</span>
+          <span class="artwork-event-label">收录航海见闻</span>
+          <span id="sight-title-text" class="artwork-event-name">【见闻录】</span>
+        </div>
         <img id="sight-full-img" class="pure-artwork-img" src="" alt="Sight Artwork" onclick="window.App.closeModal('modal-sight')">
+        <div class="artwork-tap-tip">点击图片或任意处继续航行</div>
       </div>
     </div>
 

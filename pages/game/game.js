@@ -63,6 +63,7 @@ Page({
 
     if (this.engine.state.newAchievements && this.engine.state.newAchievements.length > 0) {
       this.triggerAchievementToast(this.engine.state.newAchievements);
+      this.engine.state.newAchievements = [];
     }
 
     this.renderCurrentNode();
@@ -250,6 +251,7 @@ Page({
     // 检查本回合新达成的成就并播放横幅
     if (res.newAchievements && res.newAchievements.length > 0) {
       this.triggerAchievementToast(res.newAchievements);
+      this.engine.state.newAchievements = [];
     }
 
     // 判断游戏是否结束
@@ -338,6 +340,7 @@ Page({
 
     if (res.newAchievements && res.newAchievements.length > 0) {
       this.triggerAchievementToast(res.newAchievements);
+      this.engine.state.newAchievements = [];
     }
 
     const updatedList = this.prepareSacrificesList();

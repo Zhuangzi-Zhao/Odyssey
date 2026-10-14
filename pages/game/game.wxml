@@ -133,7 +133,7 @@
   <view class="act-objective-banner stone-card animate-fade-in" wx:if="{{state.actTitle}}" catchtap="preventBubble">
     <view class="act-meta-row">
       <view class="act-pill act-pill-{{state.currentAct}}">
-        <text class="act-pill-badge">第 {{state.currentAct === 0 ? '序' : state.currentAct}} 幕</text>
+        <text class="act-pill-badge">{{state.currentAct === 0 ? '序幕' : '第 ' + state.currentAct + ' 幕'}}</text>
         <text class="act-pill-title">{{state.actTitle}}</text>
         <text class="act-pill-theme" wx:if="{{state.actTheme}}">· {{state.actTheme}}</text>
       </view>
@@ -413,23 +413,35 @@
     </view>
   </view>
 
-  <!-- 弹窗：荷马史诗 · 核心主线大事件特刊 (Epic Major Event Modal - 纯原画展示) -->
+  <!-- 弹窗：荷马史诗 · 核心主线大事件特刊 (提示通过的大事件与原画) -->
   <view class="modal-mask epic-modal-mask" wx:if="{{showEpicModal}}" bindtap="closeEpicModal">
     <view class="modal-content pure-artwork-modal-card animate-fade-in" catchtap="preventBubble">
       <view class="pure-close-btn" bindtap="closeEpicModal">✕</view>
+      <view class="artwork-event-tag">
+        <text class="artwork-event-icon">🏆</text>
+        <text class="artwork-event-label">成功通过大事件</text>
+        <text class="artwork-event-name">【{{epicEventData.title}}】</text>
+      </view>
       <view class="pure-banner-wrap" wx:if="{{epicEventData.image}}" bindtap="closeEpicModal">
         <image class="pure-modal-banner" src="{{epicEventData.image}}" mode="aspectFit" />
       </view>
+      <text class="artwork-tap-tip">点击图片或任意处继续航行</text>
     </view>
   </view>
 
-  <!-- 弹窗：航海见闻录发现 (Poetic Sights Modal - 纯原画展示) -->
+  <!-- 弹窗：航海见闻录发现 (提示收录见闻与原画) -->
   <view class="modal-mask sight-modal-mask" wx:if="{{showSightModal}}" bindtap="closeSightModal">
     <view class="modal-content pure-artwork-modal-card animate-fade-in" catchtap="preventBubble">
       <view class="pure-close-btn" bindtap="closeSightModal">✕</view>
+      <view class="artwork-event-tag">
+        <text class="artwork-event-icon">📜</text>
+        <text class="artwork-event-label">收录航海见闻</text>
+        <text class="artwork-event-name">【{{currentSight.title}}】</text>
+      </view>
       <view class="pure-banner-wrap" wx:if="{{currentSight.image}}" bindtap="closeSightModal">
         <image class="pure-modal-banner" src="{{currentSight.image}}" mode="aspectFit" />
       </view>
+      <text class="artwork-tap-tip">点击图片或任意处继续航行</text>
     </view>
   </view>
 

@@ -242,7 +242,8 @@
         this.renderCurrentNode();
 
         if (this.engine.state.newAchievements && this.engine.state.newAchievements.length > 0) {
-          this.triggerAchievementToast(this.engine.state.newAchievements[0]);
+          this.triggerAchievementToast(this.engine.state.newAchievements);
+          this.engine.state.newAchievements = [];
         }
       } catch (err) {
         console.error('开启新游戏异常:', err);
@@ -301,7 +302,7 @@
       const actPill = document.getElementById('act-pill-container');
 
       actPill.className = `act-pill act-pill-${state.currentAct}`;
-      actBadge.textContent = `第 ${state.currentAct === 0 ? '序' : state.currentAct} 幕`;
+      actBadge.textContent = state.currentAct === 0 ? '序幕' : `第 ${state.currentAct} 幕`;
       actTitle.textContent = state.actTitle || '';
       actTheme.textContent = state.actTheme ? `· ${state.actTheme}` : '';
       objText.textContent = state.currentObjective || node.objective || '';
@@ -355,9 +356,10 @@
         this.openSightModal(state.discoveredSight);
       }
 
-      // 6. 新成就横幅
+      // 6. 新成就横幅（展示并立即清空，杜绝下回合重复弹出）
       if (state.newAchievements && state.newAchievements.length > 0) {
-        this.triggerAchievementToast(state.newAchievements[0]);
+        this.triggerAchievementToast(state.newAchievements);
+        state.newAchievements = [];
       }
 
       // 7. 自动模式调度
@@ -681,11 +683,11 @@
       const img = document.getElementById('epic-full-img');
       if (img) img.src = resolveImg(epic.image);
       const titleEl = document.getElementById('epic-title-text');
-      if (titleEl) titleEl.textContent = epic.title || '';
-      const quoteEl = document.getElementById('epic-quote-text');
-      if (quoteEl) quoteEl.textContent = epic.quote || '';
-      const descEl = document.getElementById('epic-desc-text');
-      if (descEl) descEl.textContent = epic.aftermath || epic.text || '';
+      if (titleEl) {
+        let t = epic.title || '';
+        if (!t.startsWith('【') && t) t = `【${t}】`;
+        titleEl.textContent = t;
+      }
       this.openModal('modal-epic-collector');
     },
 
@@ -694,9 +696,11 @@
       const img = document.getElementById('sight-full-img');
       if (img) img.src = resolveImg(sight.image);
       const titleEl = document.getElementById('sight-title-text');
-      if (titleEl) titleEl.textContent = sight.title || '';
-      const descEl = document.getElementById('sight-desc-text');
-      if (descEl) descEl.textContent = sight.text || '';
+      if (titleEl) {
+        let t = sight.title || '';
+        if (!t.startsWith('【') && t) t = `【${t}】`;
+        titleEl.textContent = t;
+      }
       this.openModal('modal-sight');
     },
 
@@ -715,20 +719,40 @@
       this.openModal('modal-ending');
     },
 
-    triggerAchievementToast(ach) {
-      if (!ach) return;
+    triggerAchievementToast(achOrList) {
+      if (!achOrList) return;
+      const list = Array.isArray(achOrList) ? achOrList : [achOrList];
+      if (list.length === 0) return;
+      if (!this.achievementQueue) this.achievementQueue = [];
+      this.achievementQueue.push(...list);
+      if (!this.isShowingToast) {
+        this.showNextAchievementToast();
+      }
+    },
+
+    showNextAchievementToast() {
+      if (!this.achievementQueue || this.achievementQueue.length === 0) {
+        this.isShowingToast = false;
+        const banner = document.getElementById('achievement-toast');
+        if (banner) banner.style.display = 'none';
+        return;
+      }
+
+      this.isShowingToast = true;
+      const ach = this.achievementQueue.shift();
       playSound('triumph');
       const banner = document.getElementById('achievement-toast');
-      document.getElementById('toast-trophy-icon').textContent = ach.icon || '🏆';
-      document.getElementById('toast-ach-name').textContent = ach.name || '';
-      document.getElementById('toast-ach-desc').textContent = ach.desc || ach.hint || '';
-
-      banner.style.display = 'flex';
+      if (banner) {
+        document.getElementById('toast-trophy-icon').textContent = ach.icon || '🏆';
+        document.getElementById('toast-ach-name').textContent = ach.name || '';
+        document.getElementById('toast-ach-desc').textContent = ach.desc || ach.hint || '';
+        banner.style.display = 'flex';
+      }
 
       if (this.newAchievementToastTimer) clearTimeout(this.newAchievementToastTimer);
       this.newAchievementToastTimer = setTimeout(() => {
-        banner.style.display = 'none';
-      }, 5000);
+        this.showNextAchievementToast();
+      }, 4200);
     },
 
     // ==============================================================

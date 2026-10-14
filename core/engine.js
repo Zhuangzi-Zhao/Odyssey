@@ -434,6 +434,7 @@ class OdysseyEngine {
     // 消费并清除当前节点的单次弹窗标记，防止次级/结果节点重复弹出
     this.state.epicMajorEvent = null;
     this.state.discoveredSight = null;
+    this.state.newAchievements = []; // 清空上一回合的即时新达成成就缓存，确保每回合 newAchievements 仅包含本回合达成的成就
 
     // 0. 特殊即死/结局触发
     if (choice.triggerEnding) {
@@ -953,6 +954,7 @@ class OdysseyEngine {
     res.loyalty = Math.max(0, Math.min(100, res.loyalty));
 
     this.state.lastDeltas = appliedDeltas;
+    this.state.newAchievements = [];
 
     const sacAchs = ArchiveManager.recordSacrifice(sac.god);
     const turnAchs = ArchiveManager.checkTurnUnlocks(this.state, null, null);

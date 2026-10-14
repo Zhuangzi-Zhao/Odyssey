@@ -90,10 +90,29 @@ const ArchiveManager = {
    * @returns {object|null} 若为新解锁则返回成就对象，否则返回 null
    */
   unlock(achId, archive) {
+    if (!achId) return null;
+    const ID_ALIASES = {
+      'ach_luck_up': 'ach_first_luck_gain',
+      'ach_low_food': 'ach_limit_food',
+      'ach_low_loyalty': 'ach_limit_loyalty',
+      'ach_low_sanity': 'ach_limit_sanity',
+      'ach_low_crew': 'ach_limit_crew',
+      'ach_low_luck': 'ach_limit_luck',
+      'ach_end_hidden_safe_haven': 'ach_caphireus_miracle',
+      'ach_end_caphireus_easter_egg_home': 'ach_caphireus_miracle'
+    };
+    if (ID_ALIASES[achId]) {
+      achId = ID_ALIASES[achId];
+    }
+
     if (!archive.unlockedAchievements[achId]) {
       archive.unlockedAchievements[achId] = Date.now();
       const achDef = GAME_DATABASE.ACHIEVEMENTS.find(a => a.id === achId);
-      return achDef || { id: achId, name: achId, icon: '🏆', desc: '' };
+      if (!achDef) {
+        console.warn(`[ArchiveManager] 未知成就 ID: ${achId}`);
+        return null;
+      }
+      return achDef;
     }
     return null;
   },
@@ -187,9 +206,6 @@ const ArchiveManager = {
     const a1 = this.unlock('ach_first_sacrifice', archive);
     if (a1) newAchs.push(a1);
 
-    const a2 = this.unlock('ach_first_dice', archive);
-    if (a2) newAchs.push(a2);
-
     this.saveArchive(archive);
     return newAchs;
   },
@@ -246,23 +262,23 @@ const ArchiveManager = {
 
     // 1. 极境成就检定
     if (res.food < 10) {
-      const a = this.unlock('ach_low_food', archive);
+      const a = this.unlock('ach_limit_food', archive);
       if (a) newAchs.push(a);
     }
     if (res.loyalty < 10) {
-      const a = this.unlock('ach_low_loyalty', archive);
+      const a = this.unlock('ach_limit_loyalty', archive);
       if (a) newAchs.push(a);
     }
     if (res.sanity < 10) {
-      const a = this.unlock('ach_low_sanity', archive);
+      const a = this.unlock('ach_limit_sanity', archive);
       if (a) newAchs.push(a);
     }
     if (res.crew <= 3) {
-      const a = this.unlock('ach_low_crew', archive);
+      const a = this.unlock('ach_limit_crew', archive);
       if (a) newAchs.push(a);
     }
     if (res.luck < 10) {
-      const a = this.unlock('ach_low_luck', archive);
+      const a = this.unlock('ach_limit_luck', archive);
       if (a) newAchs.push(a);
     }
 
@@ -278,7 +294,7 @@ const ArchiveManager = {
 
     // 3. 神恩上升检定
     if (state.lastDeltas && state.lastDeltas.luck > 0) {
-      const a = this.unlock('ach_luck_up', archive);
+      const a = this.unlock('ach_first_luck_gain', archive);
       if (a) newAchs.push(a);
     }
 
